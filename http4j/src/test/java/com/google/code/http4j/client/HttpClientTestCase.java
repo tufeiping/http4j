@@ -7,11 +7,8 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.google.code.http4j.client.HttpClient;
-import com.google.code.http4j.client.HttpRequest;
-import com.google.code.http4j.client.HttpResponse;
 import com.google.code.http4j.client.impl.BasicHttpClient;
-import com.google.code.http4j.client.impl.HttpGet;
+import com.google.code.http4j.client.impl.HttpHead;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -27,7 +24,7 @@ public class HttpClientTestCase {
 	
 	@Test
 	public void testSubmit() throws IOException {
-		HttpRequest request = new HttpGet("http://www.google.com/search?q=http4j");
+		HttpRequest request = new HttpHead("http://www.google.com");
 		HttpResponse response = client.submit(request);
 		Assert.assertNotNull(response);
 	}

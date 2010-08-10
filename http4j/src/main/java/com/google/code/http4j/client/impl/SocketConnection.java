@@ -8,6 +8,9 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.code.http4j.client.Http;
 import com.google.code.http4j.client.HttpHost;
 import com.google.code.http4j.client.impl.utils.IOUtils;
@@ -16,7 +19,9 @@ import com.google.code.http4j.client.impl.utils.IOUtils;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public class SocketConnection implements Connection {
-
+	
+	private static final Logger logger = LoggerFactory.getLogger(SocketConnection.class);
+	
 	protected Socket socket;
 	protected HttpHost host;
 	
@@ -32,6 +37,7 @@ public class SocketConnection implements Connection {
 
 	@Override
 	public void send(String formattedMessage) throws IOException {
+		logger.debug("HTTP Request >>\r\n", formattedMessage);
 		OutputStream out = socket.getOutputStream();
 		out.write(formattedMessage.getBytes());
 		out.flush();

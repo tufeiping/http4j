@@ -22,7 +22,7 @@ public class HttpHead extends AbstractHttpRequest {
 
 	@Override
 	protected String formatRequestLine() {
-		return new StringBuilder(HEAD).append(BLANK_CHAR).append(url.getFile()).append(BLANK_CHAR).append(DEFAULT_HTTP_VERSION).toString();
+		return new StringBuilder(HEAD).append(BLANK_CHAR).append(getURI()).append(BLANK_CHAR).append(DEFAULT_HTTP_VERSION).toString();
 	}
 
 }

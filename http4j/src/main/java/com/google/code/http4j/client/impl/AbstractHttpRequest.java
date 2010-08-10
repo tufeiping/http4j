@@ -55,6 +55,11 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 		return message.toString();
 	}
 	
+	protected String getURI() {
+		String file = url.getFile();
+		return "".equals(file) ? "/" : file;
+	}
+	
 	abstract protected String formatEntity();
 	abstract protected String formatRequestLine();
 }
