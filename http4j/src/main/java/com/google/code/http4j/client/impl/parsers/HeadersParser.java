@@ -22,6 +22,6 @@ public class HeadersParser extends AbstractParser<List<HttpHeader>> {
 
 	@Override
 	protected byte[] getEndExpression() {
-		return null;
+		return HEADERS_END;
 	}
 }

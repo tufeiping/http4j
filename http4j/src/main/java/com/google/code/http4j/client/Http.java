@@ -19,8 +19,7 @@ public interface Http {
 	byte[] STATUS_LINE_END = new byte[]{LF};
 	byte[] HEADERS_END = new byte[]{CR, LF, CR, LF};
 	
-	float DEFAULT_HTTP_VERSION = 1.1f;
-	String DEFAULT_HTTP_VERSION_STRING = "HTTP/" + DEFAULT_HTTP_VERSION;
+	String DEFAULT_HTTP_VERSION = "HTTP/1.1";
 	
 	String HEADER_NAME_HOST = "Host";
 	String HEADER_NAME_USER_AGENT = "User-Agent";
