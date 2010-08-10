@@ -31,14 +31,10 @@ public class BasicHttpClient implements HttpClient {
 	public HttpResponse submit(HttpRequest request) throws IOException {
 		Connection connection = connectionPool.getConnection(request.getHost());
 		connection.send(request.getFormattedMessage());
-		HttpResponseParser responseParser = createResponseParser();
+		HttpResponseParser responseParser = request.getHttpResponseParser();
 		HttpResponse response = responseParser.parse(connection.getInputStream());
 		connectionPool.releaseConnection(connection);
 		return response;
-	}
-
-	protected HttpResponseParser createResponseParser() {
-		return new HttpResponseParser();
 	}
 
 	protected ConnectionPool createConnectionPool() {

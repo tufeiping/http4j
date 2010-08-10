@@ -13,7 +13,7 @@ import com.google.code.http4j.client.impl.BasicHttpResponse;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class HttpResponseParser implements Parser<HttpResponse>{
+public abstract class HttpResponseParser implements Parser<HttpResponse>{
 	
 	protected StatusLine statusLine;
 	
@@ -42,9 +42,5 @@ public class HttpResponseParser implements Parser<HttpResponse>{
 		return new HeadersParser().parse(in);
 	}
 
-	protected String parseEntity(InputStream in) {
-		// TODO Auto-generated method stub
-		// might need headers support, chunked, normal, identity, etc.
-		return null;
-	}
+	abstract protected String parseEntity(InputStream in);
 }

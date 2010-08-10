@@ -8,6 +8,7 @@ import java.net.UnknownHostException;
 import com.google.code.http4j.client.HttpHeader;
 import com.google.code.http4j.client.HttpHost;
 import com.google.code.http4j.client.HttpRequest;
+import com.google.code.http4j.client.impl.parsers.HttpResponseParser;
 import com.google.code.http4j.client.impl.utils.URLFormatter;
 
 /**
@@ -21,12 +22,15 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	protected final URL url;
 	
 	protected final HttpHost host;
+	
+	protected final HttpResponseParser responseParser;
 
 	public AbstractHttpRequest(String _url) throws MalformedURLException, UnknownHostException {
 		super();
 		url = URLFormatter.format(_url);
 		host = new BasicHttpHost(url.getProtocol(), url.getHost(), url.getPort());
 		addDefaultHeaders();
+		responseParser = createHttpResponseParser();
 	}
 
 	protected void addDefaultHeaders() {
@@ -60,6 +64,12 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 		return "".equals(file) ? "/" : file;
 	}
 	
+	@Override
+	public HttpResponseParser getHttpResponseParser() {
+		return responseParser;
+	}
+	
 	abstract protected String formatEntity();
 	abstract protected String formatRequestLine();
+	abstract HttpResponseParser createHttpResponseParser();
 }
