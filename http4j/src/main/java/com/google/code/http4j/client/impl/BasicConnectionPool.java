@@ -1,7 +1,7 @@
 package com.google.code.http4j.client.impl;
 
 
-import java.net.UnknownHostException;
+import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -19,7 +19,7 @@ public class BasicConnectionPool implements ConnectionPool {
 	}
 	
 	@Override
-	public Connection getConnection(HttpHost host) throws UnknownHostException {
+	public Connection getConnection(HttpHost host) throws IOException {
 		Connection connection = poll(host);
 		return (null == connection || connection.isClosed())? createConnection(host) : connection;
 	}
@@ -35,8 +35,10 @@ public class BasicConnectionPool implements ConnectionPool {
 		return getQueue(host).poll();
 	}
 	
-	protected Connection createConnection(HttpHost host) {
-		return new SocketConnection(host);
+	protected Connection createConnection(HttpHost host) throws IOException {
+		SocketConnection connection = new SocketConnection(host);
+		connection.connect();
+		return connection;
 	}
 	
 	protected ConcurrentLinkedQueue<Connection> getQueue(HttpHost host) {

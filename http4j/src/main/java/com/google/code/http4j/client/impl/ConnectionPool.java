@@ -1,6 +1,6 @@
 package com.google.code.http4j.client.impl;
 
-import java.net.UnknownHostException;
+import java.io.IOException;
 
 import com.google.code.http4j.client.HttpHost;
 
@@ -10,7 +10,7 @@ import com.google.code.http4j.client.HttpHost;
  */
 public interface ConnectionPool {
 
-	Connection getConnection(HttpHost host) throws UnknownHostException;
+	Connection getConnection(HttpHost host) throws IOException;
 
 	void releaseConnection(Connection connection);
 }
