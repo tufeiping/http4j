@@ -3,7 +3,7 @@ package com.google.code.http4j.client.impl.parsers;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 import com.google.code.http4j.client.HttpHeader;
 import com.google.code.http4j.client.HttpResponse;
@@ -17,7 +17,7 @@ public class HttpResponseParser implements Parser<HttpResponse>{
 	
 	protected StatusLine statusLine;
 	
-	protected LinkedHashMap<String, HttpHeader> headerMap;
+	protected Map<String, HttpHeader> headerMap;
 	
 	protected String entity;
 	
@@ -38,7 +38,7 @@ public class HttpResponseParser implements Parser<HttpResponse>{
 		return new StatusLineParser().parse(in);
 	}
 	
-	protected LinkedHashMap<String, HttpHeader> parseHeaders(InputStream in) throws IOException {
+	protected Map<String, HttpHeader> parseHeaders(InputStream in) throws IOException {
 		return new HeadersParser().parse(in);
 	}
 

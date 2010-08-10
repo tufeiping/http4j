@@ -37,7 +37,7 @@ public class SocketConnection implements Connection {
 
 	@Override
 	public void send(String formattedMessage) throws IOException {
-		logger.debug("HTTP Request >>\r\n", formattedMessage);
+		logger.debug("HTTP Request >>\r\n{}", formattedMessage);
 		OutputStream out = socket.getOutputStream();
 		out.write(formattedMessage.getBytes());
 		out.flush();
