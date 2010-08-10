@@ -23,8 +23,7 @@ public final class URLFormatter {
 	 */
 	public static URL format(String s) throws MalformedURLException {
 		s = ensureProtocol(s);
-		URL url = ensurePort(s);
-		return url;
+		return new URL(s);
 	}
 	
 	public static URL setPort(URL url, int port) throws MalformedURLException {
@@ -42,15 +41,5 @@ public final class URLFormatter {
 			s = "http://" + s;
 		}
 		return s;
-	}
-
-	static URL ensurePort(String s) throws MalformedURLException {
-		URL url = new URL(s);
-		int port = url.getPort();
-		if (port == -1) {
-			port = url.getProtocol().length() == 4 ? 80 : 443;// http vs https
-			url = setPort(url, port);
-		}
-		return url;
 	}
 }

@@ -8,6 +8,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import com.google.code.http4j.client.Http;
 import com.google.code.http4j.client.HttpHost;
 import com.google.code.http4j.client.impl.utils.IOUtils;
 
@@ -48,7 +49,9 @@ public class SocketConnection implements Connection {
 	}
 	
 	protected InetSocketAddress getSocketAddress(HttpHost host) throws UnknownHostException {
-		return new InetSocketAddress(host.getInetAddress(), host.getPort());
+		int port = host.getPort();
+		port = (port < 0) ? (host.getProtocol().equalsIgnoreCase(Http.PROTOCOL_HTTP) ? 80 : 443) : port;
+		return new InetSocketAddress(host.getInetAddress(), port);
 	}
 
 	@Override
