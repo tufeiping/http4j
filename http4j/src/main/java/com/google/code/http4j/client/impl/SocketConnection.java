@@ -1,0 +1,63 @@
+package com.google.code.http4j.client.impl;
+
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+import com.google.code.http4j.client.HttpHost;
+import com.google.code.http4j.client.impl.utils.IOUtils;
+
+/**
+ * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
+ */
+public class SocketConnection implements Connection {
+
+	protected Socket socket;
+	protected HttpHost host;
+	
+	public SocketConnection(HttpHost host) {
+		socket = new Socket();
+		this.host = host;
+	}
+	
+	@Override
+	public InputStream getInputStream() throws IOException {
+		return socket.getInputStream();
+	}
+
+	@Override
+	public void send(String formattedMessage) throws IOException {
+		OutputStream out = socket.getOutputStream();
+		out.write(formattedMessage.getBytes());
+		out.flush();
+	}
+
+	@Override
+	public void close() {
+		IOUtils.close(socket);
+	}
+
+	@Override
+	public void connect() throws IOException {
+		InetSocketAddress address = getSocketAddress(host);
+		socket.connect(address);
+	}
+	
+	protected InetSocketAddress getSocketAddress(HttpHost host) throws UnknownHostException {
+		return new InetSocketAddress(host.getInetAddress(), host.getPort());
+	}
+
+	@Override
+	public HttpHost getHost() {
+		return host;
+	}
+
+	@Override
+	public boolean isClosed() {
+		return socket.isClosed();
+	}
+}
