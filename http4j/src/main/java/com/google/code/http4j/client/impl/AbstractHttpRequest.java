@@ -1,6 +1,8 @@
 package com.google.code.http4j.client.impl;
 
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -8,6 +10,7 @@ import java.net.UnknownHostException;
 import com.google.code.http4j.client.HttpHeader;
 import com.google.code.http4j.client.HttpHost;
 import com.google.code.http4j.client.HttpRequest;
+import com.google.code.http4j.client.HttpResponse;
 import com.google.code.http4j.client.impl.parsers.HttpResponseParser;
 import com.google.code.http4j.client.impl.utils.URLFormatter;
 
@@ -51,6 +54,11 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 		return host;
 	}
 	
+	@Override
+	public HttpResponse parse(InputStream in) throws IOException {
+		return responseParser.parse(in);
+	}
+	
 	protected String formatHeaders() {
 		StringBuilder message = new StringBuilder();
 		for(HttpHeader header:headerMap.values()) {
@@ -62,11 +70,6 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	protected String getURI() {
 		String file = url.getFile();
 		return "".equals(file) ? "/" : file;
-	}
-	
-	@Override
-	public HttpResponseParser getHttpResponseParser() {
-		return responseParser;
 	}
 	
 	abstract protected String formatEntity();
