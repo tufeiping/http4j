@@ -18,7 +18,7 @@ public class StatusLineParserTestCase {
 	public void testParse() throws IOException {
 		assertion("HTTP/1.1 200 OK", "HTTP/1.1", 200, "OK");
 		assertion("HTTP/1.0 404 Not Found", "HTTP/1.0", 404, "Not Found");
-		assertion("HTTP/1.1 204 No Content", "HTTP/1.1", 204, "No Content");
+		assertion("HTTP/1.1 204 No Content\r\n", "HTTP/1.1", 204, "No Content");
 	}
 	
 	private void assertion(String line, String version, int responseCode, String reason) throws IOException {

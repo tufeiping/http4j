@@ -12,6 +12,7 @@ import com.google.code.http4j.client.Http;
 public abstract class AbstractParser<T> implements Parser<T>, Http {
 
 	private ByteBuffer buffer;
+	
 
 	protected AbstractParser() {
 		resetBuffer();
@@ -37,23 +38,20 @@ public abstract class AbstractParser<T> implements Parser<T>, Http {
 	
 	private void fillBuffer(InputStream in) throws IOException {
 		byte b;
-		while (!isEnd() && (b = (byte) in.read()) != -1) {
+		byte[] end = getEndExpression();
+		int matched = 0, total = end.length;
+		while (matched < total && (b = (byte) in.read()) != -1) {
 			if (!buffer.hasRemaining()) {
 				extendBuffer();
 			}
 			buffer.put(b);
+			matched = b == end[matched] ? matched + 1 : 0;
 		}
 		buffer.flip();
 	}
 	
 	private byte[] compress() {
 		return new String(buffer.array()).trim().getBytes();
-	}
-
-	private boolean isEnd() {
-		byte[] endExpression = getEndExpression();
-		String string = new String(buffer.array());
-		return string.endsWith(new String(endExpression));
 	}
 
 	private void extendBuffer() {
