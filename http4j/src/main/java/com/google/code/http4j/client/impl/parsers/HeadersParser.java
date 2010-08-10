@@ -17,7 +17,7 @@ import com.google.code.http4j.client.impl.BasicHttpHeader;
 public class HeadersParser extends AbstractParser<Map<String, HttpHeader>> {
 
 	@Override
-	protected Map<String, HttpHeader> doParsing(byte[] bytes) throws IOException {
+	protected Map<String, HttpHeader> parse(byte[] bytes) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes)));
 		String line = null;
 		Map<String, HttpHeader> headerMap = new HashMap<String, HttpHeader>();

@@ -20,14 +20,14 @@ public abstract class AbstractParser<T> implements Parser<T>, Http {
 
 	abstract protected int getCapacity();
 
-	abstract protected T doParsing(byte[] source) throws IOException;
+	abstract protected T parse(byte[] source) throws IOException;
 
 	abstract protected byte[] getEndExpression();
 
 	@Override
 	public T parse(InputStream in) throws IOException {
 		fillBuffer(in);
-		T t = doParsing(compress());
+		T t = parse(compress());
 		resetBuffer();
 		return t; 
 	}

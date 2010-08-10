@@ -1,8 +1,6 @@
 package com.google.code.http4j.client.impl.parsers;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 
 import org.testng.Assert;
@@ -16,7 +14,7 @@ import com.google.code.http4j.client.HttpHeader;
 public class HeadersParserTestCase {
 
 	@Test
-	public void testParse() throws IOException {
+	public void testParse_byteArray() throws IOException {
 		//assertion("Content-Type:text/html", new String[] { "Content-Type", "text/html" });
 		assertion("Content-Type:text/html\r\nContent-Location:www.google.com", 
 				new String[] {"Content-Type", "text/html"}, 
@@ -25,8 +23,7 @@ public class HeadersParserTestCase {
 
 	private void assertion(String source, String[]... values)
 			throws IOException {
-		InputStream input = new ByteArrayInputStream(source.getBytes());
-		Map<String, HttpHeader> headers = new HeadersParser().parse(input);
+		Map<String, HttpHeader> headers = new HeadersParser().parse(source.getBytes());
 		Assert.assertNotNull(headers);
 		Assert.assertEquals(headers.size(), values.length);
 		for (String[] header: values) {

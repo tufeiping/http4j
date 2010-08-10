@@ -28,7 +28,7 @@ public class StatusLineParser extends AbstractParser<StatusLine> {
 	}
 
 	@Override
-	protected StatusLine doParsing(byte[] source) throws IOException {
+	protected StatusLine parse(byte[] source) throws IOException {
 		String line = new String(source);
 		String[] strings = line.split("[ '\t']+", 3);
 		return createStatusLine(strings[0], Integer.parseInt(strings[1]), strings[2]);
