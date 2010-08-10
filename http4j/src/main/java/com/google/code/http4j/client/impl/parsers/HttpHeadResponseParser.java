@@ -9,8 +9,6 @@ public class HttpHeadResponseParser extends HttpResponseParser {
 
 	@Override
 	protected String parseEntity(InputStream in) {
-		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
-
 }

@@ -11,5 +11,5 @@ public interface HttpResponse extends HttpMessage {
 	
 	List<HttpHeader> getHeaders();
 	
-	String getContent();
+	String getEntity();
 }

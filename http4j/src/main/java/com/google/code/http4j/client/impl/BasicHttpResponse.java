@@ -21,7 +21,7 @@ public class BasicHttpResponse extends AbstractHttpMessage implements HttpRespon
 	}
 
 	@Override
-	public String getContent() {
+	public String getEntity() {
 		return content;
 	}
 
