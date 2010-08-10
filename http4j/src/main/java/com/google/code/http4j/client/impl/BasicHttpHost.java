@@ -29,7 +29,6 @@ public class BasicHttpHost implements HttpHost {
 	}
 	
 	protected InetAddress processDNSLookup(String host, byte[] address) throws UnknownHostException {
-		// TODO record time, use ThreadLocal Metric Object
 		return null == address ? InetAddress.getByName(host) : InetAddress.getByAddress(address);
 	}
 
