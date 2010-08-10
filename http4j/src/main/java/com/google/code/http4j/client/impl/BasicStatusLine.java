@@ -1,11 +1,12 @@
 package com.google.code.http4j.client.impl;
 
+import com.google.code.http4j.client.Http;
 import com.google.code.http4j.client.StatusLine;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class BasicStatusLine implements StatusLine {
+public class BasicStatusLine implements StatusLine, Http {
 
 	String version;
 	int responseCode;
@@ -32,4 +33,10 @@ public class BasicStatusLine implements StatusLine {
 		return version;
 	}
 
+	@Override
+	public String format() {
+		return new StringBuilder(version).append(BLANK_CHAR)
+				.append(responseCode).append(BLANK_CHAR)
+				.append(reason).toString();
+	}
 }

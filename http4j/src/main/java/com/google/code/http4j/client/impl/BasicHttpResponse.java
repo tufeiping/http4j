@@ -13,16 +13,16 @@ public class BasicHttpResponse extends AbstractHttpMessage implements HttpRespon
 	
 	protected StatusLine statusLine;
 	
-	protected String content;
+	protected String entity;
 	
-	public BasicHttpResponse(StatusLine statusLine, String content) {
+	public BasicHttpResponse(StatusLine statusLine, String entity) {
 		this.statusLine = statusLine;
-		this.content = content;
+		this.entity = entity;
 	}
 
 	@Override
 	public String getEntity() {
-		return content;
+		return entity;
 	}
 
 	@Override
@@ -39,11 +39,11 @@ public class BasicHttpResponse extends AbstractHttpMessage implements HttpRespon
 	}
 
 	protected String formatEntity() {
-		return null;
+		return entity;
 	}
 
 	protected String formatStatusLine() {
-		return null;
+		return statusLine.format();
 	}
 
 	@Override
