@@ -45,4 +45,9 @@ public class BasicHttpResponse extends AbstractHttpMessage implements HttpRespon
 	protected String formatStatusLine() {
 		return null;
 	}
+
+	@Override
+	public String toString() {
+		return format();
+	}
 }
