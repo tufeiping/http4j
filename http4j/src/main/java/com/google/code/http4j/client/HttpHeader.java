@@ -9,5 +9,7 @@ public interface HttpHeader {
 
 	String getValue();
 	
+	String getCanonicalName();
+	
 	String toCanonicalString();
 }

@@ -49,7 +49,7 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	
 	protected String formatHeaders() {
 		StringBuilder message = new StringBuilder();
-		for(HttpHeader header:headers) {
+		for(HttpHeader header:headerMap.values()) {
 			message.append(header.toCanonicalString()).append(CRLF);
 		}
 		return message.toString();

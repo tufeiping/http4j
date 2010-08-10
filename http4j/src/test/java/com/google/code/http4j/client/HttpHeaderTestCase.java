@@ -40,6 +40,13 @@ public class HttpHeaderTestCase {
 	}
 	
 	@Test
+	public void testGetCanonicalName() {
+		Assert.assertEquals(host.getCanonicalName(), "Host");
+		Assert.assertEquals(userAgent.getCanonicalName(), "User-Agent");
+		Assert.assertEquals(accept.getCanonicalName(), "Accept");
+	}
+	
+	@Test
 	public void testToCanonicalString() {
 		Assert.assertEquals(host.toCanonicalString(), "Host:www.google.com");
 		Assert.assertEquals(userAgent.toCanonicalString(), "User-Agent:Firefox 3.6 (Windows 7)");

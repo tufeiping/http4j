@@ -13,7 +13,8 @@ public class BasicHttpHeader extends NameValuePair implements HttpHeader {
 		super(name, value);
 	}
 
-	protected String getCanonicalName() {
+	@Override
+	public String getCanonicalName() {
 		return null == canonicalName ? calculateCanonicalName() : canonicalName;
 	}
 
