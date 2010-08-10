@@ -14,7 +14,7 @@ public abstract class AbstractParser<T> implements Parser<T>, Http {
 	private ByteBuffer buffer;
 
 	protected AbstractParser() {
-		buffer = ByteBuffer.allocate(getCapacity());
+		resetBuffer();
 	}
 
 	abstract protected int getCapacity();
@@ -27,10 +27,14 @@ public abstract class AbstractParser<T> implements Parser<T>, Http {
 	public T parse(InputStream in) throws IOException {
 		fillBuffer(in);
 		T t = doParsing(compress());
-		buffer.clear();
+		resetBuffer();
 		return t; 
 	}
 
+	private void resetBuffer() {
+		buffer = ByteBuffer.allocate(getCapacity());
+	}
+	
 	private void fillBuffer(InputStream in) throws IOException {
 		byte b;
 		while (!isEnd() && (b = (byte) in.read()) != -1) {
