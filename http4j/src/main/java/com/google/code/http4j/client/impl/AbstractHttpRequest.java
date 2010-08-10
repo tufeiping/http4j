@@ -30,7 +30,7 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	}
 
 	protected void addDefaultHeaders() {
-		addHeader(HEADER_NAME_HOST, url.getHost());
+		addHeader(HEADER_NAME_HOST, url.getAuthority());
 		addHeader(HEADER_NAME_USER_AGENT, DEFAULT_USER_AGENT);
 	}
 
