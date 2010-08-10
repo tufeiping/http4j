@@ -51,6 +51,14 @@ public abstract class AbstractHttpMessage implements HttpMessage {
 		headerMap.put(header.getCanonicalName(), header);
 	}
 	
+	protected String formatHeaders() {
+		StringBuilder message = new StringBuilder();
+		for(HttpHeader header:headerMap.values()) {
+			message.append(header.format()).append(CRLF);
+		}
+		return message.toString();
+	}
+	
 	protected HttpHeader createHeader(String name, String value) {
 		return new BasicHttpHeader(name, value);
 	}

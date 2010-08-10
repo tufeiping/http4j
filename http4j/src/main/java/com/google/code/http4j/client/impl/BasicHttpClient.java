@@ -29,7 +29,7 @@ public class BasicHttpClient implements HttpClient {
 	@Override
 	public HttpResponse submit(HttpRequest request) throws IOException {
 		Connection connection = connectionPool.getConnection(request.getHost());
-		connection.send(request.getFormattedMessage());
+		connection.send(request.format());
 		HttpResponse response = request.parse(connection.getInputStream());
 		connectionPool.releaseConnection(connection);
 		return response;

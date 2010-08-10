@@ -37,7 +37,7 @@ public class BasicHttpHeader extends NameValuePair implements HttpHeader {
 	}
 
 	@Override
-	public String toCanonicalString() {
+	public String format() {
 		return new StringBuilder(getCanonicalName()).append(":").append(value).toString();
 	}
 }

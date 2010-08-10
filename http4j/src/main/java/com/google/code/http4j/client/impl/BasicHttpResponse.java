@@ -29,4 +29,20 @@ public class BasicHttpResponse extends AbstractHttpMessage implements HttpRespon
 	public StatusLine getStatusLine() {
 		return statusLine;
 	}
+
+	@Override
+	public String format() {
+		StringBuilder message = new StringBuilder(formatStatusLine());
+		message.append(CRLF).append(formatHeaders());
+		message.append(CRLF).append(CRLF).append(formatEntity());
+		return message.toString();
+	}
+
+	protected String formatEntity() {
+		return null;
+	}
+
+	protected String formatStatusLine() {
+		return null;
+	}
 }

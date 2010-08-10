@@ -19,7 +19,7 @@ public class HttpHead extends AbstractHttpRequest {
 	}
 
 	@Override
-	protected String formatEntity() {
+	protected String formatBody() {
 		return "";
 	}
 

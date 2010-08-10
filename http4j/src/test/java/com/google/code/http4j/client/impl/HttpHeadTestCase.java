@@ -35,7 +35,7 @@ public class HttpHeadTestCase {
 	
 	@Test
 	public void testFormatEntity() {
-		String message = head.formatEntity();
+		String message = head.formatBody();
 		Assert.assertEquals(message, "");
 	}
 }

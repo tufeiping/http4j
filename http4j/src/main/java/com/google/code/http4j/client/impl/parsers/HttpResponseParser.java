@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.code.http4j.client.HttpHeader;
 import com.google.code.http4j.client.HttpResponse;
 import com.google.code.http4j.client.StatusLine;
@@ -14,6 +17,8 @@ import com.google.code.http4j.client.impl.BasicHttpResponse;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public abstract class HttpResponseParser implements Parser<HttpResponse>{
+	
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	protected StatusLine statusLine;
 	
@@ -31,6 +36,7 @@ public abstract class HttpResponseParser implements Parser<HttpResponse>{
 	protected HttpResponse createHttpResponse() {
 		HttpResponse response = new BasicHttpResponse(statusLine, entity);
 		response.addHeaders(headerMap.values());
+		logger.debug("HTTP Response <<\r\n{}", response);
 		return response;
 	}
 

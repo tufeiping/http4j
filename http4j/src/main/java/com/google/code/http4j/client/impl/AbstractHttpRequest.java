@@ -7,7 +7,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 
-import com.google.code.http4j.client.HttpHeader;
 import com.google.code.http4j.client.HttpHost;
 import com.google.code.http4j.client.HttpRequest;
 import com.google.code.http4j.client.HttpResponse;
@@ -42,10 +41,10 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	}
 
 	@Override
-	public String getFormattedMessage() {
+	public String format() {
 		StringBuilder message = new StringBuilder(formatRequestLine());
 		message.append(CRLF).append(formatHeaders());
-		message.append(CRLF).append(CRLF).append(formatEntity());
+		message.append(CRLF).append(CRLF).append(formatBody());
 		return message.toString();
 	}
 	
@@ -59,20 +58,12 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 		return responseParser.parse(in);
 	}
 	
-	protected String formatHeaders() {
-		StringBuilder message = new StringBuilder();
-		for(HttpHeader header:headerMap.values()) {
-			message.append(header.toCanonicalString()).append(CRLF);
-		}
-		return message.toString();
-	}
-	
 	protected String getURI() {
 		String file = url.getFile();
 		return "".equals(file) ? "/" : file;
 	}
 	
-	abstract protected String formatEntity();
+	abstract protected String formatBody();
 	abstract protected String formatRequestLine();
 	abstract HttpResponseParser createHttpResponseParser();
 }

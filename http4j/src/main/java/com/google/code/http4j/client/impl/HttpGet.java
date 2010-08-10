@@ -18,7 +18,7 @@ public class HttpGet extends AbstractHttpRequest {
 	}
 
 	@Override
-	protected String formatEntity() {
+	protected String formatBody() {
 		return "";
 	}
 

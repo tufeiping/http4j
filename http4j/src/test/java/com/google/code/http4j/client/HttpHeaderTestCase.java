@@ -47,10 +47,10 @@ public class HttpHeaderTestCase {
 	}
 	
 	@Test
-	public void testToCanonicalString() {
-		Assert.assertEquals(host.toCanonicalString(), "Host:www.google.com");
-		Assert.assertEquals(userAgent.toCanonicalString(), "User-Agent:Firefox 3.6 (Windows 7)");
-		Assert.assertEquals(accept.toCanonicalString(), "Accept:text/html");
+	public void testFormat() {
+		Assert.assertEquals(host.format(), "Host:www.google.com");
+		Assert.assertEquals(userAgent.format(), "User-Agent:Firefox 3.6 (Windows 7)");
+		Assert.assertEquals(accept.format(), "Accept:text/html");
 	}
 	
 	private HttpHeader createHeader(String name, String value) {
