@@ -61,11 +61,9 @@ public class BasicHttpHost implements HttpHost {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((inetAddress == null) ? 0 : inetAddress.hashCode());
+		result = prime * result + ((inetAddress == null) ? 0 : inetAddress.hashCode());
 		result = prime * result + port;
-		result = prime * result
-				+ ((protocol == null) ? 0 : protocol.hashCode());
+		result = prime * result + ((protocol == null) ? 0 : protocol.hashCode());
 		return result;
 	}
 
