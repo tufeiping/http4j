@@ -16,7 +16,6 @@
 
 package com.google.code.http4j.client.impl;
 
-
 import java.io.IOException;
 
 import com.google.code.http4j.client.HttpClient;
@@ -45,10 +44,15 @@ public class BasicHttpClient implements HttpClient {
 	@Override
 	public HttpResponse submit(HttpRequest request) throws IOException {
 		Connection connection = connectionPool.getConnection(request.getHost());
-		connection.send(request.format());
-		HttpResponse response = request.parse(connection.getInputStream());
-		connectionPool.releaseConnection(connection);
-		return response;
+		try {
+			connection.send(request.format());
+			HttpResponse response = request.parse(connection.getInputStream());
+			connectionPool.releaseConnection(connection);
+			return response;
+		} catch (IOException e) {
+			connection.close();
+			throw e;
+		}
 	}
 
 	protected ConnectionPool createConnectionPool() {
