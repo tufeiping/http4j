@@ -19,9 +19,6 @@ package com.google.code.http4j.client.impl;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 
-import com.google.code.http4j.client.impl.parsers.EmptyEntityResponseParser;
-import com.google.code.http4j.client.impl.parsers.HttpResponseParser;
-
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
@@ -33,6 +30,11 @@ public class HttpHead extends AbstractHttpRequest {
 			UnknownHostException {
 		super(url);
 	}
+	
+	@Override
+	public boolean hasEntity() {
+		return false;
+	}
 
 	@Override
 	protected String formatBody() {
@@ -42,10 +44,5 @@ public class HttpHead extends AbstractHttpRequest {
 	@Override
 	protected String formatRequestLine() {
 		return new StringBuilder(HEAD).append(BLANK_CHAR).append(getURI()).append(BLANK_CHAR).append(DEFAULT_HTTP_VERSION).toString();
-	}
-
-	@Override
-	HttpResponseParser createHttpResponseParser() {
-		return new EmptyEntityResponseParser();
 	}
 }

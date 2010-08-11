@@ -21,6 +21,8 @@ import java.io.IOException;
 import com.google.code.http4j.client.HttpClient;
 import com.google.code.http4j.client.HttpRequest;
 import com.google.code.http4j.client.HttpResponse;
+import com.google.code.http4j.client.impl.parsers.HttpResponseParser;
+import com.google.code.http4j.client.impl.parsers.Parser;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -46,13 +48,17 @@ public class BasicHttpClient implements HttpClient {
 		Connection connection = connectionPool.getConnection(request.getHost());
 		try {
 			connection.send(request.format());
-			HttpResponse response = request.parse(connection.getInputStream());
+			HttpResponse response = createResponseParser(request.hasEntity()).parse(connection.getInputStream());
 			connectionPool.releaseConnection(connection);
 			return response;
 		} catch (IOException e) {
 			connection.close();
 			throw e;
 		}
+	}
+
+	protected Parser<HttpResponse> createResponseParser(boolean hasEntity) {
+		return new HttpResponseParser(hasEntity);
 	}
 
 	protected ConnectionPool createConnectionPool() {

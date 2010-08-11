@@ -32,7 +32,7 @@ import com.google.code.http4j.client.impl.BasicHttpResponse;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public abstract class HttpResponseParser implements Parser<HttpResponse>{
+public class HttpResponseParser implements Parser<HttpResponse>{
 	
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	
@@ -41,6 +41,12 @@ public abstract class HttpResponseParser implements Parser<HttpResponse>{
 	protected Map<String, HttpHeader> headerMap;
 	
 	protected String entity;
+	
+	protected boolean hasEntity;
+	
+	public HttpResponseParser(boolean hasEntity) {
+		this.hasEntity = hasEntity;
+	}
 	
 	public HttpResponse parse(InputStream in) throws IOException {
 		statusLine = parseStatusLine(in);
@@ -64,5 +70,7 @@ public abstract class HttpResponseParser implements Parser<HttpResponse>{
 		return new HeadersParser().parse(in);
 	}
 
-	abstract protected String parseEntity(InputStream in);
+	protected String parseEntity(InputStream in) {
+		return "";//TODO
+	}
 }
