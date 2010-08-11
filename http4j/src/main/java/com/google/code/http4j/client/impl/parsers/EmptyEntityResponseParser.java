@@ -21,7 +21,7 @@ import java.io.InputStream;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class HttpHeadResponseParser extends HttpResponseParser {
+public class EmptyEntityResponseParser extends HttpResponseParser {
 
 	@Override
 	protected String parseEntity(InputStream in) {

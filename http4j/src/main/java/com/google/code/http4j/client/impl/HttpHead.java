@@ -19,7 +19,7 @@ package com.google.code.http4j.client.impl;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 
-import com.google.code.http4j.client.impl.parsers.HttpHeadResponseParser;
+import com.google.code.http4j.client.impl.parsers.EmptyEntityResponseParser;
 import com.google.code.http4j.client.impl.parsers.HttpResponseParser;
 
 /**
@@ -46,6 +46,6 @@ public class HttpHead extends AbstractHttpRequest {
 
 	@Override
 	HttpResponseParser createHttpResponseParser() {
-		return new HttpHeadResponseParser();
+		return new EmptyEntityResponseParser();
 	}
 }
