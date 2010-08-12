@@ -16,13 +16,13 @@
 
 package com.google.code.http4j.client.impl;
 
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,17 +35,17 @@ import com.google.code.http4j.client.impl.utils.IOUtils;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public class SocketConnection implements Connection {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(SocketConnection.class);
-	
+
 	protected Socket socket;
 	protected HttpHost host;
-	
+
 	public SocketConnection(HttpHost host) {
 		socket = new Socket();
 		this.host = host;
 	}
-	
+
 	@Override
 	public void close() {
 		IOUtils.close(socket);
@@ -63,13 +63,31 @@ public class SocketConnection implements Connection {
 	}
 
 	@Override
-	public InputStream getInputStream() throws IOException {
-		return socket.getInputStream();
+	public byte[] read() throws IOException {
+		ByteBuffer buffer = ByteBuffer.allocate(2 << 13);
+		InputStream stream = socket.getInputStream();
+		byte b;
+		while ((b = (byte) stream.read()) != -1) {
+			if(!buffer.hasRemaining()) {
+				buffer = extendBuffer(buffer);
+			}
+			buffer.put(b);
+		}
+		buffer.flip();
+		return buffer.array();
 	}
 	
-	protected InetSocketAddress getSocketAddress(HttpHost host) throws UnknownHostException {
+	private ByteBuffer extendBuffer(ByteBuffer buffer) {
+		ByteBuffer newBuffer = ByteBuffer.allocate(buffer.capacity() << 1);
+		newBuffer.put(buffer);
+		return newBuffer;
+	}
+
+	protected InetSocketAddress getSocketAddress(HttpHost host)
+			throws UnknownHostException {
 		int port = host.getPort();
-		port = (port < 0) ? (host.getProtocol().equalsIgnoreCase(Http.PROTOCOL_HTTP) ? 80 : 443) : port;
+		port = (port < 0) ? (host.getProtocol().equalsIgnoreCase(
+				Http.PROTOCOL_HTTP) ? 80 : 443) : port;
 		return new InetSocketAddress(host.getInetAddress(), port);
 	}
 

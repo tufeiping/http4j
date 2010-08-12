@@ -18,7 +18,6 @@ package com.google.code.http4j.client.impl;
 
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import com.google.code.http4j.client.HttpHost;
 
@@ -33,7 +32,7 @@ public interface Connection {
 
 	void write(byte[] message) throws IOException;
 
-	InputStream getInputStream() throws IOException;
+	byte[] read() throws IOException;
 	
 	void close();
 
