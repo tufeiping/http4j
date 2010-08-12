@@ -47,19 +47,6 @@ public class SocketConnection implements Connection {
 	}
 	
 	@Override
-	public InputStream getInputStream() throws IOException {
-		return socket.getInputStream();
-	}
-
-	@Override
-	public void send(String formattedMessage) throws IOException {
-		logger.debug("HTTP Request >>\r\n{}", formattedMessage);
-		OutputStream out = socket.getOutputStream();
-		out.write(formattedMessage.getBytes());
-		out.flush();
-	}
-
-	@Override
 	public void close() {
 		IOUtils.close(socket);
 	}
@@ -69,6 +56,16 @@ public class SocketConnection implements Connection {
 		InetSocketAddress address = getSocketAddress(host);
 		socket.connect(address);
 	}
+
+	@Override
+	public HttpHost getHost() {
+		return host;
+	}
+
+	@Override
+	public InputStream getInputStream() throws IOException {
+		return socket.getInputStream();
+	}
 	
 	protected InetSocketAddress getSocketAddress(HttpHost host) throws UnknownHostException {
 		int port = host.getPort();
@@ -77,12 +74,15 @@ public class SocketConnection implements Connection {
 	}
 
 	@Override
-	public HttpHost getHost() {
-		return host;
+	public boolean isClosed() {
+		return socket.isClosed();
 	}
 
 	@Override
-	public boolean isClosed() {
-		return socket.isClosed();
+	public void send(String formattedMessage) throws IOException {
+		logger.debug("HTTP Request >>\r\n{}", formattedMessage);
+		OutputStream out = socket.getOutputStream();
+		out.write(formattedMessage.getBytes());
+		out.flush();
 	}
 }
