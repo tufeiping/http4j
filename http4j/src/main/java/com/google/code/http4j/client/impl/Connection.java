@@ -31,7 +31,7 @@ public interface Connection {
 	
 	void connect() throws IOException;
 
-	void send(String formattedMessage) throws IOException;
+	void write(byte[] message) throws IOException;
 
 	InputStream getInputStream() throws IOException;
 	

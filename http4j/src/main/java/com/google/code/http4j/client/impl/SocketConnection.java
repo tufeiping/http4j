@@ -79,10 +79,10 @@ public class SocketConnection implements Connection {
 	}
 
 	@Override
-	public void send(String formattedMessage) throws IOException {
-		logger.debug("HTTP Request >>\r\n{}", formattedMessage);
+	public void write(byte[] message) throws IOException {
+		logger.debug("HTTP Request >>\r\n{}", new String(message));
 		OutputStream out = socket.getOutputStream();
-		out.write(formattedMessage.getBytes());
+		out.write(message);
 		out.flush();
 	}
 }

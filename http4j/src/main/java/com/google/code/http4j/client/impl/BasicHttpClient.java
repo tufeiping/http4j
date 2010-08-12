@@ -48,7 +48,7 @@ public class BasicHttpClient implements HttpClient {
 	public HttpResponse submit(HttpRequest request) throws IOException {
 		Connection connection = connectionPool.getConnection(request.getHost());
 		try {
-			connection.send(request.format());
+			connection.write(request.format().getBytes());
 			HttpResponse response = createResponseParser(request.hasEntity()).parse(connection.getInputStream());
 			connectionPool.releaseConnection(connection);
 			return response;
