@@ -17,6 +17,7 @@
 package com.google.code.http4j.client.impl;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import com.google.code.http4j.client.HttpClient;
 import com.google.code.http4j.client.HttpRequest;
@@ -57,7 +58,7 @@ public class BasicHttpClient implements HttpClient {
 		}
 	}
 
-	protected Parser<HttpResponse> createResponseParser(boolean hasEntity) {
+	protected Parser<HttpResponse, InputStream> createResponseParser(boolean hasEntity) {
 		return new HttpResponseParser(hasEntity);
 	}
 

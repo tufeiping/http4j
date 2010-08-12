@@ -25,7 +25,7 @@ import com.google.code.http4j.client.impl.BasicStatusLine;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class StatusLineParser extends AbstractParser<StatusLine> {
+public class StatusLineParser extends AbstractStreamParser<StatusLine> {
 
 	protected static final String PROTOCOL = "HTTP";
 	protected static final float MINIMUM_VERSION = 1.0f;

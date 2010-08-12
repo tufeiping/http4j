@@ -30,7 +30,7 @@ import com.google.code.http4j.client.impl.BasicHttpHeader;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class HeadersParser extends AbstractParser<Map<String, HttpHeader>> {
+public class HeadersParser extends AbstractStreamParser<Map<String, HttpHeader>> {
 
 	@Override
 	protected Map<String, HttpHeader> parse(byte[] bytes) throws IOException {

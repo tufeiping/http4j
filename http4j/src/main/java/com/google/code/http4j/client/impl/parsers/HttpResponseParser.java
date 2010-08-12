@@ -33,7 +33,7 @@ import com.google.code.http4j.client.impl.BasicHttpResponse;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class HttpResponseParser implements Parser<HttpResponse>{
+public class HttpResponseParser implements Parser<HttpResponse, InputStream>{
 	
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	

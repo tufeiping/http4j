@@ -17,12 +17,11 @@
 package com.google.code.http4j.client.impl.parsers;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public interface Parser <T> {
+public interface Parser <RESULT, SOURCE> {
 	
-	T parse(InputStream in) throws IOException;
+	RESULT parse(SOURCE source) throws IOException;
 }
