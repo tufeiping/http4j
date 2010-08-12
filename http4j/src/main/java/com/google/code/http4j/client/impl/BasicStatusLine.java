@@ -25,12 +25,12 @@ import com.google.code.http4j.client.StatusLine;
 public class BasicStatusLine implements StatusLine, Http {
 
 	String version;
-	int responseCode;
+	int statusCode;
 	String reason;
 
 	public BasicStatusLine(String version, int responseCode, String reason) {
 		this.version = version;
-		this.responseCode = responseCode;
+		this.statusCode = responseCode;
 		this.reason = reason;
 	}
 
@@ -40,8 +40,8 @@ public class BasicStatusLine implements StatusLine, Http {
 	}
 
 	@Override
-	public int getResponseCode() {
-		return responseCode;
+	public int getStatusCode() {
+		return statusCode;
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class BasicStatusLine implements StatusLine, Http {
 	@Override
 	public String format() {
 		return new StringBuilder(version).append(BLANK_CHAR)
-				.append(responseCode).append(BLANK_CHAR)
+				.append(statusCode).append(BLANK_CHAR)
 				.append(reason).toString();
 	}
 }

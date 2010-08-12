@@ -50,7 +50,7 @@ public class StatusLineParser extends AbstractParser<StatusLine> {
 		return createStatusLine(strings[0], Integer.parseInt(strings[1]), strings[2]);
 	}
 	
-	protected StatusLine createStatusLine(String version, int responseCode, String reason) {
-		return new BasicStatusLine(version, responseCode, reason);
+	protected StatusLine createStatusLine(String version, int statusCode, String reason) {
+		return new BasicStatusLine(version, statusCode, reason);
 	}
 }

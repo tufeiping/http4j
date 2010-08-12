@@ -39,7 +39,7 @@ public class StatusLineParserTestCase {
 		StatusLine statusLine = new StatusLineParser().parse(line.getBytes());
 		Assert.assertNotNull(statusLine);
 		Assert.assertEquals(statusLine.getVersion(), version);
-		Assert.assertEquals(statusLine.getResponseCode(), responseCode);
+		Assert.assertEquals(statusLine.getStatusCode(), responseCode);
 		Assert.assertEquals(statusLine.getReason(), reason);
 	}
 }

@@ -23,7 +23,7 @@ public interface StatusLine extends Formattable {
 
 	String getVersion();
 	
-	int getResponseCode();
+	int getStatusCode();
 	
 	String getReason();
 }

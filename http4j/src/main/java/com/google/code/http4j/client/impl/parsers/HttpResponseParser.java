@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.code.http4j.client.HttpHeader;
 import com.google.code.http4j.client.HttpResponse;
+import com.google.code.http4j.client.StatusDictionary;
 import com.google.code.http4j.client.StatusLine;
 import com.google.code.http4j.client.impl.BasicHttpResponse;
 
@@ -51,7 +52,10 @@ public class HttpResponseParser implements Parser<HttpResponse>{
 	public HttpResponse parse(InputStream in) throws IOException {
 		statusLine = parseStatusLine(in);
 		headerMap = parseHeaders(in);
-		entity = parseEntity(in);
+		hasEntity &= StatusDictionary.hasEntity(statusLine.getStatusCode());
+		if(hasEntity) {
+			entity = parseEntity(in);
+		}
 		return createHttpResponse();
 	}
 

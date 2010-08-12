@@ -46,6 +46,6 @@ public class HttpClientTestCase {
 		Assert.assertNotNull(response.getStatusLine());
 		Assert.assertNotNull(response.getHeaders());
 		Assert.assertTrue(response.getHeaders().size() > 0);
-		Assert.assertNotNull(response.getEntity());
+		Assert.assertNull(response.getEntity());
 	}
 }
