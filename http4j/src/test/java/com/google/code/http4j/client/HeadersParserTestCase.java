@@ -29,7 +29,7 @@ public class HeadersParserTestCase {
 				new NameValue("Accept","text/html"));
 		assertion("Host :\t www.google.com\r\nAccept:text/html", 
 				new NameValue("Host","www.google.com"),
-				new NameValue("Accept","text/html"));
+				new NameValue("accept","text/html"));
 	}
 	
 	private void assertion(String source, NameValue... nvs) throws IOException {
