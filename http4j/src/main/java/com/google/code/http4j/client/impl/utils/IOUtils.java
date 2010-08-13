@@ -46,7 +46,7 @@ public final class IOUtils {
 
 	public static ByteBuffer extendBuffer(ByteBuffer buffer) {
 		ByteBuffer newBuffer = ByteBuffer.allocate(buffer.capacity() << 1);
-		fill(buffer, newBuffer);
+		transfer(buffer, newBuffer);
 		return newBuffer;
 	}
 
@@ -85,7 +85,16 @@ public final class IOUtils {
 		return extract(valueHolder);
 	}
 	
-	public static void fill(ByteBuffer src, ByteBuffer dest) {
+	/**
+	 * Transfer data of src[0 - position] to dest buffer.
+	 * And then clear the src buffer.
+	 * @see ByteBuffer#flip()
+	 * @see ByteBuffer#put(ByteBuffer)
+	 * @see ByteBuffer#clear()
+	 * @param src
+	 * @param dest
+	 */
+	public static void transfer(ByteBuffer src, ByteBuffer dest) {
 		src.flip();
 		dest.put(src);
 		src.clear();

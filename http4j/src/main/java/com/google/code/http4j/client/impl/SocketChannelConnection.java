@@ -67,7 +67,7 @@ public class SocketChannelConnection implements Connection {
 		while (channel.read(buffer) == buffer.capacity()) {
 			// Increasing buffer's capacity reduces the chance to get here
 			extended = ensureSpace(buffer, extended);
-			IOUtils.fill(buffer, extended);
+			IOUtils.transfer(buffer, extended);
 		}
 		return IOUtils.extract(extended.position() == 0 ? buffer : extended);
 	}

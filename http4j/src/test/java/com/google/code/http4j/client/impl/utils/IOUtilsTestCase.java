@@ -43,6 +43,16 @@ public class IOUtilsTestCase {
 		assertionExtractByEnd("http4j", "http4j", "4g");
 	}
 	
+	@Test
+	public void testTransfer() {
+		byte[] bytes = "http4j".getBytes();
+		ByteBuffer src = ByteBuffer.allocate(bytes.length);
+		src.put(bytes);
+		ByteBuffer dest = ByteBuffer.allocate(bytes.length);
+		IOUtils.transfer(src, dest);
+		Assert.assertEquals(dest.position(), bytes.length);
+	}
+	
 	private void assertionExtractByEnd(String source, String dest, String end) {
 		ByteBuffer buffer = ByteBuffer.wrap(source.getBytes());
 		byte[] bytes = IOUtils.extractByEnd(buffer, end.getBytes());
