@@ -24,9 +24,6 @@ import java.net.URL;
  */
 public final class URLFormatter {
 	
-	private URLFormatter() {
-	}
-	
 	/**
 	 * Get standard URL by given string, ensure protocol and port are set. e.g.
 	 * <li>www.google.com --&gt; http://www.google.com:80</li>
