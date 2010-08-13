@@ -19,6 +19,7 @@ package com.google.code.http4j.client.impl.utils;
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -27,9 +28,9 @@ public final class IOUtils {
 
 	private IOUtils() {
 	}
-	
+
 	public static void close(Socket socket) {
-		if(null != socket && !socket.isClosed()) {
+		if (null != socket && !socket.isClosed()) {
 			try {
 				socket.close();
 			} catch (IOException e) {
@@ -38,11 +39,24 @@ public final class IOUtils {
 	}
 
 	public static void close(Closeable closeable) {
-		if(null != closeable) {
+		if (null != closeable) {
 			try {
 				closeable.close();
 			} catch (IOException e) {
 			}
 		}
+	}
+
+	/**
+	 * Extract buffer data from 0 to the position after flip.
+	 * 
+	 * @param buffer
+	 * @return bytes
+	 */
+	public static byte[] extract(ByteBuffer buffer) {
+		buffer.flip();
+		byte[] data = new byte[buffer.limit()];
+		System.arraycopy(buffer.array(), 0, data, 0, data.length);
+		return data;
 	}
 }

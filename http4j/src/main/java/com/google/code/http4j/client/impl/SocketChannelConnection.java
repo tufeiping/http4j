@@ -17,17 +17,17 @@ import com.google.code.http4j.client.impl.utils.IOUtils;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public class SocketChannelConnection implements Connection {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(SocketChannelConnection.class);
-	
+
 	protected SocketChannel channel;
-	
+
 	protected HttpHost host;
-	
+
 	public SocketChannelConnection(HttpHost host) {
 		this.host = host;
 	}
-	
+
 	@Override
 	public void close() {
 		IOUtils.close(channel);
@@ -46,26 +46,16 @@ public class SocketChannelConnection implements Connection {
 
 	@Override
 	public byte[] read() throws IOException {
-		int capacity = 2 << 13;
-		ByteBuffer buffer = ByteBuffer.allocate(capacity);
-		ByteBuffer result = buffer;
-		while(channel.read(buffer) == capacity) {
-			// Wrong, FIXME
-			result = extendBuffer(result);
-			result.put(buffer);
-			buffer.clear();
+		ByteBuffer buffer = ByteBuffer.allocate(1 << 12);//4096 bytes,normally enough
+		ByteBuffer extended = ByteBuffer.allocate(buffer.capacity() << 1);
+		while(channel.read(buffer) == buffer.capacity()) {
+			// increase the buffer's capacity will reduce the chance to reach here
+			extended = ensureSpace(buffer, extended);
+			fill(buffer, extended);
 		}
-		channel.read(buffer);//16384 b = 16kb = 0.016mb
-		buffer.flip();
-		return buffer.array();
+		return IOUtils.extract(extended.position() == 0 ? buffer : extended);
 	}
 
-	protected InetSocketAddress getSocketAddress(HttpHost host) throws UnknownHostException {
-		int port = host.getPort();
-		port = (port < 0) ? (host.getProtocol().equalsIgnoreCase(Http.PROTOCOL_HTTP) ? 80 : 443) : port;
-		return new InetSocketAddress(host.getInetAddress(), port);
-	}
-	
 	@Override
 	public boolean isClosed() {
 		return !channel.isOpen();
@@ -77,10 +67,27 @@ public class SocketChannelConnection implements Connection {
 		ByteBuffer buffer = ByteBuffer.wrap(message);
 		channel.write(buffer);
 	}
-	
+
 	private ByteBuffer extendBuffer(ByteBuffer buffer) {
 		ByteBuffer newBuffer = ByteBuffer.allocate(buffer.capacity() << 1);
-		newBuffer.put(buffer);
+		fill(buffer, newBuffer);
 		return newBuffer;
+	}
+	
+	protected ByteBuffer ensureSpace(ByteBuffer src, ByteBuffer dest) {
+		return dest.remaining() < src.position() ? extendBuffer(dest) : dest;
+	}
+
+	protected void fill(ByteBuffer src, ByteBuffer dest) {
+		src.flip();
+		dest.put(src);
+		src.clear();
+	}
+
+	protected InetSocketAddress getSocketAddress(HttpHost host)
+			throws UnknownHostException {
+		int port = host.getPort();
+		port = (port < 0) ? (host.getProtocol().equalsIgnoreCase(Http.PROTOCOL_HTTP) ? 80 : 443) : port;
+		return new InetSocketAddress(host.getInetAddress(), port);
 	}
 }
