@@ -15,23 +15,30 @@
  */
 package com.google.code.http4j.client;
 
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
+ *
  */
-public class StatusDictionary {
-
-	public static final int OK = 200;
-
-	public static final int NO_CONTENT = 204;
-
-	public static final int RESET_CONTENT = 205;
-
-	public static final int NOT_MODIFIED = 304;
-
-	public static boolean hasEntity(int status) {
-		return status >= OK 
-			&& status != NO_CONTENT 
-			&& status != RESET_CONTENT
-			&& status != NOT_MODIFIED;
+public class StatusDictionaryTestCase {
+	
+	@Test
+	public void testHasEntity() {
+		assertion(0, false);
+		assertion(100, false);
+		assertion(200, true);
+		assertion(204, false);
+		assertion(205, false);
+		assertion(304, false);
+		assertion(399, true);
+		assertion(400, true);
+		assertion(404, true);
+	}
+	
+	private void assertion(int status, boolean hasEntity) {
+		boolean result = StatusDictionary.hasEntity(status);
+		Assert.assertEquals(result, hasEntity);
 	}
 }
