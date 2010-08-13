@@ -52,7 +52,7 @@ public class BasicConnectionPool implements ConnectionPool {
 	}
 	
 	protected Connection createConnection(HttpHost host) throws IOException {
-		SocketConnection connection = new SocketConnection(host);
+		Connection connection = new SocketChannelConnection(host);
 		connection.connect();
 		return connection;
 	}

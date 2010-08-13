@@ -17,13 +17,11 @@
 package com.google.code.http4j.client.impl;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import com.google.code.http4j.client.HttpClient;
 import com.google.code.http4j.client.HttpRequest;
 import com.google.code.http4j.client.HttpResponse;
-import com.google.code.http4j.client.impl.parsers.HttpResponseParser;
-import com.google.code.http4j.client.impl.parsers.Parser;
+import com.google.code.http4j.client.HttpResponseParser;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -49,27 +47,26 @@ public class BasicHttpClient implements HttpClient {
 		Connection connection = connectionPool.getConnection(request.getHost());
 		try {
 			connection.write(request.format().getBytes());
-			//HttpResponse response = createResponseParser(request.hasEntity()).parse(connection.read());
+			HttpResponse response = createResponseParser().parse(connection.read(),request.hasEntity());
 			connectionPool.releaseConnection(connection);
-			//return response;
-			return null;
+			return response;
 		} catch (IOException e) {
 			connection.close();
 			throw e;
 		}
 	}
 
-	protected Parser<HttpResponse, InputStream> createResponseParser(boolean hasEntity) {
-		return new HttpResponseParser(hasEntity);
-	}
-
-	protected ConnectionPool createConnectionPool() {
-		return new BasicConnectionPool();
-	}
-
 	@Override
 	public HttpResponse head(String url) throws IOException {
 		HttpRequest request = new HttpHead(url);
 		return submit(request);
+	}
+	
+	protected HttpResponseParser createResponseParser() {
+		return new BasicHttpResponseParser();
+	}
+
+	protected ConnectionPool createConnectionPool() {
+		return new BasicConnectionPool();
 	}
 }
