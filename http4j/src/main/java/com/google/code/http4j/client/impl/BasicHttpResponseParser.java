@@ -20,10 +20,12 @@ package com.google.code.http4j.client.impl;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Collection;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.code.http4j.client.HeadersParser;
 import com.google.code.http4j.client.Http;
 import com.google.code.http4j.client.HttpHeader;
 import com.google.code.http4j.client.HttpResponse;
@@ -36,7 +38,7 @@ import com.google.code.http4j.client.impl.utils.IOUtils;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class BasicHttpResponseParser implements HttpResponseParser {
+public class BasicHttpResponseParser implements HttpResponseParser, Http {
 	
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	
@@ -45,19 +47,19 @@ public class BasicHttpResponseParser implements HttpResponseParser {
 	
 	public HttpResponse parse(byte[] bytes, boolean hasEntity) throws IOException {
 		ByteBuffer buffer = ByteBuffer.wrap(bytes);
-		StatusLine statusLine = createStatusLineParser().parse(IOUtils.extractByEnd(buffer, Http.LF));
-		Collection<HttpHeader> headers = parseHeaders(buffer);
+		StatusLine statusLine = createStatusLineParser().parse(IOUtils.extractByEnd(buffer, LF));
+		List<HttpHeader> headers = createHeadersParser().parse(IOUtils.extractByEnd(buffer, CR, LF, CR, LF));
 		hasEntity &= StatusDictionary.hasEntity(statusLine.getStatusCode());
 		String entity = hasEntity ? parseEntity(buffer, statusLine.getStatusCode()) : null;
 		return createHttpResponse(statusLine, headers, entity);
 	}
 
-	protected StatusLineParser createStatusLineParser() throws IOException {
+	protected StatusLineParser createStatusLineParser() {
 		return new BasicStatusLineParser();
 	}
 	
-	protected Collection<HttpHeader> parseHeaders(ByteBuffer buffer) throws IOException {
-		return null;
+	protected HeadersParser createHeadersParser() {
+		return new BasicHeadersParser();
 	}
 
 	protected String parseEntity(ByteBuffer buffer, int statusCode) {
