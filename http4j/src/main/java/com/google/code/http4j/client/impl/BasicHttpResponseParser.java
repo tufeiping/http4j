@@ -30,7 +30,7 @@ import com.google.code.http4j.client.Http;
 import com.google.code.http4j.client.HttpHeader;
 import com.google.code.http4j.client.HttpResponse;
 import com.google.code.http4j.client.HttpResponseParser;
-import com.google.code.http4j.client.StatusDictionary;
+import com.google.code.http4j.client.StatusCodes;
 import com.google.code.http4j.client.StatusLine;
 import com.google.code.http4j.client.StatusLineParser;
 import com.google.code.http4j.client.impl.utils.IOUtils;
@@ -49,7 +49,7 @@ public class BasicHttpResponseParser implements HttpResponseParser, Http {
 		ByteBuffer buffer = ByteBuffer.wrap(bytes);
 		StatusLine statusLine = createStatusLineParser().parse(IOUtils.extractByEnd(buffer, LF));
 		List<HttpHeader> headers = createHeadersParser().parse(IOUtils.extractByEnd(buffer, CR, LF, CR, LF));
-		hasEntity &= StatusDictionary.hasEntity(statusLine.getStatusCode());
+		hasEntity &= StatusCodes.hasEntity(statusLine.getStatusCode());
 		String entity = hasEntity ? parseEntity(buffer, statusLine.getStatusCode()) : null;
 		return createHttpResponse(statusLine, headers, entity);
 	}
