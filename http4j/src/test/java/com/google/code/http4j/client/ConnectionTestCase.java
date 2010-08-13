@@ -8,7 +8,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.code.http4j.client.impl.BasicHttpHost;
-import com.google.code.http4j.client.impl.Connection;
 import com.google.code.http4j.client.impl.SocketChannelConnection;
 import com.google.code.http4j.client.impl.utils.IOUtils;
 
