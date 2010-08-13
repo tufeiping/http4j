@@ -51,14 +51,6 @@ public class BasicHttpResponseParser implements HttpResponseParser {
 	}
 
 	protected StatusLine parseStatusLine(ByteBuffer buffer) throws IOException {
-		
-		while(buffer.hasRemaining()) {
-			byte b = buffer.get();
-			if(b == Http.LF) {
-				break;
-			}
-		}
-		
 		return null;
 	}
 	

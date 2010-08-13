@@ -13,13 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.http4j.client;
+package com.google.code.http4j.client.impl;
 
+import com.google.code.http4j.client.StatusLine;
+import com.google.code.http4j.client.StatusLineParser;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public interface StatusLineParser {
-	
-	StatusLine parse(byte[] source);
+public class BasicStatusLineParser implements StatusLineParser {
+
+	@Override
+	public StatusLine parse(byte[] source) {
+		
+		return null;
+	}
+
 }

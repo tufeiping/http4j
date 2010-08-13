@@ -59,6 +59,17 @@ public final class IOUtils {
 		System.arraycopy(buffer.array(), 0, data, 0, data.length);
 		return data;
 	}
+
+	public static byte[] extract(ByteBuffer buffer, byte... endExpression) {
+		ByteBuffer valueHolder = ByteBuffer.allocate(buffer.limit());
+		byte b;
+		int count = 0;
+		while(buffer.hasRemaining() && count < endExpression.length) {
+			count = ((b = buffer.get()) == endExpression[count]) ? count + 1 : 0;
+			valueHolder.put(b);
+		}
+		return null;
+	}
 	
 	public static ByteBuffer extendBuffer(ByteBuffer buffer) {
 		ByteBuffer newBuffer = ByteBuffer.allocate(buffer.capacity() << 1);

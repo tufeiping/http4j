@@ -30,11 +30,7 @@ public interface Http {
 	byte BLANK = ' ';//32
 	char BLANK_CHAR = (char) BLANK;
 	String CRLF = "\r\n";
-	
-	byte[] BLANK_END = new byte[]{BLANK};
-	byte[] STATUS_LINE_END = new byte[]{LF};
-	byte[] HEADERS_END = new byte[]{CR, LF, CR, LF};
-	
+
 	String DEFAULT_HTTP_VERSION = "HTTP/1.1";
 	
 	String HEADER_NAME_HOST = "Host";
