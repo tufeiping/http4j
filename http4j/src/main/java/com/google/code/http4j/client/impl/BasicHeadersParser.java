@@ -38,7 +38,7 @@ public class BasicHeadersParser implements HeadersParser {
 		List<HttpHeader> headers = new ArrayList<HttpHeader>();
 		String[] array = null;
 		while((line = reader.readLine()) != null) {
-			array = line.split("( )*:( )*", 2);
+			array = line.split("[ \t]*:[ \t]*", 2);
 			headers.add(createHttpHeader(array[0], array[1]));
 		}
 		return headers;

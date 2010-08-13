@@ -26,7 +26,7 @@ public class BasicStatusLineParser implements StatusLineParser {
 	@Override
 	public StatusLine parse(byte[] source) {
 		String line = new String(source);
-		String[] fields = line.split("[ ]+", 3);
+		String[] fields = line.split("[ \t\r]+", 3);
 		return createStatusLine(fields[0], Integer.parseInt(fields[1]), fields[2].trim());
 	}
 
