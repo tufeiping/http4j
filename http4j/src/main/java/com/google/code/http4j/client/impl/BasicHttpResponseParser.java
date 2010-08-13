@@ -18,11 +18,13 @@ package com.google.code.http4j.client.impl;
 
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Collection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.code.http4j.client.Http;
 import com.google.code.http4j.client.HttpHeader;
 import com.google.code.http4j.client.HttpResponse;
 import com.google.code.http4j.client.HttpResponseParser;
@@ -30,7 +32,6 @@ import com.google.code.http4j.client.StatusDictionary;
 import com.google.code.http4j.client.StatusLine;
 
 /**
- * Not ThreadSafe
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public class BasicHttpResponseParser implements HttpResponseParser {
@@ -41,29 +42,38 @@ public class BasicHttpResponseParser implements HttpResponseParser {
 	}
 	
 	public HttpResponse parse(byte[] bytes, boolean hasEntity) throws IOException {
-		StatusLine statusLine = parseStatusLine(bytes);
-		Collection<HttpHeader> headers = parseHeaders(bytes);
+		ByteBuffer buffer = ByteBuffer.wrap(bytes);
+		StatusLine statusLine = parseStatusLine(buffer);
+		Collection<HttpHeader> headers = parseHeaders(buffer);
 		hasEntity &= StatusDictionary.hasEntity(statusLine.getStatusCode());
-		String entity = hasEntity ? parseEntity(bytes, statusLine.getStatusCode()) : null;
+		String entity = hasEntity ? parseEntity(buffer, statusLine.getStatusCode()) : null;
 		return createHttpResponse(statusLine, headers, entity);
 	}
 
+	protected StatusLine parseStatusLine(ByteBuffer buffer) throws IOException {
+		
+		while(buffer.hasRemaining()) {
+			byte b = buffer.get();
+			if(b == Http.LF) {
+				break;
+			}
+		}
+		
+		return null;
+	}
+	
+	protected Collection<HttpHeader> parseHeaders(ByteBuffer buffer) throws IOException {
+		return null;
+	}
+
+	protected String parseEntity(ByteBuffer buffer, int statusCode) {
+		return "";//TODO
+	}
+	
 	protected HttpResponse createHttpResponse(StatusLine statusLine, Collection<HttpHeader> headers, String entity) {
 		HttpResponse response = new BasicHttpResponse(statusLine, entity);
 		response.addHeaders(headers);
 		logger.debug("HTTP Response <<\r\n{}", response);
 		return response;
-	}
-
-	protected StatusLine parseStatusLine(byte[] bytes) throws IOException {
-		return null;
-	}
-	
-	protected Collection<HttpHeader> parseHeaders(byte[] bytes) throws IOException {
-		return null;
-	}
-
-	protected String parseEntity(byte[] bytes, int statusCode) {
-		return "";//TODO
 	}
 }

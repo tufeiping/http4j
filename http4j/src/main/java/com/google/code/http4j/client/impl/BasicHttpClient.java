@@ -18,6 +18,8 @@ package com.google.code.http4j.client.impl;
 
 import java.io.IOException;
 
+import com.google.code.http4j.client.Connection;
+import com.google.code.http4j.client.ConnectionPool;
 import com.google.code.http4j.client.HttpClient;
 import com.google.code.http4j.client.HttpRequest;
 import com.google.code.http4j.client.HttpResponse;

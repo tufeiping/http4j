@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import com.google.code.http4j.client.Connection;
+import com.google.code.http4j.client.ConnectionPool;
 import com.google.code.http4j.client.HttpHost;
 
 /**
