@@ -59,4 +59,16 @@ public final class IOUtils {
 		System.arraycopy(buffer.array(), 0, data, 0, data.length);
 		return data;
 	}
+	
+	public static ByteBuffer extendBuffer(ByteBuffer buffer) {
+		ByteBuffer newBuffer = ByteBuffer.allocate(buffer.capacity() << 1);
+		fill(buffer, newBuffer);
+		return newBuffer;
+	}
+	
+	public static void fill(ByteBuffer src, ByteBuffer dest) {
+		src.flip();
+		dest.put(src);
+		src.clear();
+	}
 }

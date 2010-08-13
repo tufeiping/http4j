@@ -46,12 +46,12 @@ public class SocketChannelConnection implements Connection {
 
 	@Override
 	public byte[] read() throws IOException {
-		ByteBuffer buffer = ByteBuffer.allocate(1 << 12);//4096 bytes,normally enough
+		ByteBuffer buffer = ByteBuffer.allocate(1 << 10);
 		ByteBuffer extended = ByteBuffer.allocate(buffer.capacity() << 1);
-		while(channel.read(buffer) == buffer.capacity()) {
-			// increase the buffer's capacity will reduce the chance to reach here
+		while (channel.read(buffer) == buffer.capacity()) {
+			// Increasing buffer's capacity reduces the chance to get here
 			extended = ensureSpace(buffer, extended);
-			fill(buffer, extended);
+			IOUtils.fill(buffer, extended);
 		}
 		return IOUtils.extract(extended.position() == 0 ? buffer : extended);
 	}
@@ -68,26 +68,15 @@ public class SocketChannelConnection implements Connection {
 		channel.write(buffer);
 	}
 
-	private ByteBuffer extendBuffer(ByteBuffer buffer) {
-		ByteBuffer newBuffer = ByteBuffer.allocate(buffer.capacity() << 1);
-		fill(buffer, newBuffer);
-		return newBuffer;
-	}
-	
 	protected ByteBuffer ensureSpace(ByteBuffer src, ByteBuffer dest) {
-		return dest.remaining() < src.position() ? extendBuffer(dest) : dest;
-	}
-
-	protected void fill(ByteBuffer src, ByteBuffer dest) {
-		src.flip();
-		dest.put(src);
-		src.clear();
+		return dest.remaining() < src.position() ? IOUtils.extendBuffer(dest): dest;
 	}
 
 	protected InetSocketAddress getSocketAddress(HttpHost host)
 			throws UnknownHostException {
 		int port = host.getPort();
-		port = (port < 0) ? (host.getProtocol().equalsIgnoreCase(Http.PROTOCOL_HTTP) ? 80 : 443) : port;
+		port = (port < 0) ? (host.getProtocol().equalsIgnoreCase(
+				Http.PROTOCOL_HTTP) ? 80 : 443) : port;
 		return new InetSocketAddress(host.getInetAddress(), port);
 	}
 }
