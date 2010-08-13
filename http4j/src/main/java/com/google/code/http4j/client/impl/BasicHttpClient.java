@@ -60,8 +60,7 @@ public class BasicHttpClient implements HttpClient {
 
 	@Override
 	public HttpResponse head(String url) throws IOException {
-		HttpRequest request = new HttpHead(url);
-		return submit(request);
+		return submit(new HttpHead(url));
 	}
 	
 	protected HttpResponseParser createResponseParser() {
