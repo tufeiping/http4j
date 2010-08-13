@@ -34,6 +34,10 @@ public class BasicHttpHost implements HttpHost {
 	
 	protected InetAddress inetAddress;
 
+	public BasicHttpHost(String host) throws UnknownHostException {
+		this(PROTOCOL_HTTP, host, 80);
+	}
+	
 	public BasicHttpHost(String protocol, String host, int port) throws UnknownHostException {
 		this(protocol, host, port, null);
 	}
