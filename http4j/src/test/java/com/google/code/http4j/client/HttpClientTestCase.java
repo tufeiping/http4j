@@ -39,6 +39,14 @@ public class HttpClientTestCase {
 	}
 	
 	@Test
+	public void testExecute() throws IOException {
+		HttpRequest request = new HttpHead("http://www.google.com");
+		byte[] response = client.execute(request);
+		Assert.assertNotNull(response);
+		Assert.assertTrue(response.length > 0);
+	}
+	
+	@Test
 	public void testSubmit() throws IOException {
 		HttpRequest request = new HttpHead("http://www.google.com");
 		HttpResponse response = client.submit(request);
