@@ -22,8 +22,26 @@ import java.io.IOException;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public interface HttpClient {
-	
+
+	/**
+	 * Submit request and parse the response.
+	 * @param request
+	 * @return response
+	 * @throws IOException
+	 */
 	HttpResponse submit(HttpRequest request) throws IOException;
-	
+
+	/**
+	 * This execution is normally the same with {@link #submit(HttpRequest)},
+	 * but would not parse the response. This will be usefull in stress or
+	 * load test.
+	 * 
+	 * @param request
+	 * @return bytes
+	 * @throws IOException
+	 */
+	byte[] execute(HttpRequest request) throws IOException;
+
 	HttpResponse head(String url) throws IOException;
+	byte[] sendHead(String url) throws IOException;
 }

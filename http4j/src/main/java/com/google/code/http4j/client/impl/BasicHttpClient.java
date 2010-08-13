@@ -44,12 +44,20 @@ public class BasicHttpClient implements HttpClient {
 		connectionPool = createConnectionPool();
 	}
 
+	protected ConnectionPool createConnectionPool() {
+		return new BasicConnectionPool();
+	}
+
+	protected HttpResponseParser createResponseParser() {
+		return new BasicHttpResponseParser();
+	}
+	
 	@Override
-	public HttpResponse submit(HttpRequest request) throws IOException {
+	public byte[] execute(HttpRequest request) throws IOException {
 		Connection connection = connectionPool.getConnection(request.getHost());
 		try {
 			connection.write(request.format().getBytes());
-			HttpResponse response = createResponseParser().parse(connection.read(),request.hasEntity());
+			byte[] response = connection.read();
 			connectionPool.releaseConnection(connection);
 			return response;
 		} catch (IOException e) {
@@ -62,12 +70,14 @@ public class BasicHttpClient implements HttpClient {
 	public HttpResponse head(String url) throws IOException {
 		return submit(new HttpHead(url));
 	}
-	
-	protected HttpResponseParser createResponseParser() {
-		return new BasicHttpResponseParser();
+
+	@Override
+	public byte[] sendHead(String url) throws IOException {
+		return execute(new HttpHead(url));
 	}
 
-	protected ConnectionPool createConnectionPool() {
-		return new BasicConnectionPool();
+	@Override
+	public HttpResponse submit(HttpRequest request) throws IOException {
+		return createResponseParser().parse(execute(request), request.hasEntity());
 	}
 }
