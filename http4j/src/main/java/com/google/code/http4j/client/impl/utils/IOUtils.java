@@ -67,6 +67,7 @@ public final class IOUtils {
 			count = ((b = buffer.get()) == endExpression[count]) ? count + 1 : 0;
 			valueHolder.put(b);
 		}
+		valueHolder.position(valueHolder.position() - count);
 		return extract(valueHolder);
 	}
 	
