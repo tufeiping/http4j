@@ -17,11 +17,9 @@
 package com.google.code.http4j.client.impl;
 
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import com.google.code.http4j.client.HttpHeader;
 import com.google.code.http4j.client.HttpMessage;
@@ -33,14 +31,14 @@ public abstract class AbstractHttpMessage implements HttpMessage {
 
 	private static final long serialVersionUID = 3025166196954976484L;
 	
-	protected Map<String, HttpHeader> headerMap;
+	protected List<HttpHeader> headers;
 	
 	public AbstractHttpMessage() {
-		this.headerMap = createHeaderMap();
+		this.headers = new LinkedList<HttpHeader>();
 	}
 
 	public List<HttpHeader> getHeaders() {
-		return new ArrayList<HttpHeader>(headerMap.values());
+		return headers;
 	}
 	
 	@Override
@@ -64,12 +62,12 @@ public abstract class AbstractHttpMessage implements HttpMessage {
 	
 	@Override
 	public void addHeader(HttpHeader header) {
-		headerMap.put(header.getCanonicalName(), header);
+		headers.add(header);
 	}
 	
 	protected String formatHeaders() {
 		StringBuilder message = new StringBuilder();
-		for(HttpHeader header:headerMap.values()) {
+		for(HttpHeader header: headers) {
 			message.append(header.format()).append(CRLF);
 		}
 		return message.toString();
@@ -77,9 +75,5 @@ public abstract class AbstractHttpMessage implements HttpMessage {
 	
 	protected HttpHeader createHeader(String name, String value) {
 		return new BasicHttpHeader(name, value);
-	}
-	
-	protected Map<String, HttpHeader> createHeaderMap() {
-		return new LinkedHashMap<String, HttpHeader>();
 	}
 }
