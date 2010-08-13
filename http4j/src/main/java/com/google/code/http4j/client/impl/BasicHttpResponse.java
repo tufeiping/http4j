@@ -50,11 +50,13 @@ public class BasicHttpResponse extends AbstractHttpMessage implements HttpRespon
 	public String format() {
 		StringBuilder message = new StringBuilder(formatStatusLine());
 		message.append(CRLF).append(formatHeaders());
-		message.append(CRLF).append(CRLF).append(formatEntity());
+		message.append(CRLF).append(CRLF);
+		message = null == entity ? message : message.append(formatEntity());
 		return message.toString();
 	}
 
 	protected String formatEntity() {
+		// TODO encode
 		return entity;
 	}
 

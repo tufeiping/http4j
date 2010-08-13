@@ -72,7 +72,7 @@ public class BasicHttpClient implements HttpClient {
 	}
 
 	@Override
-	public byte[] sendHead(String url) throws IOException {
+	public byte[] executeHead(String url) throws IOException {
 		return execute(new HttpHead(url));
 	}
 

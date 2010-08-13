@@ -56,4 +56,21 @@ public class HttpClientTestCase {
 		Assert.assertTrue(response.getHeaders().size() > 0);
 		Assert.assertNull(response.getEntity());
 	}
+	
+	@Test
+	public void testHead() throws IOException {
+		HttpResponse response = client.head("http://www.google.com");
+		Assert.assertNotNull(response);
+		Assert.assertNotNull(response.getStatusLine());
+		Assert.assertNotNull(response.getHeaders());
+		Assert.assertTrue(response.getHeaders().size() > 0);
+		Assert.assertNull(response.getEntity());
+	}
+	
+	@Test
+	public void testExecuteHead() throws IOException {
+		byte[] response = client.executeHead("http://www.google.com");
+		Assert.assertNotNull(response);
+		Assert.assertTrue(response.length > 0);
+	}
 }
