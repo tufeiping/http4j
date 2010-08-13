@@ -30,6 +30,8 @@ import com.google.code.http4j.client.HttpResponse;
 import com.google.code.http4j.client.HttpResponseParser;
 import com.google.code.http4j.client.StatusDictionary;
 import com.google.code.http4j.client.StatusLine;
+import com.google.code.http4j.client.StatusLineParser;
+import com.google.code.http4j.client.impl.utils.IOUtils;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -43,15 +45,15 @@ public class BasicHttpResponseParser implements HttpResponseParser {
 	
 	public HttpResponse parse(byte[] bytes, boolean hasEntity) throws IOException {
 		ByteBuffer buffer = ByteBuffer.wrap(bytes);
-		StatusLine statusLine = parseStatusLine(buffer);
+		StatusLine statusLine = createStatusLineParser().parse(IOUtils.extractByEnd(buffer, Http.LF));
 		Collection<HttpHeader> headers = parseHeaders(buffer);
 		hasEntity &= StatusDictionary.hasEntity(statusLine.getStatusCode());
 		String entity = hasEntity ? parseEntity(buffer, statusLine.getStatusCode()) : null;
 		return createHttpResponse(statusLine, headers, entity);
 	}
 
-	protected StatusLine parseStatusLine(ByteBuffer buffer) throws IOException {
-		return null;
+	protected StatusLineParser createStatusLineParser() throws IOException {
+		return new BasicStatusLineParser();
 	}
 	
 	protected Collection<HttpHeader> parseHeaders(ByteBuffer buffer) throws IOException {
