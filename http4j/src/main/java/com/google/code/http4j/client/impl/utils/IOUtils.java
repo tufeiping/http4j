@@ -26,7 +26,13 @@ import java.nio.ByteBuffer;
  */
 public final class IOUtils {
 
-	private IOUtils() {
+	public static void close(Closeable closeable) {
+		if (null != closeable) {
+			try {
+				closeable.close();
+			} catch (IOException e) {
+			}
+		}
 	}
 
 	public static void close(Socket socket) {
@@ -38,13 +44,10 @@ public final class IOUtils {
 		}
 	}
 
-	public static void close(Closeable closeable) {
-		if (null != closeable) {
-			try {
-				closeable.close();
-			} catch (IOException e) {
-			}
-		}
+	public static ByteBuffer extendBuffer(ByteBuffer buffer) {
+		ByteBuffer newBuffer = ByteBuffer.allocate(buffer.capacity() << 1);
+		fill(buffer, newBuffer);
+		return newBuffer;
 	}
 
 	/**
@@ -59,6 +62,17 @@ public final class IOUtils {
 		return data;
 	}
 
+	/**
+	 * Extract data from buffer by given end expression.e.g.
+	 * <li>http4j [4j] -&gt; http</li>
+	 * <li>http4j [4] -&gt; http</li>
+	 * <li>http4j [ttp4j] -&gt; h</li>
+	 * <li>http4j [http4j] -&gt; ""</li>
+	 * <li>http4j [4g] -&gt; "http4j"</li>
+	 * @param buffer
+	 * @param endExpression minimum length of 1
+	 * @return bytes
+	 */
 	public static byte[] extractByEnd(ByteBuffer buffer, byte... endExpression) {
 		ByteBuffer valueHolder = ByteBuffer.allocate(buffer.limit());
 		byte b;
@@ -69,12 +83,6 @@ public final class IOUtils {
 		}
 		valueHolder.position(valueHolder.position() - count);
 		return extract(valueHolder);
-	}
-	
-	public static ByteBuffer extendBuffer(ByteBuffer buffer) {
-		ByteBuffer newBuffer = ByteBuffer.allocate(buffer.capacity() << 1);
-		fill(buffer, newBuffer);
-		return newBuffer;
 	}
 	
 	public static void fill(ByteBuffer src, ByteBuffer dest) {
