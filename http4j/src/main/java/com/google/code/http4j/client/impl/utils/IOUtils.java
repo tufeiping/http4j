@@ -54,13 +54,12 @@ public final class IOUtils {
 	 * @return bytes
 	 */
 	public static byte[] extract(ByteBuffer buffer) {
-		buffer.flip();
-		byte[] data = new byte[buffer.limit()];
+		byte[] data = new byte[buffer.position()];
 		System.arraycopy(buffer.array(), 0, data, 0, data.length);
 		return data;
 	}
 
-	public static byte[] extract(ByteBuffer buffer, byte... endExpression) {
+	public static byte[] extractByEnd(ByteBuffer buffer, byte... endExpression) {
 		ByteBuffer valueHolder = ByteBuffer.allocate(buffer.limit());
 		byte b;
 		int count = 0;
@@ -68,7 +67,7 @@ public final class IOUtils {
 			count = ((b = buffer.get()) == endExpression[count]) ? count + 1 : 0;
 			valueHolder.put(b);
 		}
-		return null;
+		return extract(valueHolder);
 	}
 	
 	public static ByteBuffer extendBuffer(ByteBuffer buffer) {
