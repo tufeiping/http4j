@@ -24,6 +24,7 @@ import com.google.code.http4j.client.StatusLine;
  */
 public class BasicStatusLine implements StatusLine, Http {
 
+	private static final long serialVersionUID = -5318592976726582472L;
 	String version;
 	int statusCode;
 	String reason;
