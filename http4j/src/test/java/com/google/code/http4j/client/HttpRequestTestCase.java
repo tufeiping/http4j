@@ -19,10 +19,12 @@ import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.code.http4j.client.impl.BasicHttpHost;
 import com.google.code.http4j.client.impl.HttpGet;
+import com.google.code.http4j.client.impl.HttpHead;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -30,9 +32,26 @@ import com.google.code.http4j.client.impl.HttpGet;
  */
 public class HttpRequestTestCase {
 	
+	protected HttpHost host;
+	protected HttpRequest getRequest;
+	protected HttpRequest headRequest;
+
+	@BeforeClass
+	public void setUp() throws MalformedURLException, UnknownHostException {
+		host = new BasicHttpHost("www.google.com");
+		getRequest = new HttpGet("http://www.google.com/search?q=http4j");
+		headRequest = new HttpHead("http://www.google.com");
+	}
+	
 	@Test
 	public void testGetHost() throws MalformedURLException, UnknownHostException {
-		HttpRequest request = new HttpGet("http://www.google.com");
-		Assert.assertEquals(request.getHost(), new BasicHttpHost("www.google.com"));
+		Assert.assertEquals(getRequest.getHost(), host);
+		Assert.assertEquals(headRequest.getHost(), host);
+	}
+	
+	@Test
+	public void testHasEntity() {
+		Assert.assertFalse(getRequest.hasEntity());
+		Assert.assertFalse(headRequest.hasEntity());
 	}
 }
