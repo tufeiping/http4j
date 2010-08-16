@@ -13,20 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.google.code.http4j.client.impl;
 
-package com.google.code.http4j.client;
-
+import java.net.MalformedURLException;
+import java.net.UnknownHostException;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
+ *
  */
-public interface HttpRequest extends HttpMessage {
+public abstract class AbstractUriRequest extends AbstractHttpRequest {
 
-	HttpHost getHost();
+	private static final long serialVersionUID = -8545690642344763108L;
+	
+	public AbstractUriRequest(String _url) throws MalformedURLException,
+			UnknownHostException {
+		super(_url);
+	}
 
-	boolean hasEntity();
-	
-	void addParameters(HttpParameter... parameters);
-	
-	void addParameter(String name, String... values);
+	@Override
+	protected String formatBody() {
+		return "";
+	}
+
+	@Override
+	protected String getURI() {
+		return parameters.isEmpty() ? getPath() : calculateURI();
+	}
 }

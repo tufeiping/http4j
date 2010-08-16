@@ -13,20 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.google.code.http4j.client.impl;
 
-package com.google.code.http4j.client;
-
+import com.google.code.http4j.client.HttpParameter;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
+ *
  */
-public interface HttpRequest extends HttpMessage {
+public class BasicHttpParameter extends NameValuePair implements HttpParameter {
 
-	HttpHost getHost();
+	public BasicHttpParameter(String name, String value) {
+		super(name, value);
+	}
 
-	boolean hasEntity();
+	@Override
+	public String format() {
+		return new StringBuilder(name).append("=").append(value).toString();
+	}
 	
-	void addParameters(HttpParameter... parameters);
-	
-	void addParameter(String name, String... values);
+	@Override
+	public boolean equals(Object obj) {
+		// In lotto, num = 1 & num = 1 is two parameter
+		return this == obj;
+	}
 }

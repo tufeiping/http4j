@@ -22,7 +22,7 @@ import java.net.UnknownHostException;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class HttpGet extends AbstractHttpRequest {
+public class HttpGet extends AbstractUriRequest {
 
 	private static final long serialVersionUID = -4509278701186547565L;
 
@@ -32,13 +32,7 @@ public class HttpGet extends AbstractHttpRequest {
 	}
 
 	@Override
-	protected String formatBody() {
-		return "";
-	}
-
-	@Override
-	protected String formatRequestLine() {
-		// TODO
-		return "";
+	String getName() {
+		return GET;
 	}
 }

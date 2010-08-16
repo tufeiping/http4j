@@ -22,27 +22,22 @@ import java.net.UnknownHostException;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class HttpHead extends AbstractHttpRequest {
+public class HttpHead extends AbstractUriRequest {
 
 	private static final long serialVersionUID = -2339520317320114115L;
-	
+
 	public HttpHead(String url) throws MalformedURLException,
 			UnknownHostException {
 		super(url);
 	}
-	
+
 	@Override
 	public boolean hasEntity() {
 		return false;
 	}
 
 	@Override
-	protected String formatBody() {
-		return "";
-	}
-
-	@Override
-	protected String formatRequestLine() {
-		return new StringBuilder(HEAD).append(BLANK_CHAR).append(getURI()).append(BLANK_CHAR).append(DEFAULT_HTTP_VERSION).toString();
+	String getName() {
+		return HEAD;
 	}
 }

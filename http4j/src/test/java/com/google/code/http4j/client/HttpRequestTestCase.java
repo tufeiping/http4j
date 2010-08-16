@@ -13,20 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.google.code.http4j.client;
 
+import java.net.MalformedURLException;
+import java.net.UnknownHostException;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import com.google.code.http4j.client.impl.BasicHttpHost;
+import com.google.code.http4j.client.impl.HttpGet;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
+ *
  */
-public interface HttpRequest extends HttpMessage {
-
-	HttpHost getHost();
-
-	boolean hasEntity();
+public class HttpRequestTestCase {
 	
-	void addParameters(HttpParameter... parameters);
-	
-	void addParameter(String name, String... values);
+	@Test
+	public void testGetHost() throws MalformedURLException, UnknownHostException {
+		HttpRequest request = new HttpGet("http://www.google.com");
+		Assert.assertEquals(request.getHost(), new BasicHttpHost("www.google.com"));
+	}
 }

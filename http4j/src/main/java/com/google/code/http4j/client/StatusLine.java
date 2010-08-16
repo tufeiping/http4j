@@ -16,10 +16,12 @@
 
 package com.google.code.http4j.client;
 
+import java.io.Serializable;
+
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public interface StatusLine extends Formattable {
+public interface StatusLine extends Formattable, Serializable {
 
 	String getVersion();
 	
