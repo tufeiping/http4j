@@ -32,6 +32,11 @@ public abstract class AbstractUriRequest extends AbstractHttpRequest {
 	}
 
 	@Override
+	public boolean hasEntity() {
+		return false;
+	}
+	
+	@Override
 	protected String formatBody() {
 		return "";
 	}

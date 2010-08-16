@@ -120,11 +120,6 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 
 	abstract protected String getURI();
 
-	@Override
-	public boolean hasEntity() {
-		return true;
-	}
-
 	protected void initParameters() {
 		parameters = new LinkedList<HttpParameter>();
 		String query = url.getQuery();
