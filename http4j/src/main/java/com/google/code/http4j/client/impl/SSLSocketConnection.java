@@ -27,5 +27,5 @@ public class SSLSocketConnection extends SocketConnection {
 		super(host);
 	}
 	
-	
+	// FIXME add SSL support
 }
