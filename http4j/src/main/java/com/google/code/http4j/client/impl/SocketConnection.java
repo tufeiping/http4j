@@ -16,50 +16,56 @@
 package com.google.code.http4j.client.impl;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
 
-import com.google.code.http4j.client.Connection;
 import com.google.code.http4j.client.HttpHost;
 import com.google.code.http4j.client.impl.utils.IOUtils;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
+ *
  */
-public class SocketChannelConnection extends AbstractConnection implements Connection {
-
-	protected SocketChannel channel;
-
-	public SocketChannelConnection(HttpHost host) {
+public class SocketConnection extends AbstractConnection {
+	
+	protected Socket socket;
+	
+	public SocketConnection(HttpHost host) {
 		super(host);
 	}
-
+	
 	@Override
-	public void close() {
-		IOUtils.close(channel);
+	public void close() throws IOException {
+		IOUtils.close(socket);
 	}
 
 	@Override
 	public void connect() throws IOException {
 		SocketAddress address = getSocketAddress(host);
-		channel = SocketChannel.open(address);
-	}
-
-	@Override
-	protected int read(ByteBuffer buffer) throws IOException {
-		return channel.read(buffer);
-	}
-
-	@Override
-	public boolean isClosed() {
-		return !channel.isOpen();
+		socket = new Socket();
+		socket.connect(address);
 	}
 
 	@Override
 	public void write(byte[] message) throws IOException {
 		logger.debug("HTTP Request >>\r\n{}", new String(message));
-		ByteBuffer buffer = ByteBuffer.wrap(message);
-		channel.write(buffer);
+		OutputStream out = socket.getOutputStream();
+		out.write(message);
+		out.flush();
+	}
+
+	@Override
+	protected int read(ByteBuffer buffer) throws IOException {
+		InputStream in = socket.getInputStream();
+		int i = in.read(buffer.array());
+		buffer.position(i);
+		return i;
+	}
+	@Override
+	public boolean isClosed() {
+		return socket.isClosed();
 	}
 }

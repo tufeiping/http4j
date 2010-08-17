@@ -54,9 +54,6 @@ public class BasicConnectionPool implements ConnectionPool {
 	}
 	
 	protected Connection createConnection(HttpHost host) throws IOException {
-		// TODO read about this article
-		// http://www.360doc.com/content/10/0702/23/1098893_36548531.shtml
-		// and http://www.blogjava.net/ruislan
 		Connection connection = new SocketChannelConnection(host);
 		connection.connect();
 		return connection;

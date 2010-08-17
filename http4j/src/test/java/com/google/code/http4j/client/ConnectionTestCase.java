@@ -23,7 +23,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.code.http4j.client.impl.BasicHttpHost;
-import com.google.code.http4j.client.impl.SocketChannelConnection;
+import com.google.code.http4j.client.impl.SocketConnection;
 import com.google.code.http4j.client.impl.utils.IOUtils;
 
 /**
@@ -39,7 +39,7 @@ public class ConnectionTestCase {
 	@BeforeClass
 	public void setUp() throws IOException {
 		host = new BasicHttpHost("www.google.com");
-		connection = new SocketChannelConnection(host);
+		connection = new SocketConnection(host);
 	}
 	
 	@Test
