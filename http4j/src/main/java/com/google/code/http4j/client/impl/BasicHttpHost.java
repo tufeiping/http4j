@@ -45,10 +45,10 @@ public class BasicHttpHost implements HttpHost {
 	public BasicHttpHost(String protocol, String host, int port, byte[] address) throws UnknownHostException {
 		this.protocol = protocol;
 		this.port = port;
-		this.inetAddress = processDNSLookup(host, address);
+		this.inetAddress = lookupDNS(host, address);
 	}
 	
-	protected InetAddress processDNSLookup(String host, byte[] address) throws UnknownHostException {
+	protected InetAddress lookupDNS(String host, byte[] address) throws UnknownHostException {
 		return null == address ? InetAddress.getByName(host) : InetAddress.getByAddress(address);
 	}
 

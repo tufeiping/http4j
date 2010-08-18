@@ -36,27 +36,16 @@ public class BasicConnectionPool implements ConnectionPool {
 		pool = new ConcurrentHashMap<HttpHost, ConcurrentLinkedQueue<Connection>>();
 	}
 	
-	@Override
-	public Connection getConnection(HttpHost host) throws IOException {
-		Connection connection = poll(host);
-		return (null == connection || connection.isClosed())? createConnection(host) : connection;
-	}
-
-	@Override
-	public void releaseConnection(Connection connection) {
-		if(! connection.isClosed()) {
-			getQueue(connection.getHost()).offer(connection);
-		}
-	}
-	
-	protected Connection poll(HttpHost host) {
-		return getQueue(host).poll();
-	}
-	
 	protected Connection createConnection(HttpHost host) throws IOException {
 		Connection connection = new SocketChannelConnection(host);
 		connection.connect();
 		return connection;
+	}
+
+	@Override
+	public Connection getConnection(HttpHost host) throws IOException {
+		Connection connection = poll(host);
+		return (null == connection || connection.isClosed())? createConnection(host) : connection;
 	}
 	
 	protected ConcurrentLinkedQueue<Connection> getQueue(HttpHost host) {
@@ -64,5 +53,16 @@ public class BasicConnectionPool implements ConnectionPool {
 			pool.putIfAbsent(host, new ConcurrentLinkedQueue<Connection>());
 		}
 		return pool.get(host);
+	}
+	
+	protected Connection poll(HttpHost host) {
+		return getQueue(host).poll();
+	}
+	
+	@Override
+	public void releaseConnection(Connection connection) {
+		if(! connection.isClosed()) {
+			getQueue(connection.getHost()).offer(connection);
+		}
 	}
 }

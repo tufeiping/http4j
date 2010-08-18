@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package com.google.code.http4j.client;
+package com.google.code.http4j.client.metrics;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  *
  */
-public interface HttpParameter extends Formattable {
+public interface Metrics {
 	
-	String getName();
-	
-	String getValue();
+	long getDNSTimeCost();
 }
