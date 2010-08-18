@@ -24,7 +24,7 @@ public interface HttpRequest extends HttpMessage {
 
 	HttpHost getHost();
 
-	boolean hasEntity();
+	boolean hasResponseEntity();
 	
 	void addParameters(HttpParameter... parameters);
 	
