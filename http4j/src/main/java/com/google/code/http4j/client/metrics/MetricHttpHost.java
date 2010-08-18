@@ -25,18 +25,18 @@ import com.google.code.http4j.client.impl.BasicHttpHost;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  *
  */
-public class BasicMetricHttpHost extends BasicHttpHost {
+public class MetricHttpHost extends BasicHttpHost {
 
-	public BasicMetricHttpHost(String host) throws UnknownHostException {
+	public MetricHttpHost(String host) throws UnknownHostException {
 		super(host);
 	}
 
-	public BasicMetricHttpHost(String protocol, String host, int port)
+	public MetricHttpHost(String protocol, String host, int port)
 			throws UnknownHostException {
 		super(protocol, host, port);
 	}
 
-	public BasicMetricHttpHost(String protocol, String host, int port, byte[] address)
+	public MetricHttpHost(String protocol, String host, int port, byte[] address)
 			throws UnknownHostException {
 		super(protocol, host, port, address);
 	}
