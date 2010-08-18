@@ -13,33 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.google.code.http4j.client.impl;
 
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
-import com.google.code.http4j.client.Http;
-import com.google.code.http4j.client.HttpRequestTestCase;
+import com.google.code.http4j.client.HttpRequest;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public abstract class AbstractHttpRequestTestCase extends HttpRequestTestCase {
-	protected AbstractHttpRequest abstractHttpRequest;
-	
+public class HttpPostTestCase extends AbstractHttpRequestTestCase {
+
+	@BeforeClass
 	public void setUp() throws MalformedURLException, UnknownHostException {
 		super.setUp();
-		abstractHttpRequest = (AbstractHttpRequest) request;
 	}
 	
-	public void testFormatHeaders() {
-		String message = abstractHttpRequest.formatHeaders();
-		Assert.assertEquals(message, "Host:www.google.com" + Http.CRLF + "User-Agent:" + Http.DEFAULT_USER_AGENT + Http.CRLF);
+	@Test
+	public void testFormatBody() {
+		Assert.assertEquals(abstractHttpRequest.formatBody(), "q=http4j");
 	}
-	
-	abstract public void testFormatBody();
-	
-	abstract public void testFormatRequestLine();
+
+	@Test
+	public void testFormatRequestLine() {
+		Assert.assertEquals(abstractHttpRequest.formatRequestLine(), "POST /search HTTP/1.1");
+	}
+
+	@Test
+	public void testHasResponseEntity() {
+		Assert.assertTrue(abstractHttpRequest.hasResponseEntity());
+	}
+
+	@Override
+	protected HttpRequest createHttpRequest(String url)
+			throws MalformedURLException, UnknownHostException {
+		return new HttpPost(url);
+	}
 }

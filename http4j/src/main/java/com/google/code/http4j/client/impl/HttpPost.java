@@ -13,33 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.google.code.http4j.client.impl;
 
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 
-import org.testng.Assert;
-
-import com.google.code.http4j.client.Http;
-import com.google.code.http4j.client.HttpRequestTestCase;
-
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public abstract class AbstractHttpRequestTestCase extends HttpRequestTestCase {
-	protected AbstractHttpRequest abstractHttpRequest;
-	
-	public void setUp() throws MalformedURLException, UnknownHostException {
-		super.setUp();
-		abstractHttpRequest = (AbstractHttpRequest) request;
+public class HttpPost extends AbstractHttpRequest {
+
+	private static final long serialVersionUID = 9154676257393105137L;
+
+	public HttpPost(String url) throws MalformedURLException,
+			UnknownHostException {
+		super(url);
 	}
-	
-	public void testFormatHeaders() {
-		String message = abstractHttpRequest.formatHeaders();
-		Assert.assertEquals(message, "Host:www.google.com" + Http.CRLF + "User-Agent:" + Http.DEFAULT_USER_AGENT + Http.CRLF);
+
+	@Override
+	protected String formatBody() {
+		return formatParameters();
 	}
-	
-	abstract public void testFormatBody();
-	
-	abstract public void testFormatRequestLine();
+
+	@Override
+	String getName() {
+		return POST;
+	}
+
+	@Override
+	protected String getURI() {
+		return getPath();
+	}
+
+	@Override
+	public boolean hasResponseEntity() {
+		return true;
+	}
 }
