@@ -32,6 +32,11 @@ public class HttpHead extends AbstractUriRequest {
 	}
 
 	@Override
+	public boolean hasResponseEntity() {
+		return false;
+	}
+	
+	@Override
 	String getName() {
 		return HEAD;
 	}

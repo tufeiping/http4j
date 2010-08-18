@@ -32,6 +32,11 @@ public class HttpGet extends AbstractUriRequest {
 	}
 
 	@Override
+	public boolean hasResponseEntity() {
+		return true;
+	}
+	
+	@Override
 	String getName() {
 		return GET;
 	}

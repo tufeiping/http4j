@@ -51,7 +51,7 @@ public class HttpRequestTestCase {
 	
 	@Test
 	public void testHasEntity() {
-		Assert.assertFalse(getRequest.hasEntity());
-		Assert.assertFalse(headRequest.hasEntity());
+		Assert.assertTrue(getRequest.hasResponseEntity());
+		Assert.assertFalse(headRequest.hasResponseEntity());
 	}
 }

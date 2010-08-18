@@ -78,6 +78,6 @@ public class BasicHttpClient implements HttpClient {
 
 	@Override
 	public HttpResponse submit(HttpRequest request) throws IOException {
-		return createResponseParser().parse(execute(request), request.hasEntity());
+		return createResponseParser().parse(execute(request), request.hasResponseEntity());
 	}
 }

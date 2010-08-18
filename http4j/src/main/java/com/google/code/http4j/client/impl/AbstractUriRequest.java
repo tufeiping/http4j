@@ -30,11 +30,6 @@ public abstract class AbstractUriRequest extends AbstractHttpRequest {
 			UnknownHostException {
 		super(_url);
 	}
-
-	@Override
-	public boolean hasEntity() {
-		return false;
-	}
 	
 	@Override
 	protected String formatBody() {
