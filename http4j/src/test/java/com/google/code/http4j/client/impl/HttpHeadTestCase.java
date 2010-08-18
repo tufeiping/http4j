@@ -34,11 +34,6 @@ public class HttpHeadTestCase extends AbstractHttpUriRequestTestCase {
 	}
 	
 	@Test
-	public void testGetHost() throws MalformedURLException, UnknownHostException {
-		super.testGetHost();
-	}
-	
-	@Test
 	public void testFormatRequestLine() {
 		super.testFormatRequestLine();
 	}
@@ -46,11 +41,6 @@ public class HttpHeadTestCase extends AbstractHttpUriRequestTestCase {
 	@Test
 	public void testFormatBody() {
 		super.testFormatBody();
-	}
-	
-	@Test
-	public void testFormatHeaders() {
-		super.testFormatHeaders();
 	}
 	
 	@Test

@@ -36,11 +36,6 @@ public class HttpPostTestCase extends AbstractHttpRequestTestCase {
 	}
 	
 	@Test
-	public void testGetHost() throws MalformedURLException, UnknownHostException {
-		super.testGetHost();
-	}
-	
-	@Test
 	public void testFormatBody() {
 		Assert.assertEquals(abstractHttpRequest.formatBody(), "q=http4j");
 	}
