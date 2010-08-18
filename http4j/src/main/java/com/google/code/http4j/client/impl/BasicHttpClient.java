@@ -17,6 +17,8 @@
 package com.google.code.http4j.client.impl;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.UnknownHostException;
 
 import com.google.code.http4j.client.Connection;
 import com.google.code.http4j.client.ConnectionPool;
@@ -68,16 +70,48 @@ public class BasicHttpClient implements HttpClient {
 
 	@Override
 	public HttpResponse head(String url) throws IOException {
-		return submit(new HttpHead(url));
+		return submit(createHeadRequest(url));
 	}
 
 	@Override
 	public byte[] executeHead(String url) throws IOException {
-		return execute(new HttpHead(url));
+		return execute(createHeadRequest(url));
 	}
 
 	@Override
 	public HttpResponse submit(HttpRequest request) throws IOException {
 		return createResponseParser().parse(execute(request), request.hasResponseEntity());
+	}
+
+	@Override
+	public byte[] executeGet(String url) throws IOException {
+		return execute(createGetRequest(url));
+	}
+
+	@Override
+	public HttpResponse get(String url) throws IOException {
+		return submit(createGetRequest(url));
+	}
+	
+	@Override
+	public byte[] executePost(String url) throws IOException {
+		return execute(createPostRequest(url));
+	}
+
+	@Override
+	public HttpResponse post(String url) throws IOException {
+		return submit(createPostRequest(url));
+	}
+	
+	protected HttpRequest createHeadRequest(String url) throws MalformedURLException, UnknownHostException {
+		return new HttpHead(url);
+	}
+	
+	protected HttpRequest createGetRequest(String url) throws MalformedURLException, UnknownHostException {
+		return new HttpGet(url);
+	}
+	
+	protected HttpRequest createPostRequest(String url) throws MalformedURLException, UnknownHostException {
+		return new HttpPost(url);
 	}
 }

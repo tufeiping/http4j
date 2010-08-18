@@ -30,7 +30,14 @@ public class HttpPost extends AbstractHttpRequest {
 			UnknownHostException {
 		super(url);
 	}
-
+	
+	@Override
+	protected String formatHeaders() {
+		String parameters = formatParameters();
+		addHeader(HEADER_NAME_CONTENT_LENGTH, String.valueOf(parameters.length()));
+		return super.formatHeaders();
+	}
+	
 	@Override
 	protected String formatBody() {
 		return formatParameters();

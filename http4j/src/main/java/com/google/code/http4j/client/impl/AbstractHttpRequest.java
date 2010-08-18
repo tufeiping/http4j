@@ -92,7 +92,7 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	public String format() {
 		StringBuilder message = new StringBuilder(formatRequestLine());
 		message.append(CRLF).append(formatHeaders());
-		message.append(CRLF).append(CRLF).append(formatBody());
+		message.append(CRLF).append(formatBody());
 		return message.toString();
 	}
 
@@ -103,7 +103,7 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 		for (HttpParameter parameter : parameters) {
 			message.append("&").append(parameter.format());
 		}
-		return message.substring(1);
+		return message.length() > 0 ? message.substring(1) : "";
 	}
 
 	protected String formatRequestLine() {

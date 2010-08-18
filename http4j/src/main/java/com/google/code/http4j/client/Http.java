@@ -35,5 +35,6 @@ public interface Http {
 	
 	String HEADER_NAME_HOST = "Host";
 	String HEADER_NAME_USER_AGENT = "User-Agent";
+	String HEADER_NAME_CONTENT_LENGTH = "Content-Length";
 	String DEFAULT_USER_AGENT = "http4j (" + System.getProperty("os.name") + ")";
 }

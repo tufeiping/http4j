@@ -73,4 +73,38 @@ public class HttpClientTestCase {
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.length > 0);
 	}
+	
+	@Test
+	public void testGet() throws IOException {
+		HttpResponse response = client.get("http://www.google.com");
+		Assert.assertNotNull(response);
+		Assert.assertNotNull(response.getStatusLine());
+		Assert.assertNotNull(response.getHeaders());
+		Assert.assertTrue(response.getHeaders().size() > 0);
+		Assert.assertNotNull(response.getEntity());
+	}
+	
+	@Test
+	public void testExecuteGet() throws IOException {
+		byte[] response = client.executeGet("http://www.google.com");
+		Assert.assertNotNull(response);
+		Assert.assertTrue(response.length > 0);
+	}
+	
+	@Test
+	public void testPost() throws IOException {
+		HttpResponse response = client.post("http://www.javaeye.com/login?name=http4j&password=http4j");
+		Assert.assertNotNull(response);
+		Assert.assertNotNull(response.getStatusLine());
+		Assert.assertNotNull(response.getHeaders());
+		Assert.assertTrue(response.getHeaders().size() > 0);
+		Assert.assertNotNull(response.getEntity());
+	}
+	
+	@Test
+	public void testExecutePost() throws IOException {
+		byte[] response = client.executePost("http://www.javaeye.com/login?name=http4j&password=http4j");
+		Assert.assertNotNull(response);
+		Assert.assertTrue(response.length > 0);
+	}
 }

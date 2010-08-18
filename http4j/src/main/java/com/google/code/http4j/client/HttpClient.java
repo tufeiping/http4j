@@ -44,4 +44,10 @@ public interface HttpClient {
 
 	HttpResponse head(String url) throws IOException;
 	byte[] executeHead(String url) throws IOException;
+	
+	HttpResponse get(String url) throws IOException;
+	byte[] executeGet(String url) throws IOException;
+	
+	HttpResponse post(String url) throws IOException;
+	byte[] executePost(String url) throws IOException;
 }
