@@ -7,13 +7,10 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.google.code.http4j.client.HttpRequest;
-import com.google.code.http4j.client.HttpRequestTestCase;
-
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class HttpGetTestCase extends HttpRequestTestCase {
+public class HttpGetTestCase extends AbstractHttpUriRequestTestCase {
 	
 	@BeforeClass
 	public void setUp() throws MalformedURLException, UnknownHostException {
@@ -22,16 +19,26 @@ public class HttpGetTestCase extends HttpRequestTestCase {
 	
 	@Test
 	public void testGetHost() throws MalformedURLException, UnknownHostException {
-		Assert.assertEquals(request.getHost(), host);
+		super.testGetHost();
 	}
 	
-	@Override
-	public void testHasEntity() {
+	@Test
+	public void testHasResponseEntity() {
 		Assert.assertTrue(request.hasResponseEntity());
 	}
 
 	@Override
-	protected HttpRequest createHttpRequest(String url) throws MalformedURLException, UnknownHostException {
+	protected AbstractHttpRequest createHttpRequest(String url) throws MalformedURLException, UnknownHostException {
 		return new HttpGet("http://www.google.com/search?q=http4j");
+	}
+
+	@Test
+	public void testFormatBody() {
+		super.testFormatBody();
+	}
+
+	@Test
+	public void testFormatRequestLine() {
+		super.testFormatRequestLine();
 	}
 }

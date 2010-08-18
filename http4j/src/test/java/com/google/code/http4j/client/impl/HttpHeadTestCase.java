@@ -23,35 +23,44 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.google.code.http4j.client.Http;
-
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class HttpHeadTestCase {
-	
-	HttpHead head;
+public class HttpHeadTestCase extends AbstractHttpUriRequestTestCase {
 	
 	@BeforeClass
 	public void setUp() throws MalformedURLException, UnknownHostException {
-		head = new HttpHead("http://www.google.com/search?q=http4j");
+		super.setUp();
+	}
+	
+	@Test
+	public void testGetHost() throws MalformedURLException, UnknownHostException {
+		super.testGetHost();
 	}
 	
 	@Test
 	public void testFormatRequestLine() {
-		String message = head.formatRequestLine();
-		Assert.assertEquals(message, "HEAD /search?q=http4j HTTP/1.1");
+		super.testFormatRequestLine();
+	}
+	
+	@Test
+	public void testFormatBody() {
+		super.testFormatBody();
 	}
 	
 	@Test
 	public void testFormatHeaders() {
-		String message = head.formatHeaders();
-		Assert.assertEquals(message, "Host:www.google.com" + Http.CRLF + "User-Agent:" + Http.DEFAULT_USER_AGENT + Http.CRLF);
+		super.testFormatHeaders();
 	}
 	
 	@Test
-	public void testFormatEntity() {
-		String message = head.formatBody();
-		Assert.assertEquals(message, "");
+	public void testHasResponseEntity() {
+		Assert.assertFalse(request.hasResponseEntity());
+	}
+	
+	@Override
+	protected AbstractHttpRequest createHttpRequest(String url)
+			throws MalformedURLException, UnknownHostException {
+		return new HttpHead(url);
 	}
 }

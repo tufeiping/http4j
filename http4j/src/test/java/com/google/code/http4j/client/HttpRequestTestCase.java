@@ -42,5 +42,5 @@ public abstract class HttpRequestTestCase {
 	
 	abstract protected HttpRequest createHttpRequest(String url) throws MalformedURLException, UnknownHostException;
 	
-	abstract public void testHasEntity();
+	abstract public void testHasResponseEntity();
 }
