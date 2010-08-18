@@ -45,8 +45,12 @@ public class SocketConnection extends AbstractConnection {
 	@Override
 	public void connect() throws IOException {
 		SocketAddress address = getSocketAddress(host);
-		socket = new Socket();
+		socket = createSocket();
 		socket.connect(address);
+	}
+	
+	protected Socket createSocket() {
+		return new Socket();
 	}
 
 	@Override
