@@ -16,45 +16,29 @@
 
 package com.google.code.http4j.client.metrics;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
- * 
  */
-public class ThreadLocalMetrics implements Metrics {
-
-	protected static final ThreadLocal<ThreadLocalMetrics> local = new ThreadLocal<ThreadLocalMetrics>();
-
-	protected static final Lock lock = new ReentrantLock();
+public class NanoTimer implements Timer {
 	
-	protected Timer dnsTimer;
+	protected long begin;
 	
-	protected ThreadLocalMetrics() {
-		dnsTimer = createTimer();
-	}
-
-	public static ThreadLocalMetrics getInstance() {
-		ThreadLocalMetrics metrics = local.get();
-		lock.lock();
-		try {
-			if (null == metrics) {
-				metrics = new ThreadLocalMetrics();
-				local.set(metrics);
-			}
-		} finally {
-			lock.unlock();
-		}
-		return metrics;
-	}
-	
-	protected Timer createTimer() {
-		return new NanoTimer();
-	}
+	protected long end;
 	
 	@Override
-	public Timer getDNSTimer() {
-		return dnsTimer;
+	public long startTimer() {
+		begin = System.nanoTime();
+		return begin;
+	}
+
+	@Override
+	public long stopTimer() {
+		end = System.nanoTime();
+		return end;
+	}
+
+	@Override
+	public long getTimeCost() {
+		return end - begin;
 	}
 }

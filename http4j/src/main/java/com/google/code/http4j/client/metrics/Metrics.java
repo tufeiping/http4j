@@ -22,5 +22,5 @@ package com.google.code.http4j.client.metrics;
  */
 public interface Metrics {
 	
-	long getDNSTimeCost();
+	Timer getDNSTimer();
 }

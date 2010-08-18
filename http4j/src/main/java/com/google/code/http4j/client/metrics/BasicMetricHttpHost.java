@@ -42,10 +42,10 @@ public class BasicMetricHttpHost extends BasicHttpHost {
 	}
 	
 	protected InetAddress lookupDNS(String host, byte[] address) throws UnknownHostException {
-		ThreadLocalMetrics metrics = ThreadLocalMetrics.getInstance();
-		metrics.startDNSTimer();
+		Timer timer = ThreadLocalMetrics.getInstance().getDNSTimer();
+		timer.startTimer();
 		InetAddress ip = super.lookupDNS(host, address);
-		metrics.stopDNSTimer();
+		timer.stopTimer();
 		return ip;
 	}
 }
