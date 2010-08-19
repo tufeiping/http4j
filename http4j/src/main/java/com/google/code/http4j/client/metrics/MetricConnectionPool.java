@@ -16,21 +16,24 @@
 
 package com.google.code.http4j.client.metrics;
 
-import com.google.code.http4j.client.ConnectionPool;
-import com.google.code.http4j.client.impl.BasicHttpClient;
+import java.io.IOException;
+
+import com.google.code.http4j.client.Connection;
+import com.google.code.http4j.client.HttpHost;
+import com.google.code.http4j.client.impl.BasicConnectionPool;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  *
  */
-public class MetricHttpClient extends BasicHttpClient {
+public class MetricConnectionPool extends BasicConnectionPool {
 
-	public MetricHttpClient() {
+	public MetricConnectionPool() {
 		super();
 	}
 	
 	@Override
-	protected ConnectionPool createConnectionPool() {
-		return new MetricConnectionPool();
+	protected Connection createConnection(HttpHost host) throws IOException {
+		return new MetricConnectionDecorator(super.createConnection(host));
 	}
 }

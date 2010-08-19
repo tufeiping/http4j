@@ -31,11 +31,15 @@ import com.google.code.http4j.client.impl.HttpHead;
  */
 public class HttpClientTestCase {
 	
-	private HttpClient client;
+	protected HttpClient client;
 	
 	@BeforeClass
 	public void setUp() {
-		client = new BasicHttpClient();
+		client = createHttpClient();
+	}
+	
+	protected HttpClient createHttpClient() {
+		return new BasicHttpClient();
 	}
 	
 	@Test

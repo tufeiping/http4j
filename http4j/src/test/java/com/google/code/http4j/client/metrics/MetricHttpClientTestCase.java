@@ -16,21 +16,29 @@
 
 package com.google.code.http4j.client.metrics;
 
-import com.google.code.http4j.client.ConnectionPool;
-import com.google.code.http4j.client.impl.BasicHttpClient;
+import java.io.IOException;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import com.google.code.http4j.client.HttpClient;
+import com.google.code.http4j.client.HttpClientTestCase;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
- *
  */
-public class MetricHttpClient extends BasicHttpClient {
-
-	public MetricHttpClient() {
-		super();
-	}
+public class MetricHttpClientTestCase extends HttpClientTestCase {
 	
 	@Override
-	protected ConnectionPool createConnectionPool() {
-		return new MetricConnectionPool();
+	protected HttpClient createHttpClient() {
+		return new MetricHttpClient();
+	}
+	
+	@Test(dependsOnMethods = "testHead")
+	public void testMetrics() throws IOException {
+		Timer timer = ThreadLocalMetrics.getInstance().getConnectionTimer();
+		byte[] response = client.executeHead("http://www.google.com");
+		Assert.assertNotNull(response);
+		Assert.assertTrue(timer.getTimeCost() > 0);
 	}
 }

@@ -41,7 +41,7 @@ public abstract class ConnectionTestCase {
 		connection = createConnection();
 	}
 
-	abstract protected Connection createConnection();
+	abstract protected Connection createConnection() throws IOException;
 
 	@Test
 	public void testConnect() throws IOException {
