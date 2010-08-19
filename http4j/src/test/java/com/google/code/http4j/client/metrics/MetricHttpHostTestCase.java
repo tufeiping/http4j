@@ -19,10 +19,7 @@ package com.google.code.http4j.client.metrics;
 import java.net.UnknownHostException;
 
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import com.google.code.http4j.client.HttpHost;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -30,19 +27,10 @@ import com.google.code.http4j.client.HttpHost;
  */
 public class MetricHttpHostTestCase {
 	
-	private HttpHost host;
-	
-	private Timer timer;
-	
-	@BeforeClass
-	public void setUp() throws UnknownHostException {
-		host = new MetricHttpHost("www.google.com");
-		timer = ThreadLocalMetrics.getInstance().getDNSTimer();
-	}
-	
 	@Test
-	public void testTimer() {
-		Assert.assertNotNull(host.getInetAddress());
+	public void testDNSTimer() throws UnknownHostException {
+		new MetricHttpHost("www.google.com");
+		Timer timer = ThreadLocalMetrics.getInstance().getDNSTimer();
 		Assert.assertTrue(timer.getTimeCost() > 0);
 	}
 }
