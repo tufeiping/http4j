@@ -29,8 +29,9 @@ public class MetricHttpHostTestCase {
 	
 	@Test
 	public void testDNSTimer() throws UnknownHostException {
-		new MetricHttpHost("www.google.com");
 		Timer timer = ThreadLocalMetrics.getInstance().getDNSTimer();
+		Assert.assertFalse(timer.getTimeCost() > 0);
+		new MetricHttpHost("www.google.com");
 		Assert.assertTrue(timer.getTimeCost() > 0);
 	}
 }
