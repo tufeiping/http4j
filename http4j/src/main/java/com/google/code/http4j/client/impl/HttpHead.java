@@ -37,7 +37,7 @@ public class HttpHead extends AbstractUriRequest {
 	}
 	
 	@Override
-	String getName() {
+	protected String getName() {
 		return HEAD;
 	}
 }

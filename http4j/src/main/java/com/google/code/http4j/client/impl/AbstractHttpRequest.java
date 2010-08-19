@@ -115,7 +115,7 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 		return host;
 	}
 
-	abstract String getName();
+	abstract protected String getName();
 	
 	protected String getPath() {
 		String path = url.getPath();

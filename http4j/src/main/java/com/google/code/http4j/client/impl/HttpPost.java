@@ -44,7 +44,7 @@ public class HttpPost extends AbstractHttpRequest {
 	}
 
 	@Override
-	String getName() {
+	protected String getName() {
 		return POST;
 	}
 
