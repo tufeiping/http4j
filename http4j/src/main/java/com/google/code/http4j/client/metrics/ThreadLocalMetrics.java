@@ -16,8 +16,6 @@
 
 package com.google.code.http4j.client.metrics;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -27,26 +25,16 @@ public class ThreadLocalMetrics implements Metrics {
 
 	protected static final ThreadLocal<ThreadLocalMetrics> local = new ThreadLocal<ThreadLocalMetrics>();
 
-	protected static final Lock lock = new ReentrantLock();
-	
 	protected Timer dnsTimer;
 	
 	protected ThreadLocalMetrics() {
+		local.set(this);
 		dnsTimer = createTimer();
 	}
 
 	public static ThreadLocalMetrics getInstance() {
 		ThreadLocalMetrics metrics = local.get();
-		lock.lock();
-		try {
-			if (null == metrics) {
-				metrics = new ThreadLocalMetrics();
-				local.set(metrics);
-			}
-		} finally {
-			lock.unlock();
-		}
-		return metrics;
+		return metrics == null ? new ThreadLocalMetrics() : metrics;
 	}
 	
 	protected Timer createTimer() {
