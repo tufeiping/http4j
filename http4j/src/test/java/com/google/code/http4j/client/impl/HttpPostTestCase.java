@@ -20,7 +20,6 @@ import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.code.http4j.client.HttpRequest;
@@ -30,11 +29,6 @@ import com.google.code.http4j.client.HttpRequest;
  */
 public class HttpPostTestCase extends AbstractHttpRequestTestCase {
 
-	@BeforeClass
-	public void setUp() throws MalformedURLException, UnknownHostException {
-		super.setUp();
-	}
-	
 	@Test
 	public void testFormatBody() {
 		Assert.assertEquals(abstractHttpRequest.formatBody(), "q=http4j");

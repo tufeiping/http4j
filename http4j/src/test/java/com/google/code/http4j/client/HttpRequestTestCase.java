@@ -19,6 +19,8 @@ import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import com.google.code.http4j.client.impl.BasicHttpHost;
 
@@ -31,11 +33,13 @@ public abstract class HttpRequestTestCase {
 	protected HttpHost host;
 	protected HttpRequest request;
 
+	@BeforeClass
 	public void setUp() throws MalformedURLException, UnknownHostException {
 		host = new BasicHttpHost("www.google.com");
 		request = createHttpRequest("http://www.google.com/search?q=http4j");
 	}
 	
+	@Test
 	public void testGetHost() throws MalformedURLException, UnknownHostException {
 		Assert.assertEquals(request.getHost(), host);
 	}

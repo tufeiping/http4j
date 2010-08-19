@@ -20,28 +20,12 @@ import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public class HttpHeadTestCase extends AbstractHttpUriRequestTestCase {
-	
-	@BeforeClass
-	public void setUp() throws MalformedURLException, UnknownHostException {
-		super.setUp();
-	}
-	
-	@Test
-	public void testFormatRequestLine() {
-		super.testFormatRequestLine();
-	}
-	
-	@Test
-	public void testFormatBody() {
-		super.testFormatBody();
-	}
 	
 	@Test
 	public void testHasResponseEntity() {
