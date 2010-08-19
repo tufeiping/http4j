@@ -37,17 +37,21 @@ public class BasicConnectionPool implements ConnectionPool {
 	}
 	
 	protected Connection createConnection(HttpHost host) throws IOException {
-		Connection connection = new SocketChannelConnection(host);
+		return new SocketChannelConnection(host);
+	}
+
+	protected Connection establishConnection(HttpHost host) throws IOException {
+		Connection connection = createConnection(host);
 		connection.connect();
 		return connection;
 	}
-
+	
 	@Override
 	public Connection getConnection(HttpHost host) throws IOException {
 		Connection connection = poll(host);
-		return (null == connection || connection.isClosed())? createConnection(host) : connection;
+		return (null == connection || connection.isClosed())? establishConnection(host) : connection;
 	}
-	
+
 	protected ConcurrentLinkedQueue<Connection> getQueue(HttpHost host) {
 		if(null == pool.get(host)) {// avoid create a queue each time
 			pool.putIfAbsent(host, new ConcurrentLinkedQueue<Connection>());
