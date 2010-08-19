@@ -27,9 +27,18 @@ public class ThreadLocalMetrics implements Metrics {
 
 	protected Timer dnsTimer;
 	
+	protected Timer connectionTimer;
+	
+	protected Timer requestTimer;
+	
+	protected Timer responseTimer;
+	
 	protected ThreadLocalMetrics() {
 		local.set(this);
 		dnsTimer = createTimer();
+		connectionTimer = createTimer();
+		requestTimer = createTimer();
+		responseTimer = createTimer();
 	}
 
 	public static ThreadLocalMetrics getInstance() {
@@ -44,5 +53,19 @@ public class ThreadLocalMetrics implements Metrics {
 	@Override
 	public Timer getDNSTimer() {
 		return dnsTimer;
+	}
+
+	public Timer getConnectionTimer() {
+		return connectionTimer;
+	}
+
+	@Override
+	public Timer getRequestTimer() {
+		return requestTimer;
+	}
+
+	@Override
+	public Timer getResponseTimer() {
+		return responseTimer;
 	}
 }

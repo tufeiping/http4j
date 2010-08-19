@@ -23,6 +23,7 @@ import java.net.UnknownHostException;
 import com.google.code.http4j.client.Connection;
 import com.google.code.http4j.client.ConnectionPool;
 import com.google.code.http4j.client.HttpClient;
+import com.google.code.http4j.client.HttpHost;
 import com.google.code.http4j.client.HttpRequest;
 import com.google.code.http4j.client.HttpResponse;
 import com.google.code.http4j.client.HttpResponseParser;
@@ -50,13 +51,25 @@ public class BasicHttpClient implements HttpClient {
 		return new BasicConnectionPool();
 	}
 
+	protected HttpRequest createGetRequest(String url) throws MalformedURLException, UnknownHostException {
+		return new HttpGet(url);
+	}
+	
+	protected HttpRequest createHeadRequest(String url) throws MalformedURLException, UnknownHostException {
+		return new HttpHead(url);
+	}
+	
+	protected HttpRequest createPostRequest(String url) throws MalformedURLException, UnknownHostException {
+		return new HttpPost(url);
+	}
+
 	protected HttpResponseParser createResponseParser() {
 		return new BasicHttpResponseParser();
 	}
-	
+
 	@Override
 	public byte[] execute(HttpRequest request) throws IOException {
-		Connection connection = connectionPool.getConnection(request.getHost());
+		Connection connection = getConnection(request.getHost());
 		try {
 			connection.write(request.format().getBytes());
 			byte[] response = connection.read();
@@ -69,8 +82,8 @@ public class BasicHttpClient implements HttpClient {
 	}
 
 	@Override
-	public HttpResponse head(String url) throws IOException {
-		return submit(createHeadRequest(url));
+	public byte[] executeGet(String url) throws IOException {
+		return execute(createGetRequest(url));
 	}
 
 	@Override
@@ -79,39 +92,31 @@ public class BasicHttpClient implements HttpClient {
 	}
 
 	@Override
-	public HttpResponse submit(HttpRequest request) throws IOException {
-		return createResponseParser().parse(execute(request), request.hasResponseEntity());
+	public byte[] executePost(String url) throws IOException {
+		return execute(createPostRequest(url));
 	}
-
-	@Override
-	public byte[] executeGet(String url) throws IOException {
-		return execute(createGetRequest(url));
-	}
-
+	
 	@Override
 	public HttpResponse get(String url) throws IOException {
 		return submit(createGetRequest(url));
 	}
+
+	protected Connection getConnection(HttpHost host) throws IOException {
+		return connectionPool.getConnection(host);
+	}
 	
 	@Override
-	public byte[] executePost(String url) throws IOException {
-		return execute(createPostRequest(url));
+	public HttpResponse head(String url) throws IOException {
+		return submit(createHeadRequest(url));
 	}
-
+	
 	@Override
 	public HttpResponse post(String url) throws IOException {
 		return submit(createPostRequest(url));
 	}
 	
-	protected HttpRequest createHeadRequest(String url) throws MalformedURLException, UnknownHostException {
-		return new HttpHead(url);
-	}
-	
-	protected HttpRequest createGetRequest(String url) throws MalformedURLException, UnknownHostException {
-		return new HttpGet(url);
-	}
-	
-	protected HttpRequest createPostRequest(String url) throws MalformedURLException, UnknownHostException {
-		return new HttpPost(url);
+	@Override
+	public HttpResponse submit(HttpRequest request) throws IOException {
+		return createResponseParser().parse(execute(request), request.hasResponseEntity());
 	}
 }

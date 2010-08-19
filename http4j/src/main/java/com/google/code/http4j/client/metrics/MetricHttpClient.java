@@ -16,17 +16,24 @@
 
 package com.google.code.http4j.client.metrics;
 
+import java.io.IOException;
+
+import com.google.code.http4j.client.Connection;
+import com.google.code.http4j.client.HttpHost;
+import com.google.code.http4j.client.impl.BasicHttpClient;
+
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  *
  */
-public interface Metrics {
+public class MetricHttpClient extends BasicHttpClient {
+
+	public MetricHttpClient() {
+		super();
+	}
 	
-	Timer getDNSTimer();
-	
-	Timer getConnectionTimer();
-	
-	Timer getRequestTimer();
-	
-	Timer getResponseTimer();
+	@Override
+	protected Connection getConnection(HttpHost host) throws IOException {
+		return new MetricConnectionDecorator(super.getConnection(host));
+	}
 }

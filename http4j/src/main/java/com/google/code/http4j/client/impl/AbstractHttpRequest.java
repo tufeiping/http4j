@@ -45,16 +45,16 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 			UnknownHostException {
 		super();
 		url = URLFormatter.format(_url);
-		host = new BasicHttpHost(url.getProtocol(), url.getHost(),url.getPort());
+		host = createHttpHost(url.getProtocol(), url.getHost(),url.getPort());
 		addDefaultHeaders();
 		initParameters();
 	}
-
+	
 	protected void addDefaultHeaders() {
 		addHeader(HEADER_NAME_HOST, url.getAuthority());
 		addHeader(HEADER_NAME_USER_AGENT, DEFAULT_USER_AGENT);
 	}
-
+	
 	@Override
 	public void addParameter(String name, String... values) {
 		for (String value : values) {
@@ -78,12 +78,11 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	protected String calculateURI() {
 		return new StringBuilder(url.getPath()).append("?").append(formatParameters()).toString();
 	}
-	
-	protected String getPath() {
-		String path = url.getPath();
-		return path.length() > 0 ? path : "/";
-	}
 
+	protected HttpHost createHttpHost(String protocol, String host, int port) throws UnknownHostException {
+		return new BasicHttpHost(protocol, host, port);
+	}
+	
 	protected HttpParameter createHttpParameter(String name, String value) {
 		return new BasicHttpParameter(name, value);
 	}
@@ -115,8 +114,13 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	public HttpHost getHost() {
 		return host;
 	}
-	
+
 	abstract String getName();
+	
+	protected String getPath() {
+		String path = url.getPath();
+		return path.length() > 0 ? path : "/";
+	}
 
 	abstract protected String getURI();
 
