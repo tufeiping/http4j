@@ -23,6 +23,7 @@
 		<packages>
 			<package name="com.google.code.http4j.client.impl.utils" />
 			<package name="com.google.code.http4j.client.impl" />
+			<package name="com.google.code.http4j.client.metrics" />
 			<package name="com.google.code.http4j.client" />
 		</packages>
 	</test>
