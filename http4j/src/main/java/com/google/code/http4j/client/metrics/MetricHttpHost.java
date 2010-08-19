@@ -26,53 +26,29 @@ import com.google.code.http4j.client.impl.BasicHttpHost;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  *
  */
-public class MetricHttpHostProxy implements HttpHost {
+public class MetricHttpHost extends BasicHttpHost {
 	
 	protected HttpHost host;
 	
-	public MetricHttpHostProxy(String _host) throws UnknownHostException {
-		host = createHttpHost(PROTOCOL_HTTP, _host, -1, null);
+	public MetricHttpHost(String _host) throws UnknownHostException {
+		this(PROTOCOL_HTTP, _host, -1);
 	}
 
-	public MetricHttpHostProxy(String protocol, String _host, int port)
+	public MetricHttpHost(String protocol, String _host, int port)
 			throws UnknownHostException {
-		host = createHttpHost(protocol, _host, port, null);
+		this(protocol, _host, port, null);
 	}
 
-	public MetricHttpHostProxy(String protocol, String _host, int port, byte[] address)
+	public MetricHttpHost(String protocol, String _host, int port, byte[] address)
 			throws UnknownHostException {
-		host = createHttpHost(protocol, _host, port, address);
-	}
-	
-	protected HttpHost createHttpHost(String protocol, String _host, int port, byte[] ip) throws UnknownHostException {
-		return new BasicHttpHost(protocol, _host, port, ip);
+		super(protocol, _host, port, address);
 	}
 	
 	public InetAddress lookupDNS(String _host, byte[] address) throws UnknownHostException {
 		Timer timer = ThreadLocalMetrics.getInstance().getDNSTimer();
 		timer.startTimer();
-		InetAddress ip = host.lookupDNS(_host, address);
+		InetAddress ip = super.lookupDNS(_host, address);
 		timer.stopTimer();
 		return ip;
-	}
-
-	@Override
-	public String getProtocol() {
-		return host.getProtocol();
-	}
-
-	@Override
-	public String getHostName() {
-		return host.getHostName();
-	}
-
-	@Override
-	public int getPort() {
-		return host.getPort();
-	}
-
-	@Override
-	public InetAddress getInetAddress() {
-		return host.getInetAddress();
 	}
 }
