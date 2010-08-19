@@ -17,6 +17,7 @@
 package com.google.code.http4j.client;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 
 /**
@@ -24,11 +25,13 @@ import java.net.InetAddress;
  */
 public interface HttpHost extends Http {
 	
-	String getProtocol();
-	
 	String getHostName();
+	
+	InetAddress getInetAddress();
 	
 	int getPort();
 	
-	InetAddress getInetAddress();
+	String getProtocol();
+	
+	InetAddress lookupDNS(String host, byte[] address) throws UnknownHostException;
 }
