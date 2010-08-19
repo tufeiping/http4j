@@ -16,6 +16,8 @@
 
 package com.google.code.http4j.client.metrics;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  *
@@ -27,4 +29,6 @@ public interface Timer {
 	long stopTimer();
 	
 	long getTimeCost();
+	
+	TimeUnit getTimeUnit();
 }

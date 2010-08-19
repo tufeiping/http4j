@@ -16,6 +16,8 @@
 
 package com.google.code.http4j.client.metrics;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
@@ -40,5 +42,10 @@ public class NanoTimer implements Timer {
 	@Override
 	public long getTimeCost() {
 		return end - begin;
+	}
+
+	@Override
+	public TimeUnit getTimeUnit() {
+		return TimeUnit.NANOSECONDS;
 	}
 }
