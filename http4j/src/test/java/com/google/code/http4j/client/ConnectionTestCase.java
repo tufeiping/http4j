@@ -44,12 +44,8 @@ public abstract class ConnectionTestCase {
 	abstract protected Connection createConnection();
 
 	@Test
-	public void testConnect() {
-		try {
-			connection.connect();
-		} catch (IOException e) {
-			Assert.fail("Can not connect to: " + connection.getHost());
-		}
+	public void testConnect() throws IOException {
+		connection.connect();
 	}
 
 	@Test(dependsOnMethods = "testConnect")
