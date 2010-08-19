@@ -28,12 +28,12 @@ import com.google.code.http4j.client.impl.BasicHttpHost;
 public class MetricHttpHost extends BasicHttpHost {
 
 	public MetricHttpHost(String host) throws UnknownHostException {
-		super(host);
+		this(null, host, -1);
 	}
 
 	public MetricHttpHost(String protocol, String host, int port)
 			throws UnknownHostException {
-		super(protocol, host, port);
+		this(protocol, host, port, null);
 	}
 
 	public MetricHttpHost(String protocol, String host, int port, byte[] address)
