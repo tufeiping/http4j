@@ -15,7 +15,6 @@
  */
 package com.google.code.http4j.client.impl;
 
-import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 
 import com.google.code.http4j.client.Connection;
@@ -32,22 +31,7 @@ public class SocketConnectionTestCase extends ConnectionTestCase {
 	}
 	
 	@Test
-	public void testConnect() {
-		super.testConnect();
-	}
-
-	@Test(dependsOnMethods = "testConnect")
-	public void testWrite() {
-		super.testWrite();
-	}
-
-	@Test(dependsOnMethods = "testWrite")
-	public void testRead() {
-		super.testRead();
-	}
-
-	@AfterTest
-	public void destory() {
-		super.destory();
+	public void testNothing() {
+		// do nothing, testng will not recognize a class without testng specific annotation
 	}
 }

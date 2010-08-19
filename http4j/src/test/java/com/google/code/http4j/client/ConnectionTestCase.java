@@ -18,7 +18,9 @@ package com.google.code.http4j.client;
 import java.io.IOException;
 
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import com.google.code.http4j.client.impl.BasicHttpHost;
 import com.google.code.http4j.client.impl.utils.IOUtils;
@@ -41,6 +43,7 @@ public abstract class ConnectionTestCase {
 
 	abstract protected Connection createConnection();
 
+	@Test
 	public void testConnect() {
 		try {
 			connection.connect();
@@ -49,6 +52,7 @@ public abstract class ConnectionTestCase {
 		}
 	}
 
+	@Test(dependsOnMethods = "testConnect")
 	public void testWrite() {
 		String head = "GET / HTTP/1.1\r\nHost:" + host.getHostName()
 				+ "\r\n\r\n";
@@ -59,6 +63,7 @@ public abstract class ConnectionTestCase {
 		}
 	}
 
+	@Test(dependsOnMethods = "testWrite")
 	public void testRead() {
 		try {
 			byte[] response = connection.read();
@@ -69,6 +74,12 @@ public abstract class ConnectionTestCase {
 		}
 	}
 
+	@Test(dependsOnMethods = "testConnect")
+	public void testIsClosed() {
+		Assert.assertFalse(connection.isClosed());
+	}
+	
+	@AfterClass
 	public void destory() {
 		IOUtils.close(connection);
 	}
