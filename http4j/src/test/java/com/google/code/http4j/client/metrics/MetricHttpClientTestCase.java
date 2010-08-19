@@ -21,24 +21,18 @@ import java.io.IOException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.google.code.http4j.client.HttpClient;
-import com.google.code.http4j.client.HttpClientTestCase;
-
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class MetricHttpClientTestCase extends HttpClientTestCase {
-	
-	@Override
-	protected HttpClient createHttpClient() {
-		return new MetricHttpClient();
-	}
-	
-	@Test(dependsOnMethods = "testHead")
+public class MetricHttpClientTestCase {
+
+	@Test
 	public void testMetrics() throws IOException {
-		Timer timer = ThreadLocalMetrics.getInstance().getConnectionTimer();
-		byte[] response = client.executeHead("http://www.google.com");
+		ThreadLocalMetrics metrics = ThreadLocalMetrics.getInstance();
+		Timer connection = metrics.getConnectionTimer();
+		Assert.assertFalse(connection.getTimeCost() > 0);
+		byte[] response = new MetricHttpClient().executeHead("http://www.google.com");
 		Assert.assertNotNull(response);
-		Assert.assertTrue(timer.getTimeCost() > 0);
+		Assert.assertTrue(connection.getTimeCost() > 0);
 	}
 }
