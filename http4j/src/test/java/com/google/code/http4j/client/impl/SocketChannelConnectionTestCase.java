@@ -16,10 +16,7 @@
 
 package com.google.code.http4j.client.impl;
 
-import java.io.IOException;
-
 import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.code.http4j.client.Connection;
@@ -31,11 +28,6 @@ import com.google.code.http4j.client.ConnectionTestCase;
  */
 public class SocketChannelConnectionTestCase extends ConnectionTestCase {
 
-	@BeforeClass
-	public void setUp() throws IOException {
-		super.setUp();
-	}
-	
 	@Override
 	protected Connection createConnection() {
 		return new SocketChannelConnection(host);

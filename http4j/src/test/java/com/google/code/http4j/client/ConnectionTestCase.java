@@ -18,6 +18,7 @@ package com.google.code.http4j.client;
 import java.io.IOException;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 
 import com.google.code.http4j.client.impl.BasicHttpHost;
 import com.google.code.http4j.client.impl.utils.IOUtils;
@@ -32,6 +33,7 @@ public abstract class ConnectionTestCase {
 
 	protected HttpHost host;
 
+	@BeforeClass
 	public void setUp() throws IOException {
 		host = new BasicHttpHost("www.google.com");
 		connection = createConnection();
