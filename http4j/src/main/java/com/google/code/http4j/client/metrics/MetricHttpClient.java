@@ -16,8 +16,16 @@
 
 package com.google.code.http4j.client.metrics;
 
+import java.net.MalformedURLException;
+import java.net.UnknownHostException;
+
 import com.google.code.http4j.client.ConnectionPool;
+import com.google.code.http4j.client.HttpHost;
+import com.google.code.http4j.client.HttpRequest;
 import com.google.code.http4j.client.impl.BasicHttpClient;
+import com.google.code.http4j.client.impl.HttpGet;
+import com.google.code.http4j.client.impl.HttpHead;
+import com.google.code.http4j.client.impl.HttpPost;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -32,5 +40,49 @@ public class MetricHttpClient extends BasicHttpClient {
 	@Override
 	protected ConnectionPool createConnectionPool() {
 		return new MetricConnectionPool();
+	}
+	
+	@Override
+	protected HttpRequest createGetRequest(String url)
+			throws MalformedURLException, UnknownHostException {
+		return new HttpGet(url) {
+			private static final long serialVersionUID = -7970795478275592916L;
+			@Override
+			protected HttpHost createHttpHost(String protocol, String host,
+					int port) throws UnknownHostException {
+				return createMetricHttpHost(protocol, host, port);
+			}
+		};
+	}
+	
+	@Override
+	protected HttpRequest createHeadRequest(String url)
+			throws MalformedURLException, UnknownHostException {
+		return new HttpHead(url) {
+			private static final long serialVersionUID = 1L;
+			@Override
+			protected HttpHost createHttpHost(String protocol, String host,
+					int port) throws UnknownHostException {
+				return createMetricHttpHost(protocol, host, port);
+			}
+		};
+	}
+	
+	protected MetricHttpHost createMetricHttpHost(String protocol, String host,
+			int port) throws UnknownHostException {
+		return new MetricHttpHost(protocol, host, port);
+	}
+	
+	@Override
+	protected HttpRequest createPostRequest(String url)
+			throws MalformedURLException, UnknownHostException {
+		return new HttpPost(url) {
+			private static final long serialVersionUID = -112127817630730021L;
+			@Override
+			protected HttpHost createHttpHost(String protocol, String host,
+					int port) throws UnknownHostException {
+				return createMetricHttpHost(protocol, host, port);
+			}
+		};
 	}
 }
