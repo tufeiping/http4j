@@ -60,10 +60,10 @@ public class MetricHttpClientTestCase {
 	private void testMetrics() throws IOException {
 		HttpClient client = new MetricHttpClient();
 		assertionTimers(false);
-		byte[] response = client.executeHead("http://www.google.com");
+		byte[] response = client.executeHead("http://www.bing.com");
 		Assert.assertNotNull(response);
 		assertionTimers(true);
-		response = client.executeHead("http://www.google.com");
+		response = client.executeHead("http://www.bing.com");
 		Timer dns = ThreadLocalMetrics.getInstance().getDnsTimer();
 		Assert.assertTrue(dns.getTimeCost() == 0);
 		System.out.println(dns.getTimeCost()/1000000 + "ms");
