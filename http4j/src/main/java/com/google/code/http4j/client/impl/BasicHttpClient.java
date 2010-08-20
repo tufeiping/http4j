@@ -35,6 +35,7 @@ import com.google.code.http4j.client.HttpHost;
 import com.google.code.http4j.client.HttpRequest;
 import com.google.code.http4j.client.HttpResponse;
 import com.google.code.http4j.client.HttpResponseParser;
+import com.google.code.http4j.client.impl.utils.IOUtils;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -44,7 +45,6 @@ public class BasicHttpClient implements HttpClient {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	protected ConnectionPool connectionPool;
-
 	protected CookieCache cookieCache;
 
 	/**
@@ -143,10 +143,10 @@ public class BasicHttpClient implements HttpClient {
 			setCookies(request.getUri(), response);
 			return response;
 		} catch (IOException e) {
-			connection.close();
+			IOUtils.close(connection);
 			throw e;
 		} catch (URISyntaxException e) {
-			connection.close();
+			IOUtils.close(connection);
 			throw e;
 		}
 	}
