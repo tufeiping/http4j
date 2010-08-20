@@ -10,4 +10,6 @@ import java.net.UnknownHostException;
 public interface DnsCache extends Serializable {
 	
 	InetAddress getInetAddress(String host, byte[] ip) throws UnknownHostException;
+	
+	InetAddress getInetAddress(String host) throws UnknownHostException;
 }

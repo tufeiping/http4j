@@ -15,11 +15,6 @@ public class MetricDnsCache extends BasicDnsCache implements DnsCache {
 
 	public MetricDnsCache() {
 		super();
-		resetDnsTimer();
-	}
-	
-	protected void resetDnsTimer() {
-		ThreadLocalMetrics.getInstance().getDnsTimer().reset();
 	}
 
 	@Override

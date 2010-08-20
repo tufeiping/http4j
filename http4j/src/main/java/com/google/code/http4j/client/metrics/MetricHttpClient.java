@@ -16,6 +16,7 @@
 
 package com.google.code.http4j.client.metrics;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 
@@ -37,6 +38,15 @@ public class MetricHttpClient extends BasicHttpClient {
 		super();
 	}
 	
+	@Override
+	public byte[] execute(HttpRequest request) throws IOException {
+		return super.execute(request);
+	}
+	
+	protected void resetMetrics() {
+		ThreadLocalMetrics.getInstance().reset();
+	}
+
 	@Override
 	protected ConnectionPool createConnectionPool() {
 		return new MetricConnectionPool();
@@ -70,6 +80,7 @@ public class MetricHttpClient extends BasicHttpClient {
 	
 	protected MetricHttpHost createMetricHttpHost(String protocol, String host,
 			int port) throws UnknownHostException {
+		resetMetrics();// One metric, one request-response
 		return new MetricHttpHost(protocol, host, port);
 	}
 	

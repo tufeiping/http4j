@@ -37,5 +37,10 @@ public class BasicDnsCache implements DnsCache {
 		}
 		return address;
 	}
+
+	@Override
+	public InetAddress getInetAddress(String host) throws UnknownHostException {
+		return getInetAddress(host, null);
+	}
 	
 }

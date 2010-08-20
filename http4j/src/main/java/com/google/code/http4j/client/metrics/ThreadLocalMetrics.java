@@ -26,11 +26,8 @@ public class ThreadLocalMetrics implements Metrics {
 	protected static final ThreadLocal<ThreadLocalMetrics> local = new ThreadLocal<ThreadLocalMetrics>();
 
 	protected Timer dnsTimer;
-	
 	protected Timer connectionTimer;
-	
 	protected Timer requestTimer;
-	
 	protected Timer responseTimer;
 	
 	protected ThreadLocalMetrics() {
@@ -67,5 +64,13 @@ public class ThreadLocalMetrics implements Metrics {
 	@Override
 	public Timer getResponseTimer() {
 		return responseTimer;
+	}
+
+	@Override
+	public void reset() {
+		dnsTimer.reset();
+		connectionTimer.reset();
+		requestTimer.reset();
+		responseTimer.reset();
 	}
 }
