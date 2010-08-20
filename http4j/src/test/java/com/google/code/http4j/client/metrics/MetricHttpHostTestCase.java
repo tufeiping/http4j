@@ -28,8 +28,8 @@ import org.testng.annotations.Test;
 public class MetricHttpHostTestCase {
 	
 	@Test
-	public void testDNSTimer() throws UnknownHostException {
-		Timer timer = ThreadLocalMetrics.getInstance().getDNSTimer();
+	public void testDnsTimer() throws UnknownHostException {
+		Timer timer = ThreadLocalMetrics.getInstance().getDnsTimer();
 		Assert.assertFalse(timer.getTimeCost() > 0);
 		new MetricHttpHost("www.google.com");
 		Assert.assertTrue(timer.getTimeCost() > 0);

@@ -41,10 +41,10 @@ public class MetricHttpHost extends BasicHttpHost {
 		super(protocol, _host, port, address);
 	}
 	
-	public InetAddress lookupDNS(String _host, byte[] address) throws UnknownHostException {
-		Timer timer = ThreadLocalMetrics.getInstance().getDNSTimer();
+	public InetAddress lookupDns(String _host, byte[] address) throws UnknownHostException {
+		Timer timer = ThreadLocalMetrics.getInstance().getDnsTimer();
 		timer.startTimer();
-		InetAddress ip = super.lookupDNS(_host, address);
+		InetAddress ip = super.lookupDns(_host, address);
 		timer.stopTimer();
 		return ip;
 	}

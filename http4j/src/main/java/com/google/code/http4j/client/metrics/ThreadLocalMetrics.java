@@ -51,7 +51,7 @@ public class ThreadLocalMetrics implements Metrics {
 	}
 	
 	@Override
-	public Timer getDNSTimer() {
+	public Timer getDnsTimer() {
 		return dnsTimer;
 	}
 

@@ -22,7 +22,7 @@ package com.google.code.http4j.client.metrics;
  */
 public interface Metrics {
 	
-	Timer getDNSTimer();
+	Timer getDnsTimer();
 	
 	Timer getConnectionTimer();
 	
