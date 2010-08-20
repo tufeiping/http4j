@@ -37,7 +37,7 @@ public abstract class AbstractUriRequest extends AbstractHttpRequest {
 	}
 
 	@Override
-	protected String getURI() {
+	protected String getUriString() {
 		return parameters.isEmpty() ? getPath() : calculateURI();
 	}
 }

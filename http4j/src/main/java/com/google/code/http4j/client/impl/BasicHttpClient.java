@@ -18,11 +18,19 @@ package com.google.code.http4j.client.impl;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.code.http4j.client.Connection;
 import com.google.code.http4j.client.ConnectionPool;
+import com.google.code.http4j.client.CookieCache;
 import com.google.code.http4j.client.HttpClient;
+import com.google.code.http4j.client.HttpHeader;
 import com.google.code.http4j.client.HttpHost;
 import com.google.code.http4j.client.HttpRequest;
 import com.google.code.http4j.client.HttpResponse;
@@ -33,7 +41,11 @@ import com.google.code.http4j.client.HttpResponseParser;
  */
 public class BasicHttpClient implements HttpClient {
 
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
+
 	protected ConnectionPool connectionPool;
+
+	protected CookieCache cookieCache;
 
 	/**
 	 * Construct a <code>BasicHttpClient</code> instance, subclass can
@@ -45,21 +57,29 @@ public class BasicHttpClient implements HttpClient {
 	 */
 	public BasicHttpClient() {
 		connectionPool = createConnectionPool();
+		cookieCache = createCookieCache();
 	}
 
 	protected ConnectionPool createConnectionPool() {
 		return new BasicConnectionPool();
 	}
 
-	protected HttpRequest createGetRequest(String url) throws MalformedURLException, UnknownHostException {
+	protected CookieCache createCookieCache() {
+		return new CookieStoreAdapter();
+	}
+
+	protected HttpRequest createGetRequest(String url)
+			throws MalformedURLException, UnknownHostException {
 		return new HttpGet(url);
 	}
-	
-	protected HttpRequest createHeadRequest(String url) throws MalformedURLException, UnknownHostException {
+
+	protected HttpRequest createHeadRequest(String url)
+			throws MalformedURLException, UnknownHostException {
 		return new HttpHead(url);
 	}
-	
-	protected HttpRequest createPostRequest(String url) throws MalformedURLException, UnknownHostException {
+
+	protected HttpRequest createPostRequest(String url)
+			throws MalformedURLException, UnknownHostException {
 		return new HttpPost(url);
 	}
 
@@ -68,55 +88,66 @@ public class BasicHttpClient implements HttpClient {
 	}
 
 	@Override
-	public byte[] execute(HttpRequest request) throws IOException {
-		Connection connection = getConnection(request.getHost());
-		try {
-			connection.write(request.format().getBytes());
-			byte[] response = connection.read();
-			connectionPool.releaseConnection(connection);
-			return response;
-		} catch (IOException e) {
-			connection.close();
-			throw e;
-		}
+	public HttpResponse get(String url) throws IOException, URISyntaxException {
+		return get(url, true);
 	}
 
 	@Override
-	public byte[] executeGet(String url) throws IOException {
-		return execute(createGetRequest(url));
-	}
-
-	@Override
-	public byte[] executeHead(String url) throws IOException {
-		return execute(createHeadRequest(url));
-	}
-
-	@Override
-	public byte[] executePost(String url) throws IOException {
-		return execute(createPostRequest(url));
-	}
-	
-	@Override
-	public HttpResponse get(String url) throws IOException {
-		return submit(createGetRequest(url));
+	public HttpResponse get(String url, boolean parseEntity)
+			throws IOException, URISyntaxException {
+		return submit(createGetRequest(url), parseEntity);
 	}
 
 	protected Connection getConnection(HttpHost host) throws IOException {
 		return connectionPool.getConnection(host);
 	}
-	
+
 	@Override
-	public HttpResponse head(String url) throws IOException {
-		return submit(createHeadRequest(url));
+	public HttpResponse head(String url) throws IOException, URISyntaxException {
+		return submit(createHeadRequest(url), false);
 	}
-	
+
 	@Override
-	public HttpResponse post(String url) throws IOException {
-		return submit(createPostRequest(url));
+	public HttpResponse post(String url) throws IOException, URISyntaxException {
+		return post(url, true);
 	}
-	
+
 	@Override
-	public HttpResponse submit(HttpRequest request) throws IOException {
-		return createResponseParser().parse(execute(request), request.hasResponseEntity());
+	public HttpResponse post(String url, boolean parseEntity)
+			throws IOException, URISyntaxException {
+		return submit(createPostRequest(url), parseEntity);
+	}
+
+	protected void setCookies(HttpRequest request) throws URISyntaxException {
+		HttpHeader cookies = cookieCache.getCookies(request.getUri());
+		if (null != cookies) {
+			logger.debug("Cookie header >>\r\n{}", cookies);
+			request.addHeader(cookies);
+		}
+	}
+
+	protected void setCookies(URI uri, HttpResponse response) {
+		List<HttpHeader> headers = response.getHeaders();
+		cookieCache.storeCookies(uri, headers);
+	}
+
+	protected HttpResponse submit(HttpRequest request, boolean parseEntity)
+			throws IOException, URISyntaxException {
+		Connection connection = getConnection(request.getHost());
+		try {
+			setCookies(request);
+			connection.write(request.format().getBytes());
+			byte[] message = connection.read();
+			connectionPool.releaseConnection(connection);
+			HttpResponse response = createResponseParser().parse(message, parseEntity);
+			setCookies(request.getUri(), response);
+			return response;
+		} catch (IOException e) {
+			connection.close();
+			throw e;
+		} catch (URISyntaxException e) {
+			connection.close();
+			throw e;
+		}
 	}
 }

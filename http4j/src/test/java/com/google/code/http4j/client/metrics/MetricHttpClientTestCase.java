@@ -17,6 +17,7 @@
 package com.google.code.http4j.client.metrics;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -29,6 +30,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.google.code.http4j.client.HttpClient;
+import com.google.code.http4j.client.HttpResponse;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -57,13 +59,13 @@ public class MetricHttpClientTestCase {
 	}
 	
 	
-	private void testMetrics() throws IOException {
+	private void testMetrics() throws IOException, URISyntaxException {
 		HttpClient client = new MetricHttpClient();
 		assertionTimers(false);
-		byte[] response = client.executeHead("http://www.bing.com");
+		HttpResponse response = client.get("http://www.bing.com", false);
 		Assert.assertNotNull(response);
 		assertionTimers(true);
-		response = client.executeHead("http://www.bing.com");
+		response = client.get("http://www.bing.com", false);
 		Timer dns = ThreadLocalMetrics.getInstance().getDnsTimer();
 		Assert.assertTrue(dns.getTimeCost() == 0);
 		System.out.println(dns.getTimeCost()/1000000 + "ms");

@@ -19,6 +19,8 @@ package com.google.code.http4j.client.impl;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 
+import com.google.code.http4j.client.Http;
+
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
@@ -38,6 +40,6 @@ public class HttpGet extends AbstractUriRequest {
 	
 	@Override
 	protected String getName() {
-		return GET;
+		return Http.GET;
 	}
 }

@@ -24,5 +24,5 @@ import java.io.IOException;
  */
 public interface HttpResponseParser {
 	
-	HttpResponse parse(byte[] source, boolean hasEntity) throws IOException;
+	HttpResponse parse(byte[] source, boolean parseEntity) throws IOException;
 }

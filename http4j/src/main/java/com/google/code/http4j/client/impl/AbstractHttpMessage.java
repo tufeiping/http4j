@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.code.http4j.client.Http;
 import com.google.code.http4j.client.HttpHeader;
 import com.google.code.http4j.client.HttpMessage;
 
@@ -69,7 +70,7 @@ public abstract class AbstractHttpMessage implements HttpMessage {
 	protected String formatHeaders() {
 		StringBuilder message = new StringBuilder();
 		for (HttpHeader header : headers) {
-			message.append(header.format()).append(CRLF);
+			message.append(header.format()).append(Http.CRLF);
 		}
 		return message.toString();
 	}

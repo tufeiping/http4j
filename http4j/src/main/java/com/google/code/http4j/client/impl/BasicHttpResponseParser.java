@@ -45,12 +45,12 @@ public class BasicHttpResponseParser implements HttpResponseParser, Http {
 	public BasicHttpResponseParser() {
 	}
 	
-	public HttpResponse parse(byte[] bytes, boolean hasEntity) throws IOException {
+	public HttpResponse parse(byte[] bytes, boolean parseEntity) throws IOException {
 		ByteBuffer buffer = ByteBuffer.wrap(bytes);
 		StatusLine statusLine = createStatusLineParser().parse(IOUtils.extractByEnd(buffer, LF));
 		List<HttpHeader> headers = createHeadersParser().parse(IOUtils.extractByEnd(buffer, CR, LF, CR, LF));
-		hasEntity &= StatusCodes.hasEntity(statusLine.getStatusCode());
-		String entity = hasEntity ? parseEntity(buffer, statusLine.getStatusCode()) : null;
+		parseEntity &= StatusCodes.hasEntity(statusLine.getStatusCode());
+		String entity = parseEntity ? parseEntity(buffer, statusLine.getStatusCode()) : null;
 		return createHttpResponse(statusLine, headers, entity);
 	}
 

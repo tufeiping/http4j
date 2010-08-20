@@ -16,7 +16,6 @@
 
 package com.google.code.http4j.client.metrics;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 
@@ -36,11 +35,6 @@ public class MetricHttpClient extends BasicHttpClient {
 
 	public MetricHttpClient() {
 		super();
-	}
-	
-	@Override
-	public byte[] execute(HttpRequest request) throws IOException {
-		return super.execute(request);
 	}
 	
 	protected void resetMetrics() {

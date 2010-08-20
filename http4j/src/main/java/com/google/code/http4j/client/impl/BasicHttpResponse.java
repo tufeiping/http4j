@@ -16,6 +16,7 @@
 
 package com.google.code.http4j.client.impl;
 
+import com.google.code.http4j.client.Http;
 import com.google.code.http4j.client.HttpResponse;
 import com.google.code.http4j.client.StatusLine;
 
@@ -49,8 +50,8 @@ public class BasicHttpResponse extends AbstractHttpMessage implements HttpRespon
 	@Override
 	public String format() {
 		StringBuilder message = new StringBuilder(formatStatusLine());
-		message.append(CRLF).append(formatHeaders());
-		message.append(CRLF).append(CRLF);
+		message.append(Http.CRLF).append(formatHeaders());
+		message.append(Http.CRLF).append(Http.CRLF);
 		message = null == entity ? message : message.append(formatEntity());
 		return message.toString();
 	}

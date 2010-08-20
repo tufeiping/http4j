@@ -22,7 +22,7 @@ import java.net.InetAddress;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public interface HttpHost extends Http {
+public interface HttpHost {
 	
 	String getHostName();
 	

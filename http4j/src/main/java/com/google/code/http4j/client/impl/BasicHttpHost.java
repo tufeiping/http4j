@@ -21,6 +21,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import com.google.code.http4j.client.DnsCache;
+import com.google.code.http4j.client.Http;
 import com.google.code.http4j.client.HttpHost;
 import com.google.code.http4j.client.impl.utils.URLFormatter;
 
@@ -38,7 +39,7 @@ public class BasicHttpHost implements HttpHost {
 	protected DnsCache dnsCache;
 
 	public BasicHttpHost(String host) throws UnknownHostException {
-		this(PROTOCOL_HTTP, host, -1);
+		this(Http.PROTOCOL_HTTP, host, -1);
 	}
 	
 	public BasicHttpHost(String protocol, String host, int port) throws UnknownHostException {

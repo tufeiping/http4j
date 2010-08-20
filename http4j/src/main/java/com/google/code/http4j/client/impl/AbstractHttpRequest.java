@@ -17,11 +17,14 @@
 package com.google.code.http4j.client.impl;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.code.http4j.client.Http;
 import com.google.code.http4j.client.HttpHost;
 import com.google.code.http4j.client.HttpParameter;
 import com.google.code.http4j.client.HttpRequest;
@@ -51,8 +54,8 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	}
 	
 	protected void addDefaultHeaders() {
-		addHeader(HEADER_NAME_HOST, url.getAuthority());
-		addHeader(HEADER_NAME_USER_AGENT, DEFAULT_USER_AGENT);
+		addHeader(Http.HEADER_NAME_HOST, url.getAuthority());
+		addHeader(Http.HEADER_NAME_USER_AGENT, Http.DEFAULT_USER_AGENT);
 	}
 	
 	@Override
@@ -90,8 +93,8 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	@Override
 	public String format() {
 		StringBuilder message = new StringBuilder(formatRequestLine());
-		message.append(CRLF).append(formatHeaders());
-		message.append(CRLF).append(formatBody());
+		message.append(Http.CRLF).append(formatHeaders());
+		message.append(Http.CRLF).append(formatBody());
 		return message.toString();
 	}
 
@@ -106,8 +109,8 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	}
 
 	protected String formatRequestLine() {
-		return new StringBuilder(getName()).append(BLANK_CHAR).append(getURI())
-				.append(BLANK_CHAR).append(DEFAULT_HTTP_VERSION).toString();
+		return new StringBuilder(getName()).append(Http.BLANK_CHAR).append(getUriString())
+				.append(Http.BLANK_CHAR).append(Http.DEFAULT_HTTP_VERSION).toString();
 	}
 
 	@Override
@@ -122,7 +125,7 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 		return path.length() > 0 ? path : "/";
 	}
 
-	abstract protected String getURI();
+	abstract protected String getUriString();
 
 	protected void initParameters() {
 		parameters = new LinkedList<HttpParameter>();
@@ -134,5 +137,10 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 				addParameter(nameAndValue[0], nameAndValue[1]);
 			}
 		}
+	}
+	
+	@Override
+	public URI getUri() throws URISyntaxException {
+		return url.toURI();
 	}
 }

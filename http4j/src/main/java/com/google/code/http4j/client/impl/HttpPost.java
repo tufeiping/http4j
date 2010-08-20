@@ -19,6 +19,8 @@ package com.google.code.http4j.client.impl;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 
+import com.google.code.http4j.client.Http;
+
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
@@ -34,7 +36,7 @@ public class HttpPost extends AbstractHttpRequest {
 	@Override
 	protected String formatHeaders() {
 		String parameters = formatParameters();
-		addHeader(HEADER_NAME_CONTENT_LENGTH, String.valueOf(parameters.length()));
+		addHeader(Http.HEADER_NAME_CONTENT_LENGTH, String.valueOf(parameters.length()));
 		return super.formatHeaders();
 	}
 	
@@ -45,11 +47,11 @@ public class HttpPost extends AbstractHttpRequest {
 
 	@Override
 	protected String getName() {
-		return POST;
+		return Http.POST;
 	}
 
 	@Override
-	protected String getURI() {
+	protected String getUriString() {
 		return getPath();
 	}
 

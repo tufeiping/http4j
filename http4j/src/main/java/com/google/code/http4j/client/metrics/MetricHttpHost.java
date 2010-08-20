@@ -19,6 +19,7 @@ package com.google.code.http4j.client.metrics;
 import java.net.UnknownHostException;
 
 import com.google.code.http4j.client.DnsCache;
+import com.google.code.http4j.client.Http;
 import com.google.code.http4j.client.impl.BasicHttpHost;
 
 /**
@@ -28,7 +29,7 @@ import com.google.code.http4j.client.impl.BasicHttpHost;
 public class MetricHttpHost extends BasicHttpHost {
 	
 	public MetricHttpHost(String _host) throws UnknownHostException {
-		this(PROTOCOL_HTTP, _host, -1);
+		this(Http.PROTOCOL_HTTP, _host, -1);
 	}
 
 	public MetricHttpHost(String protocol, String _host, int port)

@@ -17,37 +17,19 @@
 package com.google.code.http4j.client;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 /**
+ * Execute method only submit the request and get the message back without parsing.
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public interface HttpClient {
 
-	/**
-	 * Submit request and parse the response.
-	 * @param request
-	 * @return response
-	 * @throws IOException
-	 */
-	HttpResponse submit(HttpRequest request) throws IOException;
-
-	/**
-	 * This execution is normally the same with {@link #submit(HttpRequest)},
-	 * but would not parse the response. This will be usefull in stress or
-	 * load test.
-	 * 
-	 * @param request
-	 * @return bytes
-	 * @throws IOException
-	 */
-	byte[] execute(HttpRequest request) throws IOException;
-
-	HttpResponse head(String url) throws IOException;
-	byte[] executeHead(String url) throws IOException;
+	HttpResponse head(String url) throws IOException, URISyntaxException;
 	
-	HttpResponse get(String url) throws IOException;
-	byte[] executeGet(String url) throws IOException;
+	HttpResponse get(String url) throws IOException, URISyntaxException;
+	HttpResponse get(String url, boolean parseEntity) throws IOException, URISyntaxException;
 	
-	HttpResponse post(String url) throws IOException;
-	byte[] executePost(String url) throws IOException;
+	HttpResponse post(String url) throws IOException, URISyntaxException;
+	HttpResponse post(String url, boolean parseEntity) throws IOException, URISyntaxException;
 }

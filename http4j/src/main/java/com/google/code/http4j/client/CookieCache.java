@@ -16,16 +16,16 @@
 
 package com.google.code.http4j.client;
 
-import java.io.Serializable;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.net.URI;
+import java.util.Collection;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
+ *
  */
-public interface DnsCache extends Serializable {
+public interface CookieCache {
 	
-	InetAddress getInetAddress(String host, byte[] ip) throws UnknownHostException;
+	int storeCookies(URI uri, Collection<HttpHeader> headers); 
 	
-	InetAddress getInetAddress(String host) throws UnknownHostException;
+	HttpHeader getCookies(URI uri);
 }

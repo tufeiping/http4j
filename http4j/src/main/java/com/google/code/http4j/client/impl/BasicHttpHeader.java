@@ -87,4 +87,11 @@ public class BasicHttpHeader extends NameValuePair implements HttpHeader {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return new StringBuilder(getCanonicalName()).append(":").append(value).toString();
+	}
+	
+	
 }

@@ -16,12 +16,17 @@
 
 package com.google.code.http4j.client;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public interface HttpRequest extends HttpMessage {
-
+	
+	URI getUri() throws URISyntaxException;
+	
 	HttpHost getHost();
 
 	boolean hasResponseEntity();

@@ -18,13 +18,13 @@ package com.google.code.http4j.client;
 
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.code.http4j.client.impl.BasicHttpClient;
-import com.google.code.http4j.client.impl.HttpHead;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -43,26 +43,7 @@ public class HttpClientTestCase {
 	}
 	
 	@Test
-	public void testExecute() throws IOException {
-		HttpRequest request = new HttpHead("http://www.google.com");
-		byte[] response = client.execute(request);
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.length > 0);
-	}
-	
-	@Test
-	public void testSubmit() throws IOException {
-		HttpRequest request = new HttpHead("http://www.google.com");
-		HttpResponse response = client.submit(request);
-		Assert.assertNotNull(response);
-		Assert.assertNotNull(response.getStatusLine());
-		Assert.assertNotNull(response.getHeaders());
-		Assert.assertTrue(response.getHeaders().size() > 0);
-		Assert.assertNull(response.getEntity());
-	}
-	
-	@Test
-	public void testHead() throws IOException {
+	public void testHead() throws IOException, URISyntaxException {
 		HttpResponse response = client.head("http://www.google.com");
 		Assert.assertNotNull(response);
 		Assert.assertNotNull(response.getStatusLine());
@@ -72,14 +53,7 @@ public class HttpClientTestCase {
 	}
 	
 	@Test
-	public void testExecuteHead() throws IOException {
-		byte[] response = client.executeHead("http://www.google.com");
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.length > 0);
-	}
-	
-	@Test
-	public void testGet() throws IOException {
+	public void testGet() throws IOException, URISyntaxException {
 		HttpResponse response = client.get("http://www.google.com");
 		Assert.assertNotNull(response);
 		Assert.assertNotNull(response.getStatusLine());
@@ -89,26 +63,12 @@ public class HttpClientTestCase {
 	}
 	
 	@Test
-	public void testExecuteGet() throws IOException {
-		byte[] response = client.executeGet("http://www.google.com");
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.length > 0);
-	}
-	
-	@Test
-	public void testPost() throws IOException {
+	public void testPost() throws IOException, URISyntaxException {
 		HttpResponse response = client.post("http://www.javaeye.com/login?name=http4j&password=http4j");
 		Assert.assertNotNull(response);
 		Assert.assertNotNull(response.getStatusLine());
 		Assert.assertNotNull(response.getHeaders());
 		Assert.assertTrue(response.getHeaders().size() > 0);
 		Assert.assertNotNull(response.getEntity());
-	}
-	
-	@Test
-	public void testExecutePost() throws IOException {
-		byte[] response = client.executePost("http://www.javaeye.com/login?name=http4j&password=http4j");
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.length > 0);
 	}
 }

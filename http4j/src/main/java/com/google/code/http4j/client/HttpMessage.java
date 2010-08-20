@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-public interface HttpMessage extends Formattable, Http, Serializable {
+public interface HttpMessage extends Formattable, Serializable {
 	
 	public List<HttpHeader> getHeaders();
 	
