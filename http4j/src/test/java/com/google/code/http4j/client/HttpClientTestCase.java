@@ -53,7 +53,7 @@ public class HttpClientTestCase {
 	}
 	
 	@Test
-	public void testGet() throws IOException, URISyntaxException {
+	public void testGet_String() throws IOException, URISyntaxException {
 		HttpResponse response = client.get("http://www.google.com");
 		Assert.assertNotNull(response);
 		Assert.assertNotNull(response.getStatusLine());
@@ -63,12 +63,32 @@ public class HttpClientTestCase {
 	}
 	
 	@Test
-	public void testPost() throws IOException, URISyntaxException {
+	public void testPost_String() throws IOException, URISyntaxException {
 		HttpResponse response = client.post("http://www.javaeye.com/login?name=http4j&password=http4j");
 		Assert.assertNotNull(response);
 		Assert.assertNotNull(response.getStatusLine());
 		Assert.assertNotNull(response.getHeaders());
 		Assert.assertTrue(response.getHeaders().size() > 0);
 		Assert.assertNotNull(response.getEntity());
+	}
+	
+	@Test
+	public void testGet_String_boolean() throws IOException, URISyntaxException {
+		HttpResponse response = client.get("http://www.yahoo.com", false);
+		Assert.assertNotNull(response);
+		Assert.assertNotNull(response.getStatusLine());
+		Assert.assertNotNull(response.getHeaders());
+		Assert.assertTrue(response.getHeaders().size() > 0);
+		Assert.assertNull(response.getEntity());
+	}
+	
+	@Test
+	public void testPost_String_boolean() throws IOException, URISyntaxException {
+		HttpResponse response = client.post("http://www.javaeye.com/login?name=http4j&password=http4j", false);
+		Assert.assertNotNull(response);
+		Assert.assertNotNull(response.getStatusLine());
+		Assert.assertNotNull(response.getHeaders());
+		Assert.assertTrue(response.getHeaders().size() > 0);
+		Assert.assertNull(response.getEntity());
 	}
 }
