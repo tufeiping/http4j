@@ -17,6 +17,8 @@
 package com.google.code.http4j.client.metrics;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -53,15 +55,28 @@ public class MetricHttpClientTestCase {
 	}
 	
 	
-	public void testMetrics() throws IOException {
-		ThreadLocalMetrics metrics = ThreadLocalMetrics.getInstance();
-		Timer dns = metrics.getDNSTimer();
-		Timer connection = metrics.getConnectionTimer();
-		Assert.assertFalse(dns.getTimeCost() > 0);
-		Assert.assertFalse(connection.getTimeCost() > 0);
+	private void testMetrics() throws IOException {
+		assertionTimers(false);
 		byte[] response = new MetricHttpClient().executeHead("http://www.google.com");
 		Assert.assertNotNull(response);
-		Assert.assertTrue(dns.getTimeCost() > 0);
-		Assert.assertTrue(connection.getTimeCost() > 0);
+		assertionTimers(true);
+	}
+	
+	private List<Timer> getTimers() {
+		List<Timer> timers = new ArrayList<Timer>();
+		ThreadLocalMetrics metrics = ThreadLocalMetrics.getInstance();
+		timers.add(metrics.getDnsTimer());
+		timers.add(metrics.getConnectionTimer());
+		timers.add(metrics.getRequestTimer());
+		timers.add(metrics.getResponseTimer());
+		return timers;
+	}
+	
+	private void assertionTimers(boolean flag) {
+		List<Timer> timers = getTimers();
+		for(Timer timer: timers) {
+			System.out.println(timer.getTimeCost()/1000000 + "ms");
+			Assert.assertTrue(timer.getTimeCost() > 0 == flag);
+		}
 	}
 }
