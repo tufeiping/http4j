@@ -20,6 +20,7 @@ package com.google.code.http4j.client.impl;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import com.google.code.http4j.client.DnsCache;
 import com.google.code.http4j.client.HttpHost;
 import com.google.code.http4j.client.impl.utils.URLFormatter;
 
@@ -33,6 +34,8 @@ public class BasicHttpHost implements HttpHost {
 	protected int port;
 	
 	protected InetAddress inetAddress;
+	
+	protected DnsCache dnsCache;
 
 	public BasicHttpHost(String host) throws UnknownHostException {
 		this(PROTOCOL_HTTP, host, -1);
@@ -45,11 +48,12 @@ public class BasicHttpHost implements HttpHost {
 	public BasicHttpHost(String protocol, String host, int port, byte[] address) throws UnknownHostException {
 		this.protocol = protocol;
 		this.port = port;
-		this.inetAddress = lookupDns(host, address);
+		this.dnsCache = createDnsCache();
+		this.inetAddress = dnsCache.getInetAddress(host, address);
 	}
 	
-	protected InetAddress lookupDns(String host, byte[] address) throws UnknownHostException {
-		return null == address ? InetAddress.getByName(host) : InetAddress.getByAddress(address);
+	protected DnsCache createDnsCache() {
+		return new BasicDnsCache();
 	}
 
 	@Override

@@ -31,4 +31,6 @@ public interface Timer {
 	long getTimeCost();
 	
 	TimeUnit getTimeUnit();
+	
+	void reset();
 }

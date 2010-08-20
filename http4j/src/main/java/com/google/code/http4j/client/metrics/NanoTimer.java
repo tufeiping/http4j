@@ -48,4 +48,10 @@ public class NanoTimer implements Timer {
 	public TimeUnit getTimeUnit() {
 		return TimeUnit.NANOSECONDS;
 	}
+
+	@Override
+	public void reset() {
+		begin = 0;
+		end = 0;
+	}
 }

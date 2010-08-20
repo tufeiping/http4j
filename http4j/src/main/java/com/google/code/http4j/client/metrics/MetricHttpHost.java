@@ -16,9 +16,9 @@
 
 package com.google.code.http4j.client.metrics;
 
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import com.google.code.http4j.client.DnsCache;
 import com.google.code.http4j.client.impl.BasicHttpHost;
 
 /**
@@ -41,11 +41,8 @@ public class MetricHttpHost extends BasicHttpHost {
 		super(protocol, _host, port, address);
 	}
 	
-	public InetAddress lookupDns(String _host, byte[] address) throws UnknownHostException {
-		Timer timer = ThreadLocalMetrics.getInstance().getDnsTimer();
-		timer.startTimer();
-		InetAddress ip = super.lookupDns(_host, address);
-		timer.stopTimer();
-		return ip;
+	@Override
+	protected DnsCache createDnsCache() {
+		return new MetricDnsCache();
 	}
 }

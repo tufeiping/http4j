@@ -28,6 +28,8 @@ import java.util.concurrent.Future;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.google.code.http4j.client.HttpClient;
+
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
@@ -56,10 +58,15 @@ public class MetricHttpClientTestCase {
 	
 	
 	private void testMetrics() throws IOException {
+		HttpClient client = new MetricHttpClient();
 		assertionTimers(false);
-		byte[] response = new MetricHttpClient().executeHead("http://www.google.com");
+		byte[] response = client.executeHead("http://www.google.com");
 		Assert.assertNotNull(response);
 		assertionTimers(true);
+		response = client.executeHead("http://www.google.com");
+		Timer dns = ThreadLocalMetrics.getInstance().getDnsTimer();
+		Assert.assertTrue(dns.getTimeCost() == 0);
+		System.out.println(dns.getTimeCost()/1000000 + "ms");
 	}
 	
 	private List<Timer> getTimers() {
