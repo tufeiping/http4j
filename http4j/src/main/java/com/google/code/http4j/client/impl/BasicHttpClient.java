@@ -68,17 +68,17 @@ public class BasicHttpClient implements HttpClient {
 	}
 
 	protected HttpRequest createGetRequest(String url)
-			throws MalformedURLException, UnknownHostException {
+			throws MalformedURLException, UnknownHostException, URISyntaxException {
 		return new HttpGet(url);
 	}
 
 	protected HttpRequest createHeadRequest(String url)
-			throws MalformedURLException, UnknownHostException {
+			throws MalformedURLException, UnknownHostException, URISyntaxException {
 		return new HttpHead(url);
 	}
 
 	protected HttpRequest createPostRequest(String url)
-			throws MalformedURLException, UnknownHostException {
+			throws MalformedURLException, UnknownHostException, URISyntaxException {
 		return new HttpPost(url);
 	}
 

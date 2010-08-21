@@ -17,6 +17,7 @@
 package com.google.code.http4j.client.impl;
 
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
 import org.testng.Assert;
@@ -33,7 +34,7 @@ public class HttpGetTestCase extends AbstractHttpUriRequestTestCase {
 	}
 
 	@Override
-	protected AbstractHttpRequest createHttpRequest(String url) throws MalformedURLException, UnknownHostException {
+	protected AbstractHttpRequest createHttpRequest(String url) throws MalformedURLException, UnknownHostException, URISyntaxException {
 		return new HttpGet("http://www.google.com/search?q=http4j");
 	}
 }

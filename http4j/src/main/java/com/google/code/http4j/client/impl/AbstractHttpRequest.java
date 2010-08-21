@@ -38,23 +38,27 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 
 	private static final long serialVersionUID = 7128951961154306746L;
 
-	protected final URL url;
-
+	protected URI uri;
+	protected final String path;
+	protected final String authority;
 	protected final HttpHost host;
 
 	protected List<HttpParameter> parameters;
 
 	public AbstractHttpRequest(String _url) throws MalformedURLException,
-			UnknownHostException {
+			UnknownHostException, URISyntaxException {
 		super();
-		url = URLFormatter.format(_url);
+		URL url = URLFormatter.format(_url);
+		uri = url.toURI();
+		path = url.getPath();
+		authority = url.getAuthority();
 		host = createHttpHost(url.getProtocol(), url.getHost(),url.getPort());
 		addDefaultHeaders();
-		initParameters();
+		initParameters(url.getQuery());
 	}
 	
 	protected void addDefaultHeaders() {
-		addHeader(Http.HEADER_NAME_HOST, url.getAuthority());
+		addHeader(Http.HEADER_NAME_HOST, authority);
 		addHeader(Http.HEADER_NAME_USER_AGENT, Http.DEFAULT_USER_AGENT);
 	}
 	
@@ -79,7 +83,7 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	 * @return
 	 */
 	protected String calculateURI() {
-		return new StringBuilder(url.getPath()).append("?").append(formatParameters()).toString();
+		return new StringBuilder(path).append("?").append(formatParameters()).toString();
 	}
 
 	protected HttpHost createHttpHost(String protocol, String host, int port) throws UnknownHostException {
@@ -121,17 +125,15 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	abstract protected String getName();
 	
 	protected String getPath() {
-		String path = url.getPath();
 		return path.length() > 0 ? path : "/";
 	}
 
 	abstract protected String getUriString();
 
-	protected void initParameters() {
+	protected void initParameters(String queryString) {
 		parameters = new LinkedList<HttpParameter>();
-		String query = url.getQuery();
-		if(null != query) {
-			String[] nameValuePairs = query.split("&");
+		if(null != queryString) {
+			String[] nameValuePairs = queryString.split("&");
 			for (String nameValuePair : nameValuePairs) {
 				String[] nameAndValue = nameValuePair.split("=");
 				addParameter(nameAndValue[0], nameAndValue[1]);
@@ -140,7 +142,7 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	}
 	
 	@Override
-	public URI getUri() throws URISyntaxException {
-		return url.toURI();
+	public URI getUri() {
+		return uri;
 	}
 }

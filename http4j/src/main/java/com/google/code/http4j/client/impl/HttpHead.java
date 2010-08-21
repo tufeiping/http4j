@@ -17,6 +17,7 @@
 package com.google.code.http4j.client.impl;
 
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
 import com.google.code.http4j.client.Http;
@@ -29,7 +30,7 @@ public class HttpHead extends AbstractUriRequest {
 	private static final long serialVersionUID = -2339520317320114115L;
 
 	public HttpHead(String url) throws MalformedURLException,
-			UnknownHostException {
+			UnknownHostException, URISyntaxException {
 		super(url);
 	}
 

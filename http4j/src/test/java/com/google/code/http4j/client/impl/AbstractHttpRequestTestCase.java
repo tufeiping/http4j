@@ -16,6 +16,7 @@
 package com.google.code.http4j.client.impl;
 
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
 import org.testng.Assert;
@@ -31,7 +32,7 @@ public abstract class AbstractHttpRequestTestCase extends HttpRequestTestCase {
 	protected AbstractHttpRequest abstractHttpRequest;
 	
 	@BeforeClass
-	public void setUp() throws MalformedURLException, UnknownHostException {
+	public void setUp() throws MalformedURLException, UnknownHostException, URISyntaxException {
 		super.setUp();
 		abstractHttpRequest = (AbstractHttpRequest) request;
 	}

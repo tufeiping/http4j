@@ -17,6 +17,7 @@
 package com.google.code.http4j.client.metrics;
 
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
 import com.google.code.http4j.client.ConnectionPool;
@@ -48,7 +49,7 @@ public class MetricHttpClient extends BasicHttpClient {
 	
 	@Override
 	protected HttpRequest createGetRequest(String url)
-			throws MalformedURLException, UnknownHostException {
+			throws MalformedURLException, UnknownHostException, URISyntaxException {
 		return new HttpGet(url) {
 			private static final long serialVersionUID = -7970795478275592916L;
 			@Override
@@ -61,7 +62,7 @@ public class MetricHttpClient extends BasicHttpClient {
 	
 	@Override
 	protected HttpRequest createHeadRequest(String url)
-			throws MalformedURLException, UnknownHostException {
+			throws MalformedURLException, UnknownHostException, URISyntaxException {
 		return new HttpHead(url) {
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -80,7 +81,7 @@ public class MetricHttpClient extends BasicHttpClient {
 	
 	@Override
 	protected HttpRequest createPostRequest(String url)
-			throws MalformedURLException, UnknownHostException {
+			throws MalformedURLException, UnknownHostException, URISyntaxException {
 		return new HttpPost(url) {
 			private static final long serialVersionUID = -112127817630730021L;
 			@Override

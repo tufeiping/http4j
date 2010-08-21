@@ -17,7 +17,6 @@
 package com.google.code.http4j.client;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 
 /**
@@ -25,7 +24,7 @@ import java.net.URISyntaxException;
  */
 public interface HttpRequest extends HttpMessage {
 	
-	URI getUri() throws URISyntaxException;
+	URI getUri();
 	
 	HttpHost getHost();
 
