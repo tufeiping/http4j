@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class NanoTimer extends AbstractTimer implements Timer {
+public class NanoSecondTimer extends AbstractTimer implements Timer {
 	
 	@Override
 	public TimeUnit getTimeUnit() {

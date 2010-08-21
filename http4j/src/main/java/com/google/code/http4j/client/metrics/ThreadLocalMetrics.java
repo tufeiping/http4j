@@ -47,7 +47,7 @@ public class ThreadLocalMetrics implements Metrics {
 	}
 	
 	protected Timer createTimer() {
-		return new NanoTimer();
+		return new NanoSecondTimer();
 	}
 	
 	protected Counter<Long> createLongCounter() {
