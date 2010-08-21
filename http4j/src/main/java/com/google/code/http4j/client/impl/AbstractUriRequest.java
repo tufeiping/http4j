@@ -32,6 +32,12 @@ public abstract class AbstractUriRequest extends AbstractHttpRequest {
 		super(_url);
 	}
 	
+	public AbstractUriRequest(String _url, String encoding)
+			throws MalformedURLException, UnknownHostException,
+			URISyntaxException {
+		super(_url, encoding);
+	}
+
 	@Override
 	protected String formatBody() {
 		return "";

@@ -34,6 +34,11 @@ public class HttpPost extends AbstractHttpRequest {
 		super(url);
 	}
 	
+	public HttpPost(String _url, String encoding) throws MalformedURLException,
+			UnknownHostException, URISyntaxException {
+		super(_url, encoding);
+	}
+
 	@Override
 	protected String formatHeaders() {
 		String parameters = formatParameters();

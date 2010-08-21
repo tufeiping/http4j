@@ -27,7 +27,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.google.code.http4j.client.Http;
-import com.google.code.http4j.client.HttpHeader;
 import com.google.code.http4j.client.HttpHost;
 import com.google.code.http4j.client.HttpParameter;
 import com.google.code.http4j.client.HttpRequest;
@@ -41,14 +40,20 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 
 	private static final long serialVersionUID = 7128951961154306746L;
 
+	protected String encoding;
 	protected URI uri;
 	protected final HttpHost host;
 	protected List<HttpParameter> parameters;
-	
-	public AbstractHttpRequest(String _url)
-			throws MalformedURLException, UnknownHostException,
-			URISyntaxException {
+
+	public AbstractHttpRequest(String _url) throws MalformedURLException,
+			UnknownHostException, URISyntaxException {
+		this(_url, Http.DEFAULT_CHARSET);
+	}
+
+	public AbstractHttpRequest(String _url, String encoding) throws MalformedURLException,
+			UnknownHostException, URISyntaxException {
 		super();
+		this.encoding = encoding;
 		URL url = URLFormatter.format(_url);
 		uri = url.toURI();
 		host = createHttpHost(url.getProtocol(), url.getHost(), url.getPort());
@@ -82,8 +87,8 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	 * @return
 	 */
 	protected String calculateURI() {
-		return new StringBuilder(getPath()).append("?").append(formatParameters())
-				.toString();
+		return new StringBuilder(getPath()).append("?")
+				.append(formatParameters()).toString();
 	}
 
 	protected HttpHost createHttpHost(String protocol, String name, int port)
@@ -115,10 +120,11 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	}
 
 	protected String encode(String string) {
-		HttpHeader header = getHeader(Http.HEADER_NAME_ACCEPT_CHARSET);
-		String charset = header == null ? Http.DEFAULT_CHARSET : header.getValue();
+		if(null == encoding) {
+			return string;
+		}
 		try {
-			return URLEncoder.encode(string, charset);
+			return URLEncoder.encode(string, encoding);
 		} catch (UnsupportedEncodingException e) {
 			return string;
 		}

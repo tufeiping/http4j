@@ -26,10 +26,15 @@ import java.net.URISyntaxException;
 public interface HttpClient {
 	
 	HttpResponse head(String url) throws IOException, URISyntaxException;
+	HttpResponse head(String url, String encoding) throws IOException, URISyntaxException;
 	
 	HttpResponse get(String url) throws IOException, URISyntaxException;
 	HttpResponse get(String url, boolean parseEntity) throws IOException, URISyntaxException;
+	HttpResponse get(String url, String encoding) throws IOException, URISyntaxException;
+	HttpResponse get(String url, String encoding, boolean parseEntity) throws IOException, URISyntaxException;
 	
 	HttpResponse post(String url) throws IOException, URISyntaxException;
 	HttpResponse post(String url, boolean parseEntity) throws IOException, URISyntaxException;
+	HttpResponse post(String url, String encoding) throws IOException, URISyntaxException;
+	HttpResponse post(String url, String encoding, boolean parseEntity) throws IOException, URISyntaxException;
 }

@@ -33,6 +33,13 @@ public class HttpHead extends AbstractUriRequest {
 			UnknownHostException, URISyntaxException {
 		super(url);
 	}
+	
+	public HttpHead(String _url, String encoding) throws MalformedURLException,
+			UnknownHostException, URISyntaxException {
+		super(_url, encoding);
+	}
+
+
 
 	@Override
 	public boolean hasResponseEntity() {

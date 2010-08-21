@@ -61,10 +61,6 @@ public class BasicHttpClient implements HttpClient {
 		DnsCache.setDefault(createDnsCache());
 	}
 
-	protected DnsCache createDnsCache() {
-		return new BasicDnsCache();
-	}
-
 	protected ConnectionPool createConnectionPool() {
 		return new BasicConnectionPool();
 	}
@@ -73,19 +69,23 @@ public class BasicHttpClient implements HttpClient {
 		return new CookieStoreAdapter();
 	}
 
-	protected HttpRequest createGetRequest(String url)
-			throws MalformedURLException, UnknownHostException, URISyntaxException {
-		return new HttpGet(url);
+	protected DnsCache createDnsCache() {
+		return new BasicDnsCache();
 	}
 
-	protected HttpRequest createHeadRequest(String url)
+	protected HttpRequest createGetRequest(String url, String encoding)
 			throws MalformedURLException, UnknownHostException, URISyntaxException {
-		return new HttpHead(url);
+		return new HttpGet(url, encoding);
 	}
 
-	protected HttpRequest createPostRequest(String url)
+	protected HttpRequest createHeadRequest(String url, String encoding)
 			throws MalformedURLException, UnknownHostException, URISyntaxException {
-		return new HttpPost(url);
+		return new HttpHead(url, encoding);
+	}
+
+	protected HttpRequest createPostRequest(String url, String encoding)
+			throws MalformedURLException, UnknownHostException, URISyntaxException {
+		return new HttpPost(url, encoding);
 	}
 
 	protected HttpResponseParser createResponseParser() {
@@ -94,13 +94,25 @@ public class BasicHttpClient implements HttpClient {
 
 	@Override
 	public HttpResponse get(String url) throws IOException, URISyntaxException {
-		return get(url, true);
+		return get(url, null);
 	}
 
 	@Override
 	public HttpResponse get(String url, boolean parseEntity)
 			throws IOException, URISyntaxException {
-		return submit(createGetRequest(url), parseEntity);
+		return get(url, null, parseEntity);
+	}
+
+	@Override
+	public HttpResponse get(String url, String encoding) throws IOException,
+			URISyntaxException {
+		return get(url, encoding, true);
+	}
+
+	@Override
+	public HttpResponse get(String url, String encoding, boolean parseEntity)
+			throws IOException, URISyntaxException {
+		return submit(createGetRequest(url, encoding), parseEntity);
 	}
 
 	protected Connection getConnection(HttpHost host) throws IOException {
@@ -109,18 +121,36 @@ public class BasicHttpClient implements HttpClient {
 
 	@Override
 	public HttpResponse head(String url) throws IOException, URISyntaxException {
-		return submit(createHeadRequest(url), false);
+		return head(url, null);
+	}
+
+	@Override
+	public HttpResponse head(String url, String encoding) throws IOException,
+			URISyntaxException {
+		return submit(createHeadRequest(url, null), false);
 	}
 
 	@Override
 	public HttpResponse post(String url) throws IOException, URISyntaxException {
-		return post(url, true);
+		return post(url, null);
 	}
 
 	@Override
 	public HttpResponse post(String url, boolean parseEntity)
 			throws IOException, URISyntaxException {
-		return submit(createPostRequest(url), parseEntity);
+		return post(url, null, parseEntity);
+	}
+
+	@Override
+	public HttpResponse post(String url, String encoding) throws IOException,
+			URISyntaxException {
+		return post(url, encoding, true);
+	}
+
+	@Override
+	public HttpResponse post(String url, String encoding, boolean parseEntity)
+			throws IOException, URISyntaxException {
+		return submit(createPostRequest(url, encoding), parseEntity);
 	}
 
 	protected void setCookies(HttpRequest request) throws URISyntaxException {
