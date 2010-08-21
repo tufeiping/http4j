@@ -36,22 +36,10 @@ public class URLFormatterTestCase {
 	
 	@Test
 	public void testFormat() throws MalformedURLException {
-		assertion("www.google.com", "http://www.google.com");
-		assertion("http://www.google.com", "http://www.google.com");
-		assertion("https://www.google.com", "https://www.google.com");
+		assertion("www.google.com", "http://www.google.com/");
+		assertion("http://www.google.com", "http://www.google.com/");
+		assertion("https://www.google.com", "https://www.google.com/");
 		assertion("http://www.google.com/search?q=http4j", "http://www.google.com/search?q=http4j");
-	}
-	
-	@Test
-	public void testSetPort() throws MalformedURLException {
-		URL url = new URL("http://www.google.com");
-		int port = 443;
-		URL changed = URLFormatter.setPort(url, port);
-		Assert.assertNotNull(changed);
-		Assert.assertEquals(changed.getPort(), port);
-		Assert.assertEquals(url.getProtocol(), changed.getProtocol());
-		Assert.assertEquals(url.getHost(), changed.getHost());
-		Assert.assertEquals(url.getFile(), changed.getFile());
 	}
 	
 	private void assertion(String input, String output) throws MalformedURLException {

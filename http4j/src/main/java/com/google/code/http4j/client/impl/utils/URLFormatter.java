@@ -25,28 +25,19 @@ import java.net.URL;
 public final class URLFormatter {
 	
 	/**
-	 * Get standard URL by given string, ensure protocol and port are set. e.g.
-	 * <li>www.google.com --&gt; http://www.google.com:80</li>
-	 * <li>http://www.google.com --&gt; http://www.google.com:80</li>
-	 * <li>https://www.google.com --&gt; https://www.google.com:443</li>
-	 * <li>http://www.google.com/search?q=http4j --&gt; http://www.google.com:80/search?q=http4j</li>
+	 * Get standard URL by given string, ensure protocol and path are set. e.g.
+	 * <li>www.google.com --&gt; http://www.google.com/</li>
+	 * <li>http://www.google.com --&gt; http://www.google.com/</li>
+	 * <li>https://www.google.com --&gt; https://www.google.com/</li>
+	 * <li>http://www.google.com/search?q=http4j --&gt; http://www.google.com/search?q=http4j</li>
 	 * @param s
 	 * @return url
 	 * @throws MalformedURLException
 	 */
 	public static URL format(String s) throws MalformedURLException {
 		s = ensureProtocol(s);
+		s = ensurePath(s);
 		return new URL(s);
-	}
-	
-	public static URL setPort(URL url, int port) throws MalformedURLException {
-		return new URL(buildURLString(url.getProtocol(), url.getHost(), port, url.getFile()));
-	}
-	
-	public static String buildURLString(String protocol, String host, int port, String file) {
-		StringBuilder s = new StringBuilder(protocol);
-		s.append("://").append(host).append(":").append(port).append(file);
-		return s.toString();
 	}
 
 	static String ensureProtocol(String s) {
@@ -54,5 +45,11 @@ public final class URLFormatter {
 			s = "http://" + s;
 		}
 		return s;
+	}
+	
+	static String ensurePath(String s) {
+		int dot = s.indexOf(".");
+		int path = s.indexOf("/", dot);
+		return path > 0 ? s : s.concat("/");
 	}
 }

@@ -23,7 +23,6 @@ import java.net.UnknownHostException;
 import com.google.code.http4j.client.DnsCache;
 import com.google.code.http4j.client.Http;
 import com.google.code.http4j.client.HttpHost;
-import com.google.code.http4j.client.impl.utils.URLFormatter;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -116,6 +115,8 @@ public class BasicHttpHost implements HttpHost {
 
 	@Override
 	public String toString() {
-		return URLFormatter.buildURLString(protocol, name, port, "");
+		StringBuilder s = new StringBuilder(protocol);
+		s.append("://").append(name).append(":").append(port);
+		return s.toString();
 	}
 }

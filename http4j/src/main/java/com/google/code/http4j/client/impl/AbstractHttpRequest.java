@@ -39,8 +39,6 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	private static final long serialVersionUID = 7128951961154306746L;
 
 	protected URI uri;
-	protected final String path;
-	protected final String authority;
 	protected final HttpHost host;
 	protected List<HttpParameter> parameters;
 	
@@ -50,15 +48,13 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 		super();
 		URL url = URLFormatter.format(_url);
 		uri = url.toURI();
-		path = url.getPath().length() > 0 ? url.getPath() : "/";
-		authority = url.getAuthority();
 		host = createHttpHost(url.getProtocol(), url.getHost(), url.getPort());
 		addDefaultHeaders();
 		initParameters(url.getQuery());
 	}
 
 	protected void addDefaultHeaders() {
-		addHeader(Http.HEADER_NAME_HOST, authority);
+		addHeader(Http.HEADER_NAME_HOST, uri.getAuthority());
 		addHeader(Http.HEADER_NAME_USER_AGENT, Http.DEFAULT_USER_AGENT);
 	}
 
@@ -83,7 +79,7 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	 * @return
 	 */
 	protected String calculateURI() {
-		return new StringBuilder(path).append("?").append(formatParameters())
+		return new StringBuilder(getPath()).append("?").append(formatParameters())
 				.toString();
 	}
 
@@ -128,7 +124,7 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	abstract protected String getName();
 
 	protected String getPath() {
-		return path;
+		return uri.getPath();
 	}
 
 	@Override
