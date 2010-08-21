@@ -40,8 +40,13 @@ public class BasicDnsCache implements DnsCache {
 		InetAddress address = CACHE.get(host);
 		if(address == null) {
 			address = lookupDns(host);
-			CACHE.putIfAbsent(host, address);
+			CACHE.putIfAbsent(host, address);// multi request concurrent
 		}
 		return address;
+	}
+
+	@Override
+	public void cache(String host, InetAddress address) {
+		CACHE.put(host, address);
 	}
 }

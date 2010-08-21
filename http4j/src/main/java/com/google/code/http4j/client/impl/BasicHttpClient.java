@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.google.code.http4j.client.Connection;
 import com.google.code.http4j.client.ConnectionPool;
 import com.google.code.http4j.client.CookieCache;
+import com.google.code.http4j.client.DnsCache;
 import com.google.code.http4j.client.HttpClient;
 import com.google.code.http4j.client.HttpHeader;
 import com.google.code.http4j.client.HttpHost;
@@ -45,6 +46,7 @@ public class BasicHttpClient implements HttpClient {
 
 	protected ConnectionPool connectionPool;
 	protected CookieCache cookieCache;
+	protected DnsCache dnsCache;
 
 	/**
 	 * Construct a <code>BasicHttpClient</code> instance, subclass can
@@ -57,6 +59,11 @@ public class BasicHttpClient implements HttpClient {
 	public BasicHttpClient() {
 		connectionPool = createConnectionPool();
 		cookieCache = createCookieCache();
+		dnsCache = createDnsCache();
+	}
+
+	protected DnsCache createDnsCache() {
+		return new BasicDnsCache();
 	}
 
 	protected ConnectionPool createConnectionPool() {
@@ -69,17 +76,17 @@ public class BasicHttpClient implements HttpClient {
 
 	protected HttpRequest createGetRequest(String url)
 			throws MalformedURLException, UnknownHostException, URISyntaxException {
-		return new HttpGet(url);
+		return new HttpGet(url, dnsCache);
 	}
 
 	protected HttpRequest createHeadRequest(String url)
 			throws MalformedURLException, UnknownHostException, URISyntaxException {
-		return new HttpHead(url);
+		return new HttpHead(url, dnsCache);
 	}
 
 	protected HttpRequest createPostRequest(String url)
 			throws MalformedURLException, UnknownHostException, URISyntaxException {
-		return new HttpPost(url);
+		return new HttpPost(url, dnsCache);
 	}
 
 	protected HttpResponseParser createResponseParser() {

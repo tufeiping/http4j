@@ -31,36 +31,56 @@ import com.google.code.http4j.client.impl.utils.URLFormatter;
 public class BasicHttpHost implements HttpHost {
 	
 	protected String protocol;
-
+	
+	protected String name;
+	
 	protected int port;
 	
 	protected InetAddress inetAddress;
-	
-	protected DnsCache dnsCache;
 
-	public BasicHttpHost(String host) throws UnknownHostException {
-		this(Http.PROTOCOL_HTTP, host, -1);
+	public BasicHttpHost(String hostName, DnsCache dnsCache) throws UnknownHostException {
+		this(Http.PROTOCOL_HTTP, hostName, -1, dnsCache);
 	}
 	
-	public BasicHttpHost(String protocol, String host, int port) throws UnknownHostException {
+	public BasicHttpHost(String protocol, String hostName, int port, DnsCache dnsCache) throws UnknownHostException {
 		this.protocol = protocol;
+		this.name = hostName;
 		this.port = port;
-		this.dnsCache = createDnsCache();
-		this.inetAddress = dnsCache.getInetAddress(host);
+		this.inetAddress = dnsCache.getInetAddress(hostName);
 	}
 	
-	protected DnsCache createDnsCache() {
-		return new BasicDnsCache();
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BasicHttpHost other = (BasicHttpHost) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (port != other.port)
+			return false;
+		if (protocol == null) {
+			if (other.protocol != null)
+				return false;
+		} else if (!protocol.equals(other.protocol))
+			return false;
+		return true;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
 	}
 
 	@Override
-	public InetAddress getInetAddress() {
+	public InetAddress getInetAddress() throws UnknownHostException {
 		return inetAddress;
-	}
-	
-	@Override
-	public String getHostName() {
-		return inetAddress.getHostName();
 	}
 
 	@Override
@@ -74,41 +94,17 @@ public class BasicHttpHost implements HttpHost {
 	}
 
 	@Override
-	public String toString() {
-		return URLFormatter.buildURLString(protocol, inetAddress.getHostName(), port, "");
-	}
-
-	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((inetAddress == null) ? 0 : inetAddress.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + port;
 		result = prime * result + ((protocol == null) ? 0 : protocol.hashCode());
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		BasicHttpHost other = (BasicHttpHost) obj;
-		if (inetAddress == null) {
-			if (other.inetAddress != null)
-				return false;
-		} else if (!inetAddress.equals(other.inetAddress))
-			return false;
-		if (port != other.port)
-			return false;
-		if (protocol == null) {
-			if (other.protocol != null)
-				return false;
-		} else if (!protocol.equals(other.protocol))
-			return false;
-		return true;
+	public String toString() {
+		return URLFormatter.buildURLString(protocol, name, port, "");
 	}
 }

@@ -24,6 +24,7 @@ import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.code.http4j.client.DnsCache;
 import com.google.code.http4j.client.Http;
 import com.google.code.http4j.client.HttpHost;
 import com.google.code.http4j.client.HttpParameter;
@@ -42,26 +43,28 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	protected final String path;
 	protected final String authority;
 	protected final HttpHost host;
-
+	protected DnsCache dnsCache;
 	protected List<HttpParameter> parameters;
-
-	public AbstractHttpRequest(String _url) throws MalformedURLException,
-			UnknownHostException, URISyntaxException {
+	
+	public AbstractHttpRequest(String _url, DnsCache dnsCache)
+			throws MalformedURLException, UnknownHostException,
+			URISyntaxException {
 		super();
+		this.dnsCache = dnsCache;
 		URL url = URLFormatter.format(_url);
 		uri = url.toURI();
 		path = url.getPath().length() > 0 ? url.getPath() : "/";
 		authority = url.getAuthority();
-		host = createHttpHost(url.getProtocol(), url.getHost(),url.getPort());
+		host = createHttpHost(url.getProtocol(), url.getHost(), url.getPort());
 		addDefaultHeaders();
 		initParameters(url.getQuery());
 	}
-	
+
 	protected void addDefaultHeaders() {
 		addHeader(Http.HEADER_NAME_HOST, authority);
 		addHeader(Http.HEADER_NAME_USER_AGENT, Http.DEFAULT_USER_AGENT);
 	}
-	
+
 	@Override
 	public void addParameter(String name, String... values) {
 		for (String value : values) {
@@ -83,13 +86,15 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	 * @return
 	 */
 	protected String calculateURI() {
-		return new StringBuilder(path).append("?").append(formatParameters()).toString();
+		return new StringBuilder(path).append("?").append(formatParameters())
+				.toString();
 	}
 
-	protected HttpHost createHttpHost(String protocol, String host, int port) throws UnknownHostException {
-		return new BasicHttpHost(protocol, host, port);
+	protected HttpHost createHttpHost(String protocol, String name, int port)
+			throws UnknownHostException {
+		return new BasicHttpHost(protocol, name, port, dnsCache);
 	}
-	
+
 	protected HttpParameter createHttpParameter(String name, String value) {
 		return new BasicHttpParameter(name, value);
 	}
@@ -113,8 +118,9 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	}
 
 	protected String formatRequestLine() {
-		return new StringBuilder(getName()).append(Http.BLANK_CHAR).append(getUriString())
-				.append(Http.BLANK_CHAR).append(Http.DEFAULT_HTTP_VERSION).toString();
+		return new StringBuilder(getName()).append(Http.BLANK_CHAR)
+				.append(getUriString()).append(Http.BLANK_CHAR)
+				.append(Http.DEFAULT_HTTP_VERSION).toString();
 	}
 
 	@Override
@@ -123,26 +129,26 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	}
 
 	abstract protected String getName();
-	
+
 	protected String getPath() {
 		return path;
+	}
+
+	@Override
+	public URI getUri() {
+		return uri;
 	}
 
 	abstract protected String getUriString();
 
 	protected void initParameters(String queryString) {
 		parameters = new LinkedList<HttpParameter>();
-		if(null != queryString) {
+		if (null != queryString) {
 			String[] nameValuePairs = queryString.split("&");
 			for (String nameValuePair : nameValuePairs) {
 				String[] nameAndValue = nameValuePair.split("=");
 				addParameter(nameAndValue[0], nameAndValue[1]);
 			}
 		}
-	}
-	
-	@Override
-	public URI getUri() {
-		return uri;
 	}
 }

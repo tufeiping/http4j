@@ -48,6 +48,6 @@ public class HttpPostTestCase extends AbstractHttpRequestTestCase {
 	@Override
 	protected HttpRequest createHttpRequest(String url)
 			throws MalformedURLException, UnknownHostException, URISyntaxException {
-		return new HttpPost(url);
+		return new HttpPost(url, dnsCache);
 	}
 }

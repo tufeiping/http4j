@@ -26,4 +26,6 @@ import java.net.UnknownHostException;
 public interface DnsCache extends Serializable {
 	
 	InetAddress getInetAddress(String host) throws UnknownHostException;
+	
+	void cache(String host, InetAddress address);
 }

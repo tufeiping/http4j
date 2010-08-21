@@ -34,6 +34,13 @@ public class MetricDnsCache extends BasicDnsCache implements DnsCache {
 	}
 
 	@Override
+	public InetAddress getInetAddress(String host) throws UnknownHostException {
+		Timer timer = ThreadLocalMetrics.getInstance().getDnsTimer();
+		timer.reset();
+		return super.getInetAddress(host);
+	}
+	
+	@Override
 	protected InetAddress lookupDns(String host)
 			throws UnknownHostException {
 		Timer timer = ThreadLocalMetrics.getInstance().getDnsTimer();
