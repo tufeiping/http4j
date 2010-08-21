@@ -29,8 +29,12 @@ public class MetricDnsCache extends BasicDnsCache implements DnsCache {
 
 	private static final long serialVersionUID = 4022408023178943059L;
 
-	public MetricDnsCache() {
+	protected MetricDnsCache() {
 		super();
+	}
+	
+	public static void enableMetrics() {
+		setInstance(new MetricDnsCache());
 	}
 
 	@Override

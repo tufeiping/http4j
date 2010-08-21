@@ -22,7 +22,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.google.code.http4j.client.impl.BasicDnsCache;
 import com.google.code.http4j.client.impl.BasicHttpHost;
 import com.google.code.http4j.client.impl.utils.IOUtils;
 
@@ -35,18 +34,11 @@ public abstract class ConnectionTestCase {
 	protected Connection connection;
 
 	protected HttpHost host;
-	
-	protected DnsCache dnsCache;
 
 	@BeforeClass
 	public void setUp() throws IOException {
-		dnsCache = createDnsCache();
-		host = new BasicHttpHost("www.google.com", dnsCache);
+		host = new BasicHttpHost("www.google.com");
 		connection = createConnection();
-	}
-
-	protected DnsCache createDnsCache() {
-		return new BasicDnsCache();
 	}
 
 	abstract protected Connection createConnection() throws IOException;

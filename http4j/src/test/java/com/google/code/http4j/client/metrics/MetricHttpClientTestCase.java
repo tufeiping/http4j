@@ -32,6 +32,7 @@ import org.testng.annotations.Test;
 
 import com.google.code.http4j.client.HttpClient;
 import com.google.code.http4j.client.HttpResponse;
+import com.google.code.http4j.client.impl.BasicDnsCache;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -64,7 +65,7 @@ public class MetricHttpClientTestCase {
 		MetricHttpClient client = new MetricHttpClient();
 		String host = "www.csdn.net";
 		InetAddress ip = InetAddress.getByName(host);
-		client.cacheDns(host, ip);
+		BasicDnsCache.getInstance().cache(host, ip);
 		client.head(host);
 		Timer dns = ThreadLocalMetrics.getInstance().getDnsTimer();
 		Assert.assertEquals(dns.getTimeCost(), 0);

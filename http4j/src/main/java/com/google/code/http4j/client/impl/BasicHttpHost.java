@@ -38,17 +38,21 @@ public class BasicHttpHost implements HttpHost {
 	
 	protected InetAddress inetAddress;
 
-	public BasicHttpHost(String hostName, DnsCache dnsCache) throws UnknownHostException {
-		this(Http.PROTOCOL_HTTP, hostName, -1, dnsCache);
+	public BasicHttpHost(String hostName) throws UnknownHostException {
+		this(Http.PROTOCOL_HTTP, hostName, -1);
 	}
 	
-	public BasicHttpHost(String protocol, String hostName, int port, DnsCache dnsCache) throws UnknownHostException {
+	public BasicHttpHost(String protocol, String hostName, int port) throws UnknownHostException {
 		this.protocol = protocol;
 		this.name = hostName;
 		this.port = port;
-		this.inetAddress = dnsCache.getInetAddress(hostName);
+		this.inetAddress = getDnsCache().getInetAddress(hostName);
 	}
 	
+	protected DnsCache getDnsCache() {
+		return BasicDnsCache.getInstance();
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

@@ -36,6 +36,6 @@ public class HttpHeadTestCase extends AbstractHttpUriRequestTestCase {
 	@Override
 	protected AbstractHttpRequest createHttpRequest(String url)
 			throws MalformedURLException, UnknownHostException, URISyntaxException {
-		return new HttpHead(url, dnsCache);
+		return new HttpHead(url);
 	}
 }

@@ -17,7 +17,6 @@
 package com.google.code.http4j.client;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.URISyntaxException;
 
 /**
@@ -25,8 +24,6 @@ import java.net.URISyntaxException;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public interface HttpClient {
-	
-	void cacheDns(String host, InetAddress address);
 	
 	HttpResponse head(String url) throws IOException, URISyntaxException;
 	

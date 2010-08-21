@@ -20,7 +20,6 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
-import com.google.code.http4j.client.DnsCache;
 import com.google.code.http4j.client.Http;
 
 /**
@@ -30,9 +29,9 @@ public class HttpGet extends AbstractUriRequest {
 
 	private static final long serialVersionUID = -4509278701186547565L;
 
-	public HttpGet(String url, DnsCache dnsCache) throws MalformedURLException,
+	public HttpGet(String url) throws MalformedURLException,
 			UnknownHostException, URISyntaxException {
-		super(url, dnsCache);
+		super(url);
 	}
 
 	@Override

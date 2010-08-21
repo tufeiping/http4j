@@ -35,6 +35,6 @@ public class HttpGetTestCase extends AbstractHttpUriRequestTestCase {
 
 	@Override
 	protected AbstractHttpRequest createHttpRequest(String url) throws MalformedURLException, UnknownHostException, URISyntaxException {
-		return new HttpGet("http://www.google.com/search?q=http4j", dnsCache);
+		return new HttpGet("http://www.google.com/search?q=http4j");
 	}
 }

@@ -24,7 +24,6 @@ import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.code.http4j.client.DnsCache;
 import com.google.code.http4j.client.Http;
 import com.google.code.http4j.client.HttpHost;
 import com.google.code.http4j.client.HttpParameter;
@@ -43,14 +42,12 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	protected final String path;
 	protected final String authority;
 	protected final HttpHost host;
-	protected DnsCache dnsCache;
 	protected List<HttpParameter> parameters;
 	
-	public AbstractHttpRequest(String _url, DnsCache dnsCache)
+	public AbstractHttpRequest(String _url)
 			throws MalformedURLException, UnknownHostException,
 			URISyntaxException {
 		super();
-		this.dnsCache = dnsCache;
 		URL url = URLFormatter.format(_url);
 		uri = url.toURI();
 		path = url.getPath().length() > 0 ? url.getPath() : "/";
@@ -92,7 +89,7 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 
 	protected HttpHost createHttpHost(String protocol, String name, int port)
 			throws UnknownHostException {
-		return new BasicHttpHost(protocol, name, port, dnsCache);
+		return new BasicHttpHost(protocol, name, port);
 	}
 
 	protected HttpParameter createHttpParameter(String name, String value) {

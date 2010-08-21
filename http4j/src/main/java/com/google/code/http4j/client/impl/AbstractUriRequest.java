@@ -19,8 +19,6 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
-import com.google.code.http4j.client.DnsCache;
-
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  *
@@ -29,9 +27,9 @@ public abstract class AbstractUriRequest extends AbstractHttpRequest {
 
 	private static final long serialVersionUID = -8545690642344763108L;
 	
-	public AbstractUriRequest(String _url, DnsCache dnsCache) throws MalformedURLException,
+	public AbstractUriRequest(String _url) throws MalformedURLException,
 			UnknownHostException, URISyntaxException {
-		super(_url, dnsCache);
+		super(_url);
 	}
 	
 	@Override
