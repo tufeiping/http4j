@@ -29,6 +29,10 @@ public interface Metrics {
 	Timer getRequestTimer();
 
 	Timer getResponseTimer();
+	
+	Counter<Long> getRequestTrafficCounter();
 
+	Counter<Long> getResponseTrafficCounter();
+	
 	void reset();
 }

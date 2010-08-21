@@ -41,18 +41,26 @@ public class MetricConnectionDecoratorTestCase extends ConnectionTestCase {
 	
 	@Test(dependsOnMethods = "testConnect")
 	public void testWrite() {
-		Timer timer = ThreadLocalMetrics.getInstance().getRequestTimer();
-		Assert.assertFalse(timer.getTimeCost() > 0);
+		Metrics metrics = ThreadLocalMetrics.getInstance();
+		Timer timer = metrics.getRequestTimer();
+		Counter<Long> counter = metrics.getRequestTrafficCounter();
+		Assert.assertTrue(timer.getTimeCost() == 0);
+		Assert.assertTrue(counter.get() == 0);
 		super.testWrite();
 		Assert.assertTrue(timer.getTimeCost() > 0);
+		Assert.assertTrue(counter.get() > 0);
 	}
 
 	@Test(dependsOnMethods = "testWrite")
 	public void testRead() {
-		Timer timer = ThreadLocalMetrics.getInstance().getResponseTimer();
-		Assert.assertFalse(timer.getTimeCost() > 0);
+		Metrics metrics = ThreadLocalMetrics.getInstance();
+		Timer timer = metrics.getResponseTimer();
+		Counter<Long> counter = metrics.getResponseTrafficCounter();
+		Assert.assertTrue(timer.getTimeCost() == 0);
+		Assert.assertTrue(counter.get() == 0);
 		super.testRead();
 		Assert.assertTrue(timer.getTimeCost() > 0);
+		Assert.assertTrue(counter.get() > 0);
 	}
 	
 	@Test(dependsOnMethods = "testConnect")

@@ -29,13 +29,16 @@ public class ThreadLocalMetrics implements Metrics {
 	protected Timer connectionTimer;
 	protected Timer requestTimer;
 	protected Timer responseTimer;
-	
+	protected Counter<Long> requestTrafficCounter;
+	protected Counter<Long> responseTrafficCounter;
 	protected ThreadLocalMetrics() {
 		local.set(this);
 		dnsTimer = createTimer();
 		connectionTimer = createTimer();
 		requestTimer = createTimer();
 		responseTimer = createTimer();
+		requestTrafficCounter = createLongCounter();
+		responseTrafficCounter = createLongCounter();
 	}
 
 	public static ThreadLocalMetrics getInstance() {
@@ -45,6 +48,10 @@ public class ThreadLocalMetrics implements Metrics {
 	
 	protected Timer createTimer() {
 		return new NanoTimer();
+	}
+	
+	protected Counter<Long> createLongCounter() {
+		return new LongCounter();
 	}
 	
 	@Override
@@ -72,5 +79,17 @@ public class ThreadLocalMetrics implements Metrics {
 		connectionTimer.reset();
 		requestTimer.reset();
 		responseTimer.reset();
+		requestTrafficCounter.reset();
+		responseTrafficCounter.reset();
+	}
+
+	@Override
+	public Counter<Long> getRequestTrafficCounter() {
+		return requestTrafficCounter;
+	}
+
+	@Override
+	public Counter<Long> getResponseTrafficCounter() {
+		return responseTrafficCounter;
 	}
 }

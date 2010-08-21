@@ -49,18 +49,22 @@ public class MetricConnectionDecorator implements Connection {
 
 	@Override
 	public void write(byte[] message) throws IOException {
-		Timer timer = ThreadLocalMetrics.getInstance().getRequestTimer();
+		Metrics metrics = ThreadLocalMetrics.getInstance();
+		Timer timer = metrics.getRequestTimer();
 		timer.startTimer();
 		connection.write(message);
 		timer.stopTimer();
+		metrics.getRequestTrafficCounter().increase(Long.valueOf(message.length));
 	}
 
 	@Override
 	public byte[] read() throws IOException {
-		Timer timer = ThreadLocalMetrics.getInstance().getResponseTimer();
+		Metrics metrics = ThreadLocalMetrics.getInstance();
+		Timer timer = metrics.getResponseTimer();
 		timer.startTimer();
 		byte[] message = connection.read();
 		timer.stopTimer();
+		metrics.getResponseTrafficCounter().increase(Long.valueOf(message.length));
 		return message;
 	}
 
