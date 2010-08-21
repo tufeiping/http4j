@@ -27,7 +27,7 @@ public abstract class DnsCache implements Serializable {
 	
 	private static final long serialVersionUID = -2294441769086049537L;
 	
-	private static DnsCache dnsCache;
+	private static volatile DnsCache dnsCache;
 	
 	public static DnsCache getDefault() {
 		return dnsCache;
