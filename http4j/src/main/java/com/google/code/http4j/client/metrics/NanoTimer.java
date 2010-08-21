@@ -21,37 +21,15 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class NanoTimer implements Timer {
+public class NanoTimer extends AbstractTimer implements Timer {
 	
-	protected long begin;
-	
-	protected long end;
-	
-	@Override
-	public long startTimer() {
-		begin = System.nanoTime();
-		return begin;
-	}
-
-	@Override
-	public long stopTimer() {
-		end = System.nanoTime();
-		return end;
-	}
-
-	@Override
-	public long getTimeCost() {
-		return end - begin;
-	}
-
 	@Override
 	public TimeUnit getTimeUnit() {
 		return TimeUnit.NANOSECONDS;
 	}
 
 	@Override
-	public void reset() {
-		begin = 0;
-		end = 0;
+	protected long getCurrentTime() {
+		return System.nanoTime();
 	}
 }

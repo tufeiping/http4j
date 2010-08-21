@@ -18,17 +18,17 @@ package com.google.code.http4j.client.metrics;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
- *
+ * 
  */
 public interface Metrics {
-	
+
 	Timer getDnsTimer();
-	
+
 	Timer getConnectionTimer();
-	
+
 	Timer getRequestTimer();
-	
+
 	Timer getResponseTimer();
-	
+
 	void reset();
 }

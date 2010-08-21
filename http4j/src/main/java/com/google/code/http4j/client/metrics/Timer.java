@@ -20,17 +20,16 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
- *
+ * 
  */
 public interface Timer {
-	
 	long startTimer();
-	
+
 	long stopTimer();
-	
+
 	long getTimeCost();
-	
+
 	TimeUnit getTimeUnit();
-	
+
 	void reset();
 }

@@ -31,7 +31,7 @@ public class MetricHttpHostTestCase {
 	public void testDnsTimer() throws UnknownHostException {
 		Timer timer = ThreadLocalMetrics.getInstance().getDnsTimer();
 		Assert.assertFalse(timer.getTimeCost() > 0);
-		new MetricHttpHost("www.facebook.com");
+		new MetricHttpHost("www.sourceforge.com");
 		Assert.assertTrue(timer.getTimeCost() > 0);
 	}
 }
