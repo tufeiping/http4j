@@ -16,6 +16,7 @@
 
 package com.google.code.http4j.client.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -77,5 +78,22 @@ public abstract class AbstractHttpMessage implements HttpMessage {
 
 	protected HttpHeader createHeader(String name, String value) {
 		return new BasicHttpHeader(name, value);
+	}
+
+	@Override
+	public List<HttpHeader> getHeaders(String name) {
+		List<HttpHeader> list = new ArrayList<HttpHeader>();
+		for (HttpHeader header : headers) {
+			if(name.equalsIgnoreCase(header.getName())) {
+				list.add(header);
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public HttpHeader getHeader(String name) {
+		List<HttpHeader> list = getHeaders(name);
+		return list.isEmpty() ? null : list.get(0);
 	}
 }

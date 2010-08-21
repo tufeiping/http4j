@@ -23,6 +23,7 @@ import java.net.UnknownHostException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.google.code.http4j.client.Http;
 import com.google.code.http4j.client.HttpRequest;
 
 /**
@@ -34,7 +35,12 @@ public class HttpPostTestCase extends AbstractHttpRequestTestCase {
 	public void testFormatBody() {
 		Assert.assertEquals(abstractHttpRequest.formatBody(), "q=http4j");
 	}
-
+	
+	@Override
+	protected String getAdditionalHeaderString() {
+		return "Content-Length:8" + Http.CRLF;
+	}
+	
 	@Test
 	public void testFormatRequestLine() {
 		Assert.assertEquals(abstractHttpRequest.formatRequestLine(), "POST /search HTTP/1.1");

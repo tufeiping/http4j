@@ -16,15 +16,18 @@
 
 package com.google.code.http4j.client.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.google.code.http4j.client.Http;
+import com.google.code.http4j.client.HttpHeader;
 import com.google.code.http4j.client.HttpHost;
 import com.google.code.http4j.client.HttpParameter;
 import com.google.code.http4j.client.HttpRequest;
@@ -105,9 +108,20 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	protected String formatParameters() {
 		StringBuilder message = new StringBuilder();
 		for (HttpParameter parameter : parameters) {
-			message.append("&").append(parameter.format());
+			message.append("&").append(parameter.getName());
+			message.append("=").append(encode(parameter.getValue()));
 		}
 		return message.length() > 0 ? message.substring(1) : "";
+	}
+
+	protected String encode(String string) {
+		HttpHeader header = getHeader(Http.HEADER_NAME_ACCEPT_CHARSET);
+		String charset = header == null ? Http.DEFAULT_CHARSET : header.getValue();
+		try {
+			return URLEncoder.encode(string, charset);
+		} catch (UnsupportedEncodingException e) {
+			return string;
+		}
 	}
 
 	protected String formatRequestLine() {

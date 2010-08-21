@@ -21,6 +21,7 @@ import java.net.UnknownHostException;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import com.google.code.http4j.client.Http;
 import com.google.code.http4j.client.HttpRequestTestCase;
@@ -37,11 +38,19 @@ public abstract class AbstractHttpRequestTestCase extends HttpRequestTestCase {
 		abstractHttpRequest = (AbstractHttpRequest) request;
 	}
 	
+	@Test
 	public void testFormatHeaders() {
 		String message = abstractHttpRequest.formatHeaders();
-		Assert.assertEquals(message, "Host:www.google.com" + Http.CRLF + "User-Agent:" + Http.DEFAULT_USER_AGENT + Http.CRLF);
+		String expect = "Host:www.google.com" + Http.CRLF 
+						+ "User-Agent:" + Http.DEFAULT_USER_AGENT + Http.CRLF
+						+ getAdditionalHeaderString();
+		Assert.assertEquals(message, expect);
 	}
 	
+	protected String getAdditionalHeaderString() {
+		return "";
+	}
+
 	abstract public void testFormatBody();
 	
 	abstract public void testFormatRequestLine();

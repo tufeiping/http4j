@@ -26,11 +26,6 @@ public class BasicHttpParameter extends NameValuePair implements HttpParameter {
 	public BasicHttpParameter(String name, String value) {
 		super(name, value);
 	}
-
-	@Override
-	public String format() {
-		return new StringBuilder(name).append("=").append(value).toString();
-	}
 	
 	@Override
 	public boolean equals(Object obj) {

@@ -22,13 +22,17 @@ import java.util.List;
 
 public interface HttpMessage extends Formattable, Serializable {
 	
-	public List<HttpHeader> getHeaders();
+	List<HttpHeader> getHeaders();
+	
+	List<HttpHeader> getHeaders(String name);
+	
+	HttpHeader getHeader(String name);
 	
 	void addHeaders(Collection<HttpHeader> headers);
 	
-	public void addHeaders(HttpHeader... headers);
+	void addHeaders(HttpHeader... headers);
 	
-	public void addHeader(String name, String value);
+	void addHeader(String name, String value);
 
 	void addHeader(HttpHeader header);
 }
