@@ -19,22 +19,17 @@ package com.google.code.http4j.client.metrics;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import com.google.code.http4j.client.DnsCache;
 import com.google.code.http4j.client.impl.BasicDnsCache;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class MetricDnsCache extends BasicDnsCache implements DnsCache {
+public class MetricDnsCache extends BasicDnsCache {
 
 	private static final long serialVersionUID = 4022408023178943059L;
 
-	protected MetricDnsCache() {
+	public MetricDnsCache() {
 		super();
-	}
-	
-	public static void enableMetrics() {
-		setInstance(new MetricDnsCache());
 	}
 
 	@Override

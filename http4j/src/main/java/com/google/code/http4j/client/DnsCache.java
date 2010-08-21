@@ -23,9 +23,21 @@ import java.net.UnknownHostException;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public interface DnsCache extends Serializable {
+public abstract class DnsCache implements Serializable {
 	
-	InetAddress getInetAddress(String host) throws UnknownHostException;
+	private static final long serialVersionUID = -2294441769086049537L;
 	
-	void cache(String host, InetAddress address);
+	private static DnsCache dnsCache;
+	
+	public static DnsCache getDefault() {
+		return dnsCache;
+	}
+
+	public static void setDefault(DnsCache cache) {
+		dnsCache = cache;
+	}
+	
+	abstract public InetAddress getInetAddress(String host) throws UnknownHostException;
+	
+	abstract public void cache(String host, InetAddress address);
 }

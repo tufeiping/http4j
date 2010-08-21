@@ -30,6 +30,8 @@ import com.google.code.http4j.client.impl.utils.URLFormatter;
  */
 public class BasicHttpHost implements HttpHost {
 	
+	protected static final DnsCache DEFAULT_DNS_CACHE = new BasicDnsCache();
+	
 	protected String protocol;
 	
 	protected String name;
@@ -48,11 +50,16 @@ public class BasicHttpHost implements HttpHost {
 		this.port = port;
 		this.inetAddress = getDnsCache().getInetAddress(hostName);
 	}
-	
-	protected DnsCache getDnsCache() {
-		return BasicDnsCache.getInstance();
-	}
 
+	protected final DnsCache getDnsCache() {
+		DnsCache cache = DnsCache.getDefault();
+		if(null == cache) {
+			cache = DEFAULT_DNS_CACHE;
+			DnsCache.setDefault(cache);
+		}
+		return cache;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

@@ -25,23 +25,13 @@ import com.google.code.http4j.client.DnsCache;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class BasicDnsCache implements DnsCache {
+public class BasicDnsCache extends DnsCache {
 
 	private static final long serialVersionUID = 5641865794616472509L;
 	
 	protected static final ConcurrentHashMap<String, InetAddress> CACHE = new ConcurrentHashMap<String, InetAddress>();
 	
-	private static volatile DnsCache instance;
-	
-	protected BasicDnsCache() {
-	}
-	
-	public static DnsCache getInstance() {
-		return instance == null ? new BasicDnsCache() : instance;
-	}
-	
-	protected static void setInstance(DnsCache cache) {
-		instance = cache;
+	public BasicDnsCache() {
 	}
 	
 	protected InetAddress lookupDns(String host) throws UnknownHostException {

@@ -17,6 +17,7 @@
 package com.google.code.http4j.client.metrics;
 
 import com.google.code.http4j.client.ConnectionPool;
+import com.google.code.http4j.client.DnsCache;
 import com.google.code.http4j.client.impl.BasicHttpClient;
 
 /**
@@ -27,13 +28,17 @@ public class MetricHttpClient extends BasicHttpClient {
 
 	public MetricHttpClient() {
 		super();
-		MetricDnsCache.enableMetrics();
 	}
 	
 	protected void resetMetrics() {
 		ThreadLocalMetrics.getInstance().reset();
 	}
 
+	@Override
+	protected DnsCache createDnsCache() {
+		return new MetricDnsCache();
+	}
+	
 	@Override
 	protected ConnectionPool createConnectionPool() {
 		return new MetricConnectionPool();
