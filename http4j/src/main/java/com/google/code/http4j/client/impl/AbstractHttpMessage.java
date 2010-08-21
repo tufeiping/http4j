@@ -96,4 +96,23 @@ public abstract class AbstractHttpMessage implements HttpMessage {
 		List<HttpHeader> list = getHeaders(name);
 		return list.isEmpty() ? null : list.get(0);
 	}
+	
+	@Override
+	public void setHeader(HttpHeader header) {
+		boolean found = false;
+		for(int i = 0, size = headers.size(); !found && i < size; i++) {
+			found = headers.get(i).getName().equalsIgnoreCase(header.getName());
+			if(found) {
+				headers.set(i, header);
+			}
+		}
+		if(!found) {
+			headers.add(header);
+		}
+	}
+	
+	@Override
+	public void setHeader(String name, String value) {
+		setHeader(createHeader(name, value));
+	}
 }

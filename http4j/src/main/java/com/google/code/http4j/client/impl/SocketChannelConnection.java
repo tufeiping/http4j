@@ -58,7 +58,6 @@ public class SocketChannelConnection extends AbstractConnection implements Conne
 
 	@Override
 	public void write(byte[] message) throws IOException {
-		logger.debug("HTTP Request >>\r\n{}", new String(message));
 		ByteBuffer buffer = ByteBuffer.wrap(message);
 		channel.write(buffer);
 	}

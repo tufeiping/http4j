@@ -55,7 +55,6 @@ public class SocketConnection extends AbstractConnection {
 
 	@Override
 	public void write(byte[] message) throws IOException {
-		logger.debug("HTTP Request >>\r\n{}", new String(message));
 		OutputStream out = socket.getOutputStream();
 		out.write(message);
 		out.flush();

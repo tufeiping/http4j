@@ -28,6 +28,10 @@ public interface HttpMessage extends Formattable, Serializable {
 	
 	HttpHeader getHeader(String name);
 	
+	void setHeader(String name, String value);
+	
+	void setHeader(HttpHeader header);
+	
 	void addHeaders(Collection<HttpHeader> headers);
 	
 	void addHeaders(HttpHeader... headers);

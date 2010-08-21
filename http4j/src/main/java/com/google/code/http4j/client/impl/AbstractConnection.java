@@ -21,9 +21,6 @@ import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.code.http4j.client.Connection;
 import com.google.code.http4j.client.Http;
 import com.google.code.http4j.client.HttpHost;
@@ -34,8 +31,6 @@ import com.google.code.http4j.client.impl.utils.IOUtils;
  * 
  */
 public abstract class AbstractConnection implements Connection {
-	
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	protected HttpHost host;
 
@@ -65,9 +60,7 @@ public abstract class AbstractConnection implements Connection {
 			extended = ensureSpace(buffer, extended);
 			IOUtils.transfer(buffer, extended);
 		}
-		byte[] result = IOUtils.extract(extended.position() == 0 ? buffer : extended);
-		logger.debug("HTTP Response <<\r\n{}", new String(result));
-		return result;
+		return IOUtils.extract(extended.position() == 0 ? buffer : extended);
 	}
 	
 	abstract protected int read(ByteBuffer buffer) throws IOException;

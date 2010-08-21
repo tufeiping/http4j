@@ -141,7 +141,9 @@ public class BasicHttpClient implements HttpClient {
 		Connection connection = getConnection(request.getHost());
 		try {
 			setCookies(request);
-			connection.write(request.format().getBytes());
+			String requestMessage = request.format();
+			logger.debug("Request >>\r\n{}", requestMessage);
+			connection.write(requestMessage.getBytes());
 			byte[] message = connection.read();
 			connectionPool.releaseConnection(connection);
 			HttpResponse response = createResponseParser().parse(message, parseEntity);
