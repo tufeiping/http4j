@@ -17,6 +17,7 @@
 package com.google.code.http4j.client.metrics;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,17 @@ public class MetricHttpClientTestCase {
 			}});
 		Assert.assertTrue(result.get());
 	}
-	
+
+	@Test
+	public void testCacheDns() throws IOException, URISyntaxException {
+		MetricHttpClient client = new MetricHttpClient();
+		String host = "www.csdn.net";
+		InetAddress ip = InetAddress.getByName(host);
+		client.cacheDns(host, ip);
+		client.head(host);
+		Timer dns = ThreadLocalMetrics.getInstance().getDnsTimer();
+		Assert.assertEquals(dns.getTimeCost(), 0);
+	}
 	
 	private void testMetrics() throws IOException, URISyntaxException {
 		HttpClient client = new MetricHttpClient();
@@ -65,10 +76,6 @@ public class MetricHttpClientTestCase {
 		HttpResponse response = client.get("http://www.bing.com", false);
 		Assert.assertNotNull(response);
 		assertionTimers(true);
-		response = client.get("http://www.bing.com", false);
-		Timer dns = ThreadLocalMetrics.getInstance().getDnsTimer();
-		Assert.assertTrue(dns.getTimeCost() == 0);
-		System.out.println(dns.getTimeCost()/1000000 + "ms");
 	}
 	
 	private List<Timer> getTimers() {
@@ -85,7 +92,7 @@ public class MetricHttpClientTestCase {
 		List<Timer> timers = getTimers();
 		for(Timer timer: timers) {
 			System.out.println(timer.getTimeCost()/1000000 + "ms");
-			Assert.assertTrue(timer.getTimeCost() > 0 == flag);
+			Assert.assertEquals(timer.getTimeCost() > 0, flag);
 		}
 	}
 }

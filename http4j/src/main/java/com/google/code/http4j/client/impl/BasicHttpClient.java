@@ -17,6 +17,7 @@
 package com.google.code.http4j.client.impl;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -155,5 +156,10 @@ public class BasicHttpClient implements HttpClient {
 			connection.close();
 			throw e;
 		}
+	}
+
+	@Override
+	public void cacheDns(String host, InetAddress address) {
+		dnsCache.cache(host, address);
 	}
 }
