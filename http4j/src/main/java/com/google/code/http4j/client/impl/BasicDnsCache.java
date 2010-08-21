@@ -31,32 +31,17 @@ public class BasicDnsCache implements DnsCache {
 	
 	private static final long serialVersionUID = 5641865794616472509L;
 	
-	protected String getDnsKey(String host, byte[] ip) {
-		StringBuilder key = new StringBuilder().append(host);
-		if(null != ip) {
-			key.append("/").append(new String(ip));
-		}
-		return key.toString();
-	}
-	
-	protected InetAddress lookupDns(String host, byte[] ip) throws UnknownHostException {
-		return null == ip ? InetAddress.getByName(host) : InetAddress.getByAddress(ip);
+	protected InetAddress lookupDns(String host) throws UnknownHostException {
+		return InetAddress.getByName(host);
 	}
 	
 	@Override
-	public InetAddress getInetAddress(String host, byte[] ip) throws UnknownHostException {
-		String key = getDnsKey(host, ip);
-		InetAddress address = CACHE.get(key);
+	public InetAddress getInetAddress(String host) throws UnknownHostException {
+		InetAddress address = CACHE.get(host);
 		if(address == null) {
-			address = lookupDns(host, ip);
-			CACHE.putIfAbsent(key, address);
+			address = lookupDns(host);
+			CACHE.putIfAbsent(host, address);
 		}
 		return address;
 	}
-
-	@Override
-	public InetAddress getInetAddress(String host) throws UnknownHostException {
-		return getInetAddress(host, null);
-	}
-	
 }

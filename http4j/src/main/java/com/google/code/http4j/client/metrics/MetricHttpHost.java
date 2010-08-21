@@ -34,14 +34,9 @@ public class MetricHttpHost extends BasicHttpHost {
 
 	public MetricHttpHost(String protocol, String _host, int port)
 			throws UnknownHostException {
-		this(protocol, _host, port, null);
+		super(protocol, _host, port);
 	}
 
-	public MetricHttpHost(String protocol, String _host, int port, byte[] address)
-			throws UnknownHostException {
-		super(protocol, _host, port, address);
-	}
-	
 	@Override
 	protected DnsCache createDnsCache() {
 		return new MetricDnsCache();

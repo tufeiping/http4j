@@ -43,14 +43,10 @@ public class BasicHttpHost implements HttpHost {
 	}
 	
 	public BasicHttpHost(String protocol, String host, int port) throws UnknownHostException {
-		this(protocol, host, port, null);
-	}
-	
-	public BasicHttpHost(String protocol, String host, int port, byte[] address) throws UnknownHostException {
 		this.protocol = protocol;
 		this.port = port;
 		this.dnsCache = createDnsCache();
-		this.inetAddress = dnsCache.getInetAddress(host, address);
+		this.inetAddress = dnsCache.getInetAddress(host);
 	}
 	
 	protected DnsCache createDnsCache() {
