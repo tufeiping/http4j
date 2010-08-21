@@ -50,7 +50,7 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 		super();
 		URL url = URLFormatter.format(_url);
 		uri = url.toURI();
-		path = url.getPath();
+		path = url.getPath().length() > 0 ? url.getPath() : "/";
 		authority = url.getAuthority();
 		host = createHttpHost(url.getProtocol(), url.getHost(),url.getPort());
 		addDefaultHeaders();
@@ -125,7 +125,7 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	abstract protected String getName();
 	
 	protected String getPath() {
-		return path.length() > 0 ? path : "/";
+		return path;
 	}
 
 	abstract protected String getUriString();
