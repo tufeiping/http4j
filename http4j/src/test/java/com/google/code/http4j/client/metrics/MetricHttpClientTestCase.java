@@ -73,9 +73,19 @@ public class MetricHttpClientTestCase {
 	private void testMetrics() throws IOException, URISyntaxException {
 		HttpClient client = new MetricHttpClient();
 		assertionTimers(false);
+		Metrics metrics = ThreadLocalMetrics.getInstance();
+		Counter<Long> requestTrafficCounter = metrics.getRequestTrafficCounter();
+		Counter<Long> responseTrafficCounter = metrics.getResponseTrafficCounter();
+		Assert.assertEquals(requestTrafficCounter.get(), Long.valueOf(0));
+		Assert.assertEquals(responseTrafficCounter.get(), Long.valueOf(0));
 		HttpResponse response = client.get("http://www.bing.com", false);
 		Assert.assertNotNull(response);
 		assertionTimers(true);
+		long sent = requestTrafficCounter.get(), received = responseTrafficCounter.get();
+		System.out.println("Sent :" + sent);
+		System.out.println("Received :" + received);
+		Assert.assertTrue(sent > 0);
+		Assert.assertTrue(received > 0);
 	}
 	
 	private List<Timer> getTimers() {
