@@ -25,6 +25,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.google.code.http4j.client.HeaderNames;
 import com.google.code.http4j.client.Http;
 import com.google.code.http4j.client.HttpHeader;
 import com.google.code.http4j.client.HttpRequest;
@@ -51,32 +52,32 @@ public class MessageHeaderTestCase {
 	
 	@Test
 	public void testGetHeader() {
-		HttpHeader header = message.getHeader(Http.HEADER_NAME_USER_AGENT);
+		HttpHeader header = message.getHeader(HeaderNames.USER_AGENT);
 		Assert.assertNotNull(header);
 	}
 	
 	@Test
 	public void testGetHeaders_String() {
-		List<HttpHeader> headers = message.getHeaders(Http.HEADER_NAME_HOST);
+		List<HttpHeader> headers = message.getHeaders(HeaderNames.HOST);
 		Assert.assertNotNull(headers);
 		Assert.assertEquals(headers.size(), 1);// default headers
 	}
 	
 	@Test
 	public void testAddHeader_String_String() {
-		message.addHeader(Http.HEADER_NAME_ACCEPT_CHARSET, Http.UTF_8);
-		HttpHeader header = message.getHeader(Http.HEADER_NAME_ACCEPT_CHARSET);
+		message.addHeader(HeaderNames.ACCEPT_CHARSET, Http.UTF_8);
+		HttpHeader header = message.getHeader(HeaderNames.ACCEPT_CHARSET);
 		Assert.assertNotNull(header);
-		Assert.assertEquals(header.getName(), Http.HEADER_NAME_ACCEPT_CHARSET);
+		Assert.assertEquals(header.getName(), HeaderNames.ACCEPT_CHARSET);
 		Assert.assertEquals(header.getValue(), Http.UTF_8);
 	}
 	
 	@Test(dependsOnMethods = "testAddHeader_String_String")
 	public void testSetHeader_String_String() {
-		message.setHeader(Http.HEADER_NAME_ACCEPT_CHARSET, Http.ISO_8859_1);
-		HttpHeader header = message.getHeader(Http.HEADER_NAME_ACCEPT_CHARSET);
+		message.setHeader(HeaderNames.ACCEPT_CHARSET, Http.ISO_8859_1);
+		HttpHeader header = message.getHeader(HeaderNames.ACCEPT_CHARSET);
 		Assert.assertNotNull(header);
-		Assert.assertEquals(header.getName(), Http.HEADER_NAME_ACCEPT_CHARSET);
+		Assert.assertEquals(header.getName(), HeaderNames.ACCEPT_CHARSET);
 		Assert.assertEquals(header.getValue(), Http.ISO_8859_1);
 	}
 }

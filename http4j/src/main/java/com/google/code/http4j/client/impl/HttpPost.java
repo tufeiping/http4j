@@ -20,6 +20,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
+import com.google.code.http4j.client.HeaderNames;
 import com.google.code.http4j.client.Http;
 
 /**
@@ -42,7 +43,7 @@ public class HttpPost extends AbstractHttpRequest {
 	@Override
 	protected String formatHeaders() {
 		String parameters = formatParameters();
-		addHeader(Http.HEADER_NAME_CONTENT_LENGTH, String.valueOf(parameters.length()));
+		addHeader(HeaderNames.CONTENT_LENGTH, String.valueOf(parameters.length()));
 		return super.formatHeaders();
 	}
 	

@@ -36,14 +36,6 @@ public interface Http {
 	String DEFAULT_USER_AGENT = "http4j (" + System.getProperty("os.name") + ")";
 	String DEFAULT_ACCEPT = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
 	
-	String HEADER_NAME_HOST = "Host";
-	String HEADER_NAME_USER_AGENT = "User-Agent";
-	String HEADER_NAME_CONTENT_LENGTH = "Content-Length";
-	String HEADER_NAME_RESPONSE_COOKIE = "Set-Cookie";
-	String HEADER_NAME_REQUEST_COOKIE = "Cookie";
-	String HEADER_NAME_ACCEPT = "Accept";
-	String HEADER_NAME_ACCEPT_CHARSET = "Accept-Charset";
-	
 	String ISO_8859_1 = "ISO-889-1";
 	String DEFAULT_CHARSET = ISO_8859_1;
 	String UTF_8 = "UTF-8";

@@ -26,6 +26,7 @@ import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.code.http4j.client.HeaderNames;
 import com.google.code.http4j.client.Http;
 import com.google.code.http4j.client.HttpHost;
 import com.google.code.http4j.client.HttpParameter;
@@ -62,8 +63,8 @@ public abstract class AbstractHttpRequest extends AbstractHttpMessage implements
 	}
 
 	protected void addDefaultHeaders() {
-		addHeader(Http.HEADER_NAME_HOST, uri.getAuthority());
-		addHeader(Http.HEADER_NAME_USER_AGENT, Http.DEFAULT_USER_AGENT);
+		addHeader(HeaderNames.HOST, uri.getAuthority());
+		addHeader(HeaderNames.USER_AGENT, Http.DEFAULT_USER_AGENT);
 	}
 
 	@Override
