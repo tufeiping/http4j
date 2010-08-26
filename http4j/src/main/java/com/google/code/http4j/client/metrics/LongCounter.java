@@ -25,7 +25,7 @@ public class LongCounter implements Counter<Long> {
 	protected Long total;
 	
 	public LongCounter() {
-		total = 0L;
+		reset();
 	}
 	
 	@Override

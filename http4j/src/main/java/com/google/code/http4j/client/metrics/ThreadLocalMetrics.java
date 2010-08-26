@@ -16,12 +16,11 @@
 
 package com.google.code.http4j.client.metrics;
 
-
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  * 
  */
-public class ThreadLocalMetrics implements Metrics {
+public class ThreadLocalMetrics extends AbstractMetrics implements Metrics {
 
 	protected static final ThreadLocal<ThreadLocalMetrics> local = new ThreadLocal<ThreadLocalMetrics>();
 
@@ -31,65 +30,18 @@ public class ThreadLocalMetrics implements Metrics {
 	protected Timer responseTimer;
 	protected Counter<Long> requestTrafficCounter;
 	protected Counter<Long> responseTrafficCounter;
+
 	protected ThreadLocalMetrics() {
+		super();
 		local.set(this);
-		dnsTimer = createTimer();
-		connectionTimer = createTimer();
-		requestTimer = createTimer();
-		responseTimer = createTimer();
-		requestTrafficCounter = createLongCounter();
-		responseTrafficCounter = createLongCounter();
 	}
 
 	public static ThreadLocalMetrics getInstance() {
 		ThreadLocalMetrics metrics = local.get();
 		return metrics == null ? new ThreadLocalMetrics() : metrics;
 	}
-	
-	protected Timer createTimer() {
-		return new NanoSecondTimer();
-	}
-	
+
 	protected Counter<Long> createLongCounter() {
 		return new LongCounter();
-	}
-	
-	@Override
-	public Timer getDnsTimer() {
-		return dnsTimer;
-	}
-
-	public Timer getConnectionTimer() {
-		return connectionTimer;
-	}
-
-	@Override
-	public Timer getRequestTimer() {
-		return requestTimer;
-	}
-
-	@Override
-	public Timer getResponseTimer() {
-		return responseTimer;
-	}
-
-	@Override
-	public void reset() {
-		dnsTimer.reset();
-		connectionTimer.reset();
-		requestTimer.reset();
-		responseTimer.reset();
-		requestTrafficCounter.reset();
-		responseTrafficCounter.reset();
-	}
-
-	@Override
-	public Counter<Long> getRequestTrafficCounter() {
-		return requestTrafficCounter;
-	}
-
-	@Override
-	public Counter<Long> getResponseTrafficCounter() {
-		return responseTrafficCounter;
 	}
 }

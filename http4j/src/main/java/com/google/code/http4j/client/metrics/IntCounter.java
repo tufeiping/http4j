@@ -25,7 +25,7 @@ public class IntCounter implements Counter<Integer> {
 	protected Integer total;
 	
 	public IntCounter() {
-		total = 0;
+		reset();
 	}
 	
 	@Override

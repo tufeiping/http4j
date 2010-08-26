@@ -14,17 +14,44 @@
  * limitations under the License.
  */
 
-package com.google.code.http4j.client;
+package com.google.code.http4j.client.metrics;
+
+import java.util.concurrent.atomic.AtomicLong;
+
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public interface HeaderNames {
-	String ACCEPT = "Accept";
-	String ACCEPT_CHARSET = "Accept-Charset";
-	String CONTENT_LENGTH = "Content-Length";
-	String HOST = "Host";
-	String REQUEST_COOKIE = "Cookie";
-	String RESPONSE_COOKIE = "Set-Cookie";
-	String USER_AGENT = "User-Agent";
+public class AtomicLongCounter implements Counter<Long> {
+	
+	protected AtomicLong total;
+	
+	public AtomicLongCounter() {
+		reset();
+	}
+	
+	@Override
+	public Long get() {
+		return total.get();
+	}
+
+	@Override
+	public void increase() {
+		total.incrementAndGet();
+	}
+
+	@Override
+	public void increase(Long number) {
+		total.addAndGet(number);
+	}
+
+	@Override
+	public void increase(Counter<Long> counter) {
+		total.addAndGet(counter.get());
+	}
+
+	@Override
+	public void reset() {
+		total = new AtomicLong(0);
+	}
 }
