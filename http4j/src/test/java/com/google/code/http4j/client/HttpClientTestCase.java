@@ -74,7 +74,7 @@ public class HttpClientTestCase {
 	
 	@Test
 	public void testGet_String_boolean() throws IOException, URISyntaxException {
-		HttpResponse response = client.get("http://www.yahoo.com", false);
+		HttpResponse response = client.get("http://www.sourceforge.net", false);
 		Assert.assertNotNull(response);
 		Assert.assertNotNull(response.getStatusLine());
 		Assert.assertNotNull(response.getHeaders());
