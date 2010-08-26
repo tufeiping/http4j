@@ -32,7 +32,7 @@ public interface Timer {
 
 	void stopTimer();
 
-	long getTimeCost();
+	long get();
 
 	TimeUnit getTimeUnit();
 

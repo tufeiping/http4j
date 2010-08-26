@@ -16,48 +16,34 @@
 
 package com.google.code.http4j.client.metrics;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.URISyntaxException;
+
+import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+import com.google.code.http4j.client.DnsCache;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
- *
  */
-public abstract class AbstractTimer implements Timer {
-	
-	protected Number start;
-	
-	protected Number stop;
-	
-	protected AbstractTimer() {
-		reset();
-	}
-	
-	abstract protected long getCurrentTime();
-	
-	@Override
-	public long get() {
-		return getStop() - getStart();
-	}
-	
-	@Override
-	public void startTimer() {
-		start = getCurrentTime();
-	}
+public class DnsCacheTestCase {
+	MetricHttpClient client;
 
-	@Override
-	public void stopTimer() {
-		stop = getCurrentTime();
-	}
-
-	public long getStart() {
-		return start.longValue();
-	}
-
-	public long getStop() {
-		return stop.longValue();
+	@BeforeClass
+	public void setUp() {
+		client = new MetricHttpClient();
 	}
 	
-	@Override
-	public String toString() {
-		return getStop() + " - " + getStart() + " = " + get();
+	@Test
+	public void testCacheDns() throws IOException, URISyntaxException {
+		String host = "www.csdn.net";
+		InetAddress ip = InetAddress.getByName(host);
+		DnsCache.getDefault().cache(host, ip);
+		client.head(host);
+		Timer dns = ThreadLocalMetrics.getInstance().getDnsTimer();
+		Assert.assertEquals(dns.get(), 0);
 	}
 }

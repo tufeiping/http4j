@@ -16,94 +16,127 @@
 
 package com.google.code.http4j.client.metrics;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.google.code.http4j.client.DnsCache;
-import com.google.code.http4j.client.HttpClient;
 import com.google.code.http4j.client.HttpResponse;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public class MetricHttpClientTestCase {
-	
+
+	MetricHttpClient client;
+
+	@BeforeClass
+	public void setUp() {
+		client = new MetricHttpClient();
+	}
+
 	/*
-	 * While test suite executes, the other cases might also access thread local metrics.
-	 * Thus some metrics in that thread might have initialized values.
+	 * While test suite executes, the other cases might also access thread local
+	 * metrics. Thus some metrics in that thread might have initialized values.
 	 * So we need to test it in separated thread.
 	 */
 	@Test
-	public void testMetricsInSeparatedThread() throws InterruptedException, ExecutionException {
+	public void testMetricsInSeparatedThread() throws InterruptedException,
+			ExecutionException {
 		ExecutorService service = Executors.newSingleThreadExecutor();
-		Future<Boolean> result = service.submit(new Callable<Boolean>(){
+		Future<Boolean> result = service.submit(new Callable<Boolean>() {
 			@Override
 			public Boolean call() throws Exception {
 				try {
-					testMetrics();
+					Metrics metrics = ThreadLocalMetrics.getInstance();
+					Counter<Long> requestTrafficCounter = metrics.getRequestTrafficCounter();
+					Counter<Long> responseTrafficCounter = metrics.getResponseTrafficCounter();
+					Timer connectionTimer = metrics.getConnectionTimer();
+					Timer dnsTimer = metrics.getDnsTimer();
+					Timer requestTimer = metrics.getRequestTimer();
+					Timer responseTimer = metrics.getResponseTimer();
+					Assert.assertEquals(requestTrafficCounter.get(), Long.valueOf(0));
+					Assert.assertEquals(responseTrafficCounter.get(), Long.valueOf(0));
+					Assert.assertEquals(connectionTimer.get(), 0);
+					Assert.assertEquals(dnsTimer.get(), 0);
+					Assert.assertEquals(requestTimer.get(), 0);
+					Assert.assertEquals(responseTimer.get(), 0);
+					HttpResponse response = client.get("http://www.bing.com", false);
+					Assert.assertNotNull(response);
+					Assert.assertTrue(requestTrafficCounter.get() > 0);
+					Assert.assertTrue(responseTrafficCounter.get() > 0);
+					Assert.assertTrue(connectionTimer.get() > 0);
+					Assert.assertTrue(dnsTimer.get() > 0);
+					Assert.assertTrue(requestTimer.get() > 0);
+					Assert.assertTrue(responseTimer.get() > 0);
 					return true;
-				} catch(Exception e) {
+				} catch (Exception e) {
+					e.printStackTrace();
 					return false;
 				}
-			}});
+			}
+		});
 		Assert.assertTrue(result.get());
 	}
 
-	@Test
-	public void testCacheDns() throws IOException, URISyntaxException {
-		MetricHttpClient client = new MetricHttpClient();
-		String host = "www.csdn.net";
-		InetAddress ip = InetAddress.getByName(host);
-		DnsCache.getDefault().cache(host, ip);
-		client.head(host);
-		Timer dns = ThreadLocalMetrics.getInstance().getDnsTimer();
-		Assert.assertEquals(dns.getTimeCost(), 0);
-	}
-	
-	private void testMetrics() throws IOException, URISyntaxException {
-		HttpClient client = new MetricHttpClient();
-		assertionTimers(false);
-		Metrics metrics = ThreadLocalMetrics.getInstance();
-		Counter<Long> requestTrafficCounter = metrics.getRequestTrafficCounter();
-		Counter<Long> responseTrafficCounter = metrics.getResponseTrafficCounter();
-		Assert.assertEquals(requestTrafficCounter.get(), Long.valueOf(0));
-		Assert.assertEquals(responseTrafficCounter.get(), Long.valueOf(0));
-		HttpResponse response = client.get("http://www.bing.com", false);
-		Assert.assertNotNull(response);
-		assertionTimers(true);
-		long sent = requestTrafficCounter.get(), received = responseTrafficCounter.get();
-		System.out.println("Sent :" + sent);
-		System.out.println("Received :" + received);
-		Assert.assertTrue(sent > 0);
-		Assert.assertTrue(received > 0);
-	}
-	
-	private List<Timer> getTimers() {
-		List<Timer> timers = new ArrayList<Timer>();
-		ThreadLocalMetrics metrics = ThreadLocalMetrics.getInstance();
-		timers.add(metrics.getDnsTimer());
-		timers.add(metrics.getConnectionTimer());
-		timers.add(metrics.getRequestTimer());
-		timers.add(metrics.getResponseTimer());
-		return timers;
-	}
-	
-	private void assertionTimers(boolean flag) {
-		List<Timer> timers = getTimers();
-		for(Timer timer: timers) {
-			System.out.println(timer.getTimeCost()/1000000 + "ms");
-			Assert.assertEquals(timer.getTimeCost() > 0, flag);
+	@Test(dependsOnMethods = "testMetricsInSeparatedThread")
+	public void testAggregateMetrics() throws InterruptedException, ExecutionException {
+		int count = 5;
+		ExecutorService executor = Executors.newFixedThreadPool(count);
+		CompletionService<Boolean> service = new ExecutorCompletionService<Boolean>(executor);
+		for (int i = 0; i < count; i++) {
+			service.submit(new Callable<Boolean>(){
+				@Override
+				public Boolean call() throws Exception {
+					try {
+						Metrics metrics = ThreadLocalMetrics.getInstance();
+						Counter<Long> requestTrafficCounter = metrics.getRequestTrafficCounter();
+						Counter<Long> responseTrafficCounter = metrics.getResponseTrafficCounter();
+						Timer connectionTimer = metrics.getConnectionTimer();
+						Timer dnsTimer = metrics.getDnsTimer();
+						Timer requestTimer = metrics.getRequestTimer();
+						Timer responseTimer = metrics.getResponseTimer();
+						Assert.assertEquals(requestTrafficCounter.get(), Long.valueOf(0));
+						Assert.assertEquals(responseTrafficCounter.get(), Long.valueOf(0));
+						Assert.assertEquals(connectionTimer.get(), 0);
+						Assert.assertEquals(dnsTimer.get(), 0);
+						Assert.assertEquals(requestTimer.get(), 0);
+						Assert.assertEquals(responseTimer.get(), 0);
+						HttpResponse response = client.get("http://www.bing.com", false);
+						Assert.assertNotNull(response);
+						Assert.assertTrue(requestTrafficCounter.get() > 0);
+						Assert.assertTrue(responseTrafficCounter.get() > 0);
+						// not sure, depends on pool behavior
+						//Assert.assertEquals(connectionTimer.get(), 0); 
+						Assert.assertEquals(dnsTimer.get(), 0);// dns cache
+						Assert.assertTrue(requestTimer.get() > 0);
+						Assert.assertTrue(responseTimer.get() > 0);
+						return true;
+					} catch (Exception e) {
+						e.printStackTrace();
+						return false;
+					}
+				}});
 		}
+		boolean result = true;
+		while(count --> 0) {
+			result &= service.take().get();
+		}
+		Assert.assertTrue(result);
+		AggregatedMetrics m = client.getMetrics();
+		Assert.assertNotNull(m);
+		Assert.assertTrue(m.getConnectionTimer().get() > 0);
+		Assert.assertTrue(m.getDnsTimer().get() > 0);
+		Assert.assertTrue(m.getRequestTimer().get() > 0);
+		Assert.assertTrue(m.getResponseTimer().get() > 0);
+		Assert.assertTrue(m.getRequestTrafficCounter().get() > 0);
+		Assert.assertTrue(m.getResponseTrafficCounter().get() > 0);
 	}
 }

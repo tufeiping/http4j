@@ -34,9 +34,9 @@ public class MetricConnectionDecoratorTestCase extends ConnectionTestCase {
 	@Test
 	public void testConnect() throws IOException {
 		Timer timer = ThreadLocalMetrics.getInstance().getConnectionTimer();
-		Assert.assertFalse(timer.getTimeCost() > 0);
+		Assert.assertFalse(timer.get() > 0);
 		super.testConnect();
-		Assert.assertTrue(timer.getTimeCost() > 0);
+		Assert.assertTrue(timer.get() > 0);
 	}
 	
 	@Test(dependsOnMethods = "testConnect")
@@ -44,10 +44,10 @@ public class MetricConnectionDecoratorTestCase extends ConnectionTestCase {
 		Metrics metrics = ThreadLocalMetrics.getInstance();
 		Timer timer = metrics.getRequestTimer();
 		Counter<Long> counter = metrics.getRequestTrafficCounter();
-		Assert.assertEquals(timer.getTimeCost(), 0);
+		Assert.assertEquals(timer.get(), 0);
 		Assert.assertEquals(counter.get(), Long.valueOf(0));
 		super.testWrite();
-		Assert.assertTrue(timer.getTimeCost() > 0);
+		Assert.assertTrue(timer.get() > 0);
 		Assert.assertTrue(counter.get() > 0);
 	}
 
@@ -56,10 +56,10 @@ public class MetricConnectionDecoratorTestCase extends ConnectionTestCase {
 		Metrics metrics = ThreadLocalMetrics.getInstance();
 		Timer timer = metrics.getResponseTimer();
 		Counter<Long> counter = metrics.getResponseTrafficCounter();
-		Assert.assertEquals(timer.getTimeCost(), 0);
+		Assert.assertEquals(timer.get(), 0);
 		Assert.assertEquals(counter.get(), Long.valueOf(0));
 		super.testRead();
-		Assert.assertTrue(timer.getTimeCost() > 0);
+		Assert.assertTrue(timer.get() > 0);
 		Assert.assertTrue(counter.get() > 0);
 	}
 	
