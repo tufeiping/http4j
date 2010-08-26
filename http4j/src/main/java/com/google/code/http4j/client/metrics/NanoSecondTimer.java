@@ -24,6 +24,12 @@ import java.util.concurrent.TimeUnit;
 public class NanoSecondTimer extends AbstractTimer implements Timer {
 	
 	@Override
+	public void reset() {
+		start = 0L;
+		stop = 0L;
+	}
+	
+	@Override
 	public TimeUnit getTimeUnit() {
 		return TimeUnit.NANOSECONDS;
 	}

@@ -39,9 +39,7 @@ public abstract class AbstractMetrics implements Metrics {
 
 	abstract protected Counter<Long> createLongCounter();
 
-	protected Timer createTimer() {
-		return new NanoSecondTimer();
-	}
+	abstract protected Timer createTimer();
 	
 	@Override
 	public Timer getDnsTimer() {

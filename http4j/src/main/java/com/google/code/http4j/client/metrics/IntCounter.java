@@ -34,18 +34,8 @@ public class IntCounter implements Counter<Integer> {
 	}
 
 	@Override
-	public void increase() {
-		total++;
-	}
-
-	@Override
 	public void increase(Integer number) {
 		total += number;
-	}
-	
-	@Override
-	public void increase(Counter<Integer> counter) {
-		total += counter.get();
 	}
 
 	@Override

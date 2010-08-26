@@ -16,8 +16,13 @@
 
 package com.google.code.http4j.client.metrics;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 import com.google.code.http4j.client.ConnectionPool;
 import com.google.code.http4j.client.DnsCache;
+import com.google.code.http4j.client.HttpRequest;
+import com.google.code.http4j.client.HttpResponse;
 import com.google.code.http4j.client.impl.BasicHttpClient;
 
 /**
@@ -25,15 +30,18 @@ import com.google.code.http4j.client.impl.BasicHttpClient;
  *
  */
 public class MetricHttpClient extends BasicHttpClient {
-
+	
+	protected Metrics metrics;
+	
 	public MetricHttpClient() {
 		super();
+		metrics = createMetrics();
 	}
 	
-	protected void resetMetrics() {
-		ThreadLocalMetrics.getInstance().reset();
+	protected Metrics createMetrics() {
+		return new AggregatedMetrics();
 	}
-
+	
 	@Override
 	protected DnsCache createDnsCache() {
 		return new MetricDnsCache();
@@ -42,5 +50,13 @@ public class MetricHttpClient extends BasicHttpClient {
 	@Override
 	protected ConnectionPool createConnectionPool() {
 		return new MetricConnectionPool();
+	}
+	
+	@Override
+	protected HttpResponse submit(HttpRequest request, boolean parseEntity)
+			throws IOException, URISyntaxException {
+		HttpResponse response = super.submit(request, parseEntity);
+		ThreadLocalMetrics.getInstance();
+		return response;
 	}
 }

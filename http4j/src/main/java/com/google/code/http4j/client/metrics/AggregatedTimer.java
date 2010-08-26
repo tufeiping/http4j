@@ -16,43 +16,10 @@
 
 package com.google.code.http4j.client.metrics;
 
-
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
- *
  */
-public abstract class AbstractTimer implements Timer {
+public interface AggregatedTimer extends Timer {
 	
-	protected Number start;
-	
-	protected Number stop;
-	
-	protected AbstractTimer() {
-		reset();
-	}
-	
-	abstract protected long getCurrentTime();
-	
-	@Override
-	public long getTimeCost() {
-		return getStop() - getStart();
-	}
-	
-	@Override
-	public void startTimer() {
-		start = getCurrentTime();
-	}
-
-	@Override
-	public void stopTimer() {
-		stop = getCurrentTime();
-	}
-
-	public long getStart() {
-		return start.longValue();
-	}
-
-	public long getStop() {
-		return stop.longValue();
-	}
+	void aggregate(Timer timer);
 }

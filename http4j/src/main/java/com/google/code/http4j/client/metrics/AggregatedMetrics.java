@@ -20,20 +20,27 @@ package com.google.code.http4j.client.metrics;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public class AggregatedMetrics extends AbstractMetrics implements Metrics {
-	
-	protected Timer dnsTimer;
-	protected Timer connectionTimer;
-	protected Timer requestTimer;
-	protected Timer responseTimer;
-	protected Counter<Long> requestTrafficCounter;
-	protected Counter<Long> responseTrafficCounter;
-	
+
 	public AggregatedMetrics() {
 		super();
+	}
+
+	public void aggregate(Metrics metrics) {
+		((AggregatedTimer) connectionTimer).aggregate(metrics.getConnectionTimer());
+		((AggregatedTimer) dnsTimer).aggregate(metrics.getDnsTimer());
+		((AggregatedTimer) requestTimer).aggregate(metrics.getRequestTimer());
+		((AggregatedTimer) responseTimer).aggregate(metrics.getResponseTimer());
+		((AggregatedCounter<Long>) requestTrafficCounter).aggregate(metrics.getRequestTrafficCounter());
+		((AggregatedCounter<Long>) responseTrafficCounter).aggregate(metrics.getResponseTrafficCounter());
 	}
 
 	@Override
 	protected Counter<Long> createLongCounter() {
 		return new AtomicLongCounter();
+	}
+
+	@Override
+	protected Timer createTimer() {
+		return new AggregatedNanoSecondTimer();
 	}
 }

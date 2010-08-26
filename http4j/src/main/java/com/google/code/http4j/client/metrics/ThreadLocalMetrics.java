@@ -44,4 +44,9 @@ public class ThreadLocalMetrics extends AbstractMetrics implements Metrics {
 	protected Counter<Long> createLongCounter() {
 		return new LongCounter();
 	}
+
+	@Override
+	protected Timer createTimer() {
+		return new NanoSecondTimer();
+	}
 }

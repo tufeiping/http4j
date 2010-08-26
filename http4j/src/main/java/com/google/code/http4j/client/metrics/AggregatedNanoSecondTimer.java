@@ -16,43 +16,48 @@
 
 package com.google.code.http4j.client.metrics;
 
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
- *
  */
-public abstract class AbstractTimer implements Timer {
-	
-	protected Number start;
-	
-	protected Number stop;
-	
-	protected AbstractTimer() {
-		reset();
-	}
-	
-	abstract protected long getCurrentTime();
+public class AggregatedNanoSecondTimer extends NanoSecondTimer implements AggregatedTimer {
 	
 	@Override
-	public long getTimeCost() {
-		return getStop() - getStart();
+	public void aggregate(Timer timer) {
+		minStart(timer.getStart());
+		maxStop(timer.getStop());
+	}
+
+	protected void minStart(long t) {
+		while(true) {
+			long s = getStart();
+			long min = Math.min(s, t);
+			if(((AtomicLong) start).compareAndSet(s, min)) {
+				break;
+			}
+		}
+	}
+	
+	protected void maxStop(long t) {
+		while(true) {
+			long s = getStop();
+			long max = Math.max(s, t);
+			if(((AtomicLong) stop).compareAndSet(s, max)) {
+				break;
+			}
+		}
 	}
 	
 	@Override
-	public void startTimer() {
-		start = getCurrentTime();
+	public void reset() {
+		start = new AtomicLong(0);
+		stop = new AtomicLong(0);
 	}
 
 	@Override
-	public void stopTimer() {
-		stop = getCurrentTime();
-	}
-
-	public long getStart() {
-		return start.longValue();
-	}
-
-	public long getStop() {
-		return stop.longValue();
+	protected long getCurrentTime() {
+		long time = super.getCurrentTime();
+		return new AtomicLong(time).get();
 	}
 }

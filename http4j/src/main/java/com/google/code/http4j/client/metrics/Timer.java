@@ -23,9 +23,14 @@ import java.util.concurrent.TimeUnit;
  * 
  */
 public interface Timer {
-	long startTimer();
+	
+	long getStart();
+	
+	long getStop();
+	
+	void startTimer();
 
-	long stopTimer();
+	void stopTimer();
 
 	long getTimeCost();
 

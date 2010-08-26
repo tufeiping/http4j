@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class AtomicLongCounter implements Counter<Long> {
+public class AtomicLongCounter implements AggregatedCounter<Long> {
 	
 	protected AtomicLong total;
 	
@@ -36,17 +36,12 @@ public class AtomicLongCounter implements Counter<Long> {
 	}
 
 	@Override
-	public void increase() {
-		total.incrementAndGet();
-	}
-
-	@Override
 	public void increase(Long number) {
 		total.addAndGet(number);
 	}
 
 	@Override
-	public void increase(Counter<Long> counter) {
+	public void aggregate(Counter<Long> counter) {
 		total.addAndGet(counter.get());
 	}
 
