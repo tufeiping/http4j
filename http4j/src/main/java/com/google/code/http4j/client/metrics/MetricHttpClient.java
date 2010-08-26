@@ -59,4 +59,8 @@ public class MetricHttpClient extends BasicHttpClient {
 		metrics.aggregate(ThreadLocalMetrics.getInstance());
 		return response;
 	}
+
+	public AggregatedMetrics getMetrics() {
+		return metrics;
+	}
 }
