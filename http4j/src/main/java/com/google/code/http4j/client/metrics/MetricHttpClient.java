@@ -31,14 +31,14 @@ import com.google.code.http4j.client.impl.BasicHttpClient;
  */
 public class MetricHttpClient extends BasicHttpClient {
 	
-	protected Metrics metrics;
+	protected AggregatedMetrics metrics;
 	
 	public MetricHttpClient() {
 		super();
 		metrics = createMetrics();
 	}
 	
-	protected Metrics createMetrics() {
+	protected AggregatedMetrics createMetrics() {
 		return new AggregatedMetrics();
 	}
 	
@@ -56,7 +56,7 @@ public class MetricHttpClient extends BasicHttpClient {
 	protected HttpResponse submit(HttpRequest request, boolean parseEntity)
 			throws IOException, URISyntaxException {
 		HttpResponse response = super.submit(request, parseEntity);
-		ThreadLocalMetrics.getInstance();
+		metrics.aggregate(ThreadLocalMetrics.getInstance());
 		return response;
 	}
 }
