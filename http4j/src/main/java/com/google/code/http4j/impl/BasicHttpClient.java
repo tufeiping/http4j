@@ -57,19 +57,18 @@ public class BasicHttpClient implements HttpClient {
 	 * @see #createConnectionPool()
 	 */
 	public BasicHttpClient() {
-		Container container = getContainer();
-		connectionPool = container.getConnectionPoolFactory().create();
-		cookieCache = container.getCookieCacheFactory().create();
-		DnsCache.setDefault(container.getDnsCacheFactory().create());
+		ensureContainerCreated();
+		connectionPool = Container.createConnectionPool();
+		cookieCache = Container.createCookieCache();
+		DnsCache.setDefault(Container.createDnsCache());
 	}
 	
-	protected Container getContainer() {
+	protected void ensureContainerCreated() {
 		Container container = Container.getDefault();
 		if(null == container) {
 			container = createContainer();
 			Container.setDefault(container);
 		}
-		return container;
 	}
 
 	protected Container createContainer() {

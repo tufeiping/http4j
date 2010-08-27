@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.code.http4j.Container;
 import com.google.code.http4j.Http;
 import com.google.code.http4j.HttpHeader;
 import com.google.code.http4j.HttpMessage;
@@ -77,7 +78,7 @@ public abstract class AbstractHttpMessage implements HttpMessage {
 	}
 
 	protected HttpHeader createHeader(String name, String value) {
-		return new BasicHttpHeader(name, value);
+		return Container.createHttpHeader(name, value);
 	}
 
 	@Override

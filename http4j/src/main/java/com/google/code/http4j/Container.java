@@ -35,9 +35,31 @@ public abstract class Container {
 		P create();
 	}
 	
-	abstract public GenericFactory<ConnectionPool> getConnectionPoolFactory();
+	public static interface NameValuePairFactory<T extends NameValuePair> {
+		T create(String name, String value);
+	}
 	
-	abstract public GenericFactory<CookieCache> getCookieCacheFactory();
+	public static HttpHeader createHttpHeader(String name, String value) {
+		return instance.getHttpHeaderFactory().create(name, value);
+	}
 	
-	abstract public GenericFactory<DnsCache> getDnsCacheFactory();
+	public static ConnectionPool createConnectionPool() {
+		return instance.getConnectionPoolFactory().create();
+	}
+	
+	public static CookieCache createCookieCache() {
+		return instance.getCookieCacheFactory().create();
+	}
+	
+	public static DnsCache createDnsCache() {
+		return instance.getDnsCacheFactory().create();
+	}
+	
+	abstract protected GenericFactory<ConnectionPool> getConnectionPoolFactory();
+	
+	abstract protected GenericFactory<CookieCache> getCookieCacheFactory();
+	
+	abstract protected GenericFactory<DnsCache> getDnsCacheFactory();
+	
+	abstract protected NameValuePairFactory<? extends HttpHeader> getHttpHeaderFactory();
 }

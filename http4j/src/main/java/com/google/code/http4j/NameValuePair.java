@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.code.http4j.impl;
+package com.google.code.http4j;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>

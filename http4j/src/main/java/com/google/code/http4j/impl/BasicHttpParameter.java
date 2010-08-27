@@ -16,6 +16,7 @@
 package com.google.code.http4j.impl;
 
 import com.google.code.http4j.HttpParameter;
+import com.google.code.http4j.NameValuePair;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>

@@ -20,6 +20,7 @@ import com.google.code.http4j.ConnectionPool;
 import com.google.code.http4j.Container;
 import com.google.code.http4j.CookieCache;
 import com.google.code.http4j.DnsCache;
+import com.google.code.http4j.HttpHeader;
 import com.google.code.http4j.impl.connection.BasicConnectionPool;
 
 /**
@@ -33,10 +34,22 @@ public class BasicContainer extends Container {
 
 	protected GenericFactory<DnsCache> dnsCacheFactory;
 
+	protected NameValuePairFactory<? extends HttpHeader> httpHeaderFactory;
+
 	public BasicContainer() {
 		connectionPoolFactory = createConnectionPoolFactory();
 		cookieCacheFactory = createCookieCacheFactory();
 		dnsCacheFactory = createDnsCacheFactory();
+		httpHeaderFactory = createHttpHeaderFactory();
+	}
+
+	protected NameValuePairFactory<? extends HttpHeader> createHttpHeaderFactory() {
+		return new NameValuePairFactory<BasicHttpHeader>() {
+			@Override
+			public BasicHttpHeader create(String name, String value) {
+				return new BasicHttpHeader(name, value);
+			}
+		};
 	}
 
 	protected GenericFactory<DnsCache> createDnsCacheFactory() {
@@ -79,5 +92,10 @@ public class BasicContainer extends Container {
 	@Override
 	public GenericFactory<DnsCache> getDnsCacheFactory() {
 		return dnsCacheFactory;
+	}
+
+	@Override
+	public NameValuePairFactory<? extends HttpHeader> getHttpHeaderFactory() {
+		return httpHeaderFactory;
 	}
 }

@@ -17,6 +17,7 @@
 package com.google.code.http4j.impl;
 
 import com.google.code.http4j.HttpHeader;
+import com.google.code.http4j.NameValuePair;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -74,7 +75,7 @@ public class BasicHttpHeader extends NameValuePair implements HttpHeader {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		NameValuePair other = (NameValuePair) obj;
+		BasicHttpHeader other = (BasicHttpHeader) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;
