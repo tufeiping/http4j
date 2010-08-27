@@ -21,17 +21,17 @@ package com.google.code.http4j.client.metrics;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  *
  */
-public abstract class AbstractTimer implements Timer {
+public abstract class AbstractTimer<T extends Number> implements Timer {
 	
-	protected Number start;
+	protected T start;
 	
-	protected Number stop;
+	protected T stop;
 	
 	protected AbstractTimer() {
 		reset();
 	}
 	
-	abstract protected long getCurrentTime();
+	abstract protected T getCurrentTime();
 	
 	@Override
 	public long get() {

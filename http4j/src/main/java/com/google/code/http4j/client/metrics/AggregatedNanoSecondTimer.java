@@ -16,12 +16,13 @@
 
 package com.google.code.http4j.client.metrics;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class AggregatedNanoSecondTimer extends NanoSecondTimer implements AggregatedTimer {
+public class AggregatedNanoSecondTimer extends AbstractTimer<AtomicLong> implements AggregatedTimer {
 	
 	@Override
 	public void aggregate(Timer timer) {
@@ -33,7 +34,7 @@ public class AggregatedNanoSecondTimer extends NanoSecondTimer implements Aggreg
 		while(true) {
 			long s = getStart();
 			long min = Math.min(s, t);
-			if(((AtomicLong) start).compareAndSet(s, min)) {
+			if(start.compareAndSet(s, min)) {
 				break;
 			}
 		}
@@ -43,7 +44,7 @@ public class AggregatedNanoSecondTimer extends NanoSecondTimer implements Aggreg
 		while(true) {
 			long s = getStop();
 			long max = Math.max(s, t);
-			if(((AtomicLong) stop).compareAndSet(s, max)) {
+			if(stop.compareAndSet(s, max)) {
 				break;
 			}
 		}
@@ -56,8 +57,12 @@ public class AggregatedNanoSecondTimer extends NanoSecondTimer implements Aggreg
 	}
 
 	@Override
-	protected long getCurrentTime() {
-		long time = super.getCurrentTime();
-		return new AtomicLong(time).get();
+	protected AtomicLong getCurrentTime() {
+		return new AtomicLong(System.nanoTime());
+	}
+
+	@Override
+	public TimeUnit getTimeUnit() {
+		return TimeUnit.NANOSECONDS;
 	}
 }
