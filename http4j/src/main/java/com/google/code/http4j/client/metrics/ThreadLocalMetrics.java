@@ -24,13 +24,6 @@ public class ThreadLocalMetrics extends AbstractMetrics implements Metrics {
 
 	protected static final ThreadLocal<ThreadLocalMetrics> local = new ThreadLocal<ThreadLocalMetrics>();
 
-	protected Timer dnsTimer;
-	protected Timer connectionTimer;
-	protected Timer requestTimer;
-	protected Timer responseTimer;
-	protected Counter<Long> requestTrafficCounter;
-	protected Counter<Long> responseTrafficCounter;
-
 	protected ThreadLocalMetrics() {
 		super();
 		local.set(this);
