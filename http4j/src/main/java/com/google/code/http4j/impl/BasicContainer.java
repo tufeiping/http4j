@@ -20,7 +20,6 @@ import com.google.code.http4j.ConnectionPool;
 import com.google.code.http4j.Container;
 import com.google.code.http4j.CookieCache;
 import com.google.code.http4j.DnsCache;
-import com.google.code.http4j.Factory;
 import com.google.code.http4j.impl.connection.BasicConnectionPool;
 
 /**
@@ -28,11 +27,11 @@ import com.google.code.http4j.impl.connection.BasicConnectionPool;
  */
 public class BasicContainer extends Container {
 
-	protected Factory<ConnectionPool> connectionPoolFactory;
+	protected GenericFactory<ConnectionPool> connectionPoolFactory;
 
-	protected Factory<CookieCache> cookieCacheFactory;
+	protected GenericFactory<CookieCache> cookieCacheFactory;
 
-	protected Factory<DnsCache> dnsCacheFactory;
+	protected GenericFactory<DnsCache> dnsCacheFactory;
 
 	public BasicContainer() {
 		connectionPoolFactory = createConnectionPoolFactory();
@@ -40,8 +39,8 @@ public class BasicContainer extends Container {
 		dnsCacheFactory = createDnsCacheFactory();
 	}
 
-	protected Factory<DnsCache> createDnsCacheFactory() {
-		return new Factory<DnsCache>() {
+	protected GenericFactory<DnsCache> createDnsCacheFactory() {
+		return new GenericFactory<DnsCache>() {
 			@Override
 			public DnsCache create() {
 				return new BasicDnsCache();
@@ -49,8 +48,8 @@ public class BasicContainer extends Container {
 		};
 	}
 
-	protected Factory<CookieCache> createCookieCacheFactory() {
-		return new Factory<CookieCache>() {
+	protected GenericFactory<CookieCache> createCookieCacheFactory() {
+		return new GenericFactory<CookieCache>() {
 			@Override
 			public CookieCache create() {
 				return new CookieStoreAdapter();
@@ -58,8 +57,8 @@ public class BasicContainer extends Container {
 		};
 	}
 
-	protected Factory<ConnectionPool> createConnectionPoolFactory() {
-		return new Factory<ConnectionPool>() {
+	protected GenericFactory<ConnectionPool> createConnectionPoolFactory() {
+		return new GenericFactory<ConnectionPool>() {
 			@Override
 			public ConnectionPool create() {
 				return new BasicConnectionPool();
@@ -68,18 +67,17 @@ public class BasicContainer extends Container {
 	}
 
 	@Override
-	public Factory<ConnectionPool> getConnectionPoolFactory() {
+	public GenericFactory<ConnectionPool> getConnectionPoolFactory() {
 		return connectionPoolFactory;
 	}
 
 	@Override
-	public Factory<CookieCache> getCookieCacheFactory() {
+	public GenericFactory<CookieCache> getCookieCacheFactory() {
 		return cookieCacheFactory;
 	}
 
 	@Override
-	public Factory<DnsCache> getDnsCacheFactory() {
+	public GenericFactory<DnsCache> getDnsCacheFactory() {
 		return dnsCacheFactory;
 	}
-
 }

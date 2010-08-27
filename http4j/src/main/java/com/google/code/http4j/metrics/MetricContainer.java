@@ -18,7 +18,6 @@ package com.google.code.http4j.metrics;
 
 import com.google.code.http4j.ConnectionPool;
 import com.google.code.http4j.DnsCache;
-import com.google.code.http4j.Factory;
 import com.google.code.http4j.impl.BasicContainer;
 import com.google.code.http4j.metrics.connection.MetricConnectionPool;
 
@@ -26,8 +25,10 @@ import com.google.code.http4j.metrics.connection.MetricConnectionPool;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public class MetricContainer extends BasicContainer {
-	protected Factory<DnsCache> createDnsCacheFactory() {
-		return new Factory<DnsCache>() {
+	
+	@Override
+	protected GenericFactory<DnsCache> createDnsCacheFactory() {
+		return new GenericFactory<DnsCache>() {
 			@Override
 			public DnsCache create() {
 				return new MetricDnsCache();
@@ -35,8 +36,9 @@ public class MetricContainer extends BasicContainer {
 		};
 	}
 
-	protected Factory<ConnectionPool> createConnectionPoolFactory() {
-		return new Factory<ConnectionPool>() {
+	@Override
+	protected GenericFactory<ConnectionPool> createConnectionPoolFactory() {
+		return new GenericFactory<ConnectionPool>() {
 			@Override
 			public ConnectionPool create() {
 				return new MetricConnectionPool();

@@ -31,9 +31,13 @@ public abstract class Container {
 		instance = container;
 	}
 	
-	abstract public Factory<ConnectionPool> getConnectionPoolFactory();
+	public static interface GenericFactory<P> {
+		P create();
+	}
 	
-	abstract public Factory<CookieCache> getCookieCacheFactory();
+	abstract public GenericFactory<ConnectionPool> getConnectionPoolFactory();
 	
-	abstract public Factory<DnsCache> getDnsCacheFactory();
+	abstract public GenericFactory<CookieCache> getCookieCacheFactory();
+	
+	abstract public GenericFactory<DnsCache> getDnsCacheFactory();
 }
