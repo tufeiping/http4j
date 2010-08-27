@@ -21,10 +21,10 @@
 <suite name="http" verbose="1">
 	<test name="regression">
 		<packages>
-			<package name="com.google.code.http4j.client.impl.utils" />
-			<package name="com.google.code.http4j.client.impl" />
-			<package name="com.google.code.http4j.client.metrics" />
-			<package name="com.google.code.http4j.client" />
+			<package name="com.google.code.http4j.impl.utils" />
+			<package name="com.google.code.http4j.impl" />
+			<package name="com.google.code.http4j.metrics" />
+			<package name="com.google.code.http4j" />
 		</packages>
 	</test>
 </suite>
