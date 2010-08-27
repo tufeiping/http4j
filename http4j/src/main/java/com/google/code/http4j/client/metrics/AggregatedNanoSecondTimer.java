@@ -31,19 +31,20 @@ public class AggregatedNanoSecondTimer extends AbstractTimer<AtomicLong> impleme
 	}
 
 	protected void minStart(long t) {
-		long s, min;
+		long s;
 		do {
 			s = getStart();
-			min = Math.min(s, t);
-		} while(!start.compareAndSet(s, min));
+			if(t >= s) {
+				break;
+			}
+		} while(t < s && !start.compareAndSet(s, t));
 	}
 	
 	protected void maxStop(long t) {
-		long s, max;
+		long s;
 		do {
 			s = getStop();
-			max = Math.max(s, t);
-		} while(!stop.compareAndSet(s, max));
+		} while(t > s && !stop.compareAndSet(s, t));
 	}
 	
 	@Override
