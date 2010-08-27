@@ -34,9 +34,6 @@ public class AggregatedNanoSecondTimer extends AbstractTimer<AtomicLong> impleme
 		long s;
 		do {
 			s = getStart();
-			if(t >= s) {
-				break;
-			}
 		} while(t < s && !start.compareAndSet(s, t));
 	}
 	
