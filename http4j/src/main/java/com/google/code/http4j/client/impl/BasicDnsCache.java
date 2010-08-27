@@ -43,7 +43,10 @@ public class BasicDnsCache extends DnsCache {
 		InetAddress address = CACHE.get(host);
 		if(address == null) {
 			address = lookupDns(host);
-			CACHE.putIfAbsent(host, address);// multi request concurrent
+			InetAddress exist = CACHE.putIfAbsent(host, address);// multi request concurrent
+			if(null != exist) {
+				address = exist;
+			}
 		}
 		return address;
 	}
