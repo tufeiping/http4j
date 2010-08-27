@@ -28,13 +28,8 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.google.code.http4j.Container;
 import com.google.code.http4j.HttpResponse;
-import com.google.code.http4j.metrics.AggregatedMetrics;
-import com.google.code.http4j.metrics.Counter;
-import com.google.code.http4j.metrics.MetricHttpClient;
-import com.google.code.http4j.metrics.Metrics;
-import com.google.code.http4j.metrics.ThreadLocalMetrics;
-import com.google.code.http4j.metrics.Timer;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -46,6 +41,7 @@ public class MetricHttpClientTestCase {
 	@BeforeClass
 	public void setUp() {
 		client = new MetricHttpClient();
+		Container.setDefault(new MetricContainer());
 	}
 
 	/*

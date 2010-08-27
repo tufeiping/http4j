@@ -27,4 +27,10 @@
 			<package name="com.google.code.http4j" />
 		</packages>
 	</test>
+	<test name="metric">
+		<packages>
+			<package name="com.google.code.http4j.metrics.connection" />
+			<package name="com.google.code.http4j.metrics" />
+		</packages>
+	</test>
 </suite>
