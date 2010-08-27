@@ -18,17 +18,18 @@
 
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
-<suite name="http" verbose="1">
-	<test name="basic">
+<suite name="regression" verbose="1">
+	<test name="together">
+		<groups>
+			<run>
+	    		<exclude name="singlely"/>
+			</run>
+		</groups>
 		<packages>
 			<package name="com.google.code.http4j.impl.connection" />
 			<package name="com.google.code.http4j.impl.utils" />
 			<package name="com.google.code.http4j.impl" />
 			<package name="com.google.code.http4j" />
-		</packages>
-	</test>
-	<test name="metric">
-		<packages>
 			<package name="com.google.code.http4j.metrics.connection" />
 			<package name="com.google.code.http4j.metrics" />
 		</packages>

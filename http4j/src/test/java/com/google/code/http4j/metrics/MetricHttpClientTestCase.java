@@ -16,13 +16,14 @@
 
 package com.google.code.http4j.metrics;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -44,51 +45,32 @@ public class MetricHttpClientTestCase {
 		Container.setDefault(new MetricContainer());
 	}
 
-	/*
-	 * While test suite executes, the other cases might also access thread local
-	 * metrics. Thus some metrics in that thread might have initialized values.
-	 * So we need to test it in separated thread.
-	 */
-	@Test
-	public void testMetricsInSeparatedThread() throws InterruptedException,
-			ExecutionException {
-		ExecutorService service = Executors.newSingleThreadExecutor();
-		Future<Boolean> result = service.submit(new Callable<Boolean>() {
-			@Override
-			public Boolean call() throws Exception {
-				try {
-					Metrics metrics = ThreadLocalMetrics.getInstance();
-					Counter<Long> requestTrafficCounter = metrics.getRequestTrafficCounter();
-					Counter<Long> responseTrafficCounter = metrics.getResponseTrafficCounter();
-					Timer connectionTimer = metrics.getConnectionTimer();
-					Timer dnsTimer = metrics.getDnsTimer();
-					Timer requestTimer = metrics.getRequestTimer();
-					Timer responseTimer = metrics.getResponseTimer();
-					Assert.assertEquals(requestTrafficCounter.get(), Long.valueOf(0));
-					Assert.assertEquals(responseTrafficCounter.get(), Long.valueOf(0));
-					Assert.assertEquals(connectionTimer.get(), 0);
-					Assert.assertEquals(dnsTimer.get(), 0);
-					Assert.assertEquals(requestTimer.get(), 0);
-					Assert.assertEquals(responseTimer.get(), 0);
-					HttpResponse response = client.get("http://www.bing.com", false);
-					Assert.assertNotNull(response);
-					Assert.assertTrue(requestTrafficCounter.get() > 0);
-					Assert.assertTrue(responseTrafficCounter.get() > 0);
-					Assert.assertTrue(connectionTimer.get() > 0);
-					Assert.assertTrue(dnsTimer.get() > 0);
-					Assert.assertTrue(requestTimer.get() > 0);
-					Assert.assertTrue(responseTimer.get() > 0);
-					return true;
-				} catch (Exception e) {
-					e.printStackTrace();
-					return false;
-				}
-			}
-		});
-		Assert.assertTrue(result.get());
+	@Test(groups = "singlely")
+	public void testMetrics() throws IOException, URISyntaxException {
+		Metrics metrics = ThreadLocalMetrics.getInstance();
+		Counter<Long> requestTrafficCounter = metrics.getRequestTrafficCounter();
+		Counter<Long> responseTrafficCounter = metrics.getResponseTrafficCounter();
+		Timer connectionTimer = metrics.getConnectionTimer();
+		Timer dnsTimer = metrics.getDnsTimer();
+		Timer requestTimer = metrics.getRequestTimer();
+		Timer responseTimer = metrics.getResponseTimer();
+		Assert.assertEquals(requestTrafficCounter.get(), Long.valueOf(0));
+		Assert.assertEquals(responseTrafficCounter.get(), Long.valueOf(0));
+		Assert.assertEquals(connectionTimer.get(), 0);
+		Assert.assertEquals(dnsTimer.get(), 0);
+		Assert.assertEquals(requestTimer.get(), 0);
+		Assert.assertEquals(responseTimer.get(), 0);
+		HttpResponse response = client.get("http://www.bing.com", false);
+		Assert.assertNotNull(response);
+		Assert.assertTrue(requestTrafficCounter.get() > 0);
+		Assert.assertTrue(responseTrafficCounter.get() > 0);
+		Assert.assertTrue(connectionTimer.get() > 0);
+		Assert.assertTrue(dnsTimer.get() > 0);
+		Assert.assertTrue(requestTimer.get() > 0);
+		Assert.assertTrue(responseTimer.get() > 0);
 	}
 
-	@Test(dependsOnMethods = "testMetricsInSeparatedThread")
+	@Test(groups = "singlely",dependsOnMethods = "testMetrics")
 	public void testAggregateMetrics() throws InterruptedException, ExecutionException {
 		int count = 5;
 		ExecutorService executor = Executors.newFixedThreadPool(count);
