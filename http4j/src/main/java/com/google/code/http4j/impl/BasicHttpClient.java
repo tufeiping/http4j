@@ -57,34 +57,23 @@ public class BasicHttpClient implements HttpClient {
 	 * @see #createConnectionPool()
 	 */
 	public BasicHttpClient() {
-		ensureContainerCreated();
-		connectionPool = createConnectionPool();
-		cookieCache = createCookieCache();
-		DnsCache.setDefault(createDnsCache());
+		Container container = getContainer();
+		connectionPool = container.getConnectionPoolFactory().create();
+		cookieCache = container.getCookieCacheFactory().create();
+		DnsCache.setDefault(container.getDnsCacheFactory().create());
 	}
 	
-	protected void ensureContainerCreated() {
+	protected Container getContainer() {
 		Container container = Container.getDefault();
 		if(null == container) {
 			container = createContainer();
 			Container.setDefault(container);
 		}
+		return container;
 	}
 
 	protected Container createContainer() {
 		return new BasicContainer();
-	}
-
-	protected ConnectionPool createConnectionPool() {
-		return Container.getDefault().getConnectionPoolFactory().create();
-	}
-
-	protected CookieCache createCookieCache() {
-		return Container.getDefault().getCookieCacheFactory().create();
-	}
-
-	protected DnsCache createDnsCache() {
-		return new BasicDnsCache();
 	}
 
 	protected HttpRequest createGetRequest(String url, String encoding)

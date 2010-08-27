@@ -14,18 +14,32 @@
  * limitations under the License.
  */
 
-package com.google.code.http4j.impl;
+package com.google.code.http4j.metrics;
 
 import com.google.code.http4j.ConnectionPool;
+import com.google.code.http4j.DnsCache;
 import com.google.code.http4j.Factory;
+import com.google.code.http4j.impl.BasicContainer;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class ConnectionPoolFactory implements Factory<ConnectionPool> {
+public class MetricContainer extends BasicContainer {
+	protected Factory<DnsCache> createDnsCacheFactory() {
+		return new Factory<DnsCache>() {
+			@Override
+			public DnsCache create() {
+				return new MetricDnsCache();
+			}
+		};
+	}
 
-	@Override
-	public ConnectionPool create() {
-		return new BasicConnectionPool();
+	protected Factory<ConnectionPool> createConnectionPoolFactory() {
+		return new Factory<ConnectionPool>() {
+			@Override
+			public ConnectionPool create() {
+				return new MetricConnectionPool();
+			}
+		};
 	}
 }

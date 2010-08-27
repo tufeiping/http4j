@@ -19,8 +19,7 @@ package com.google.code.http4j.metrics;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import com.google.code.http4j.ConnectionPool;
-import com.google.code.http4j.DnsCache;
+import com.google.code.http4j.Container;
 import com.google.code.http4j.HttpRequest;
 import com.google.code.http4j.HttpResponse;
 import com.google.code.http4j.impl.BasicHttpClient;
@@ -38,18 +37,13 @@ public class MetricHttpClient extends BasicHttpClient {
 		metrics = createMetrics();
 	}
 	
+	@Override
+	protected Container createContainer() {
+		return new MetricContainer();
+	}
+	
 	protected AggregatedMetrics createMetrics() {
 		return new AggregatedMetrics();
-	}
-	
-	@Override
-	protected DnsCache createDnsCache() {
-		return new MetricDnsCache();
-	}
-	
-	@Override
-	protected ConnectionPool createConnectionPool() {
-		return new MetricConnectionPool();
 	}
 	
 	@Override

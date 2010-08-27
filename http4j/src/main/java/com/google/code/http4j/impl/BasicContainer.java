@@ -28,27 +28,42 @@ import com.google.code.http4j.Factory;
 public class BasicContainer extends Container {
 
 	protected Factory<ConnectionPool> connectionPoolFactory;
-	
+
 	protected Factory<CookieCache> cookieCacheFactory;
 
 	protected Factory<DnsCache> dnsCacheFactory;
-	
+
 	public BasicContainer() {
 		connectionPoolFactory = createConnectionPoolFactory();
 		cookieCacheFactory = createCookieCacheFactory();
 		dnsCacheFactory = createDnsCacheFactory();
 	}
 
-	private Factory<DnsCache> createDnsCacheFactory() {
-		return new DnsCacheFactory();
+	protected Factory<DnsCache> createDnsCacheFactory() {
+		return new Factory<DnsCache>() {
+			@Override
+			public DnsCache create() {
+				return new BasicDnsCache();
+			}
+		};
 	}
 
 	protected Factory<CookieCache> createCookieCacheFactory() {
-		return new CookieCacheFactory();
+		return new Factory<CookieCache>() {
+			@Override
+			public CookieCache create() {
+				return new CookieStoreAdapter();
+			}
+		};
 	}
 
 	protected Factory<ConnectionPool> createConnectionPoolFactory() {
-		return new ConnectionPoolFactory();
+		return new Factory<ConnectionPool>() {
+			@Override
+			public ConnectionPool create() {
+				return new BasicConnectionPool();
+			}
+		};
 	}
 
 	@Override
