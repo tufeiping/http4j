@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package com.google.code.http4j.metrics;
+package com.google.code.http4j.metrics.connection;
 
 import java.io.IOException;
 
 import com.google.code.http4j.Connection;
 import com.google.code.http4j.HttpHost;
+import com.google.code.http4j.metrics.Metrics;
+import com.google.code.http4j.metrics.ThreadLocalMetrics;
+import com.google.code.http4j.metrics.Timer;
 
 public class MetricConnectionDecorator implements Connection {
 	

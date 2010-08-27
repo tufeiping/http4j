@@ -21,8 +21,10 @@
 <suite name="http" verbose="1">
 	<test name="regression">
 		<packages>
+			<package name="com.google.code.http4j.impl.connection" />
 			<package name="com.google.code.http4j.impl.utils" />
 			<package name="com.google.code.http4j.impl" />
+			<package name="com.google.code.http4j.metrics.connection" />
 			<package name="com.google.code.http4j.metrics" />
 			<package name="com.google.code.http4j" />
 		</packages>

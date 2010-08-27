@@ -20,6 +20,7 @@ import com.google.code.http4j.ConnectionPool;
 import com.google.code.http4j.DnsCache;
 import com.google.code.http4j.Factory;
 import com.google.code.http4j.impl.BasicContainer;
+import com.google.code.http4j.metrics.connection.MetricConnectionPool;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>

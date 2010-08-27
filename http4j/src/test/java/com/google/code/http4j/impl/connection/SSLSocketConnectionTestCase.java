@@ -13,19 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.http4j.impl;
+package com.google.code.http4j.impl.connection;
 
-import com.google.code.http4j.HttpHost;
+import org.testng.annotations.Test;
+
+import com.google.code.http4j.Connection;
+import com.google.code.http4j.ConnectionTestCase;
+import com.google.code.http4j.impl.connection.SSLSocketConnection;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  *
  */
-public class SSLSocketConnection extends SocketConnection {
-
-	public SSLSocketConnection(HttpHost host) {
-		super(host);
+public class SSLSocketConnectionTestCase extends ConnectionTestCase {
+	
+	@Override
+	protected Connection createConnection() {
+		return new SSLSocketConnection(host);
 	}
 	
-	// FIXME add SSL support
+	@Test
+	public void testNothing() {
+		// do nothing, testng will not recognize a class without testng specific annotation
+	}
 }

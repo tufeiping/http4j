@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.code.http4j.metrics;
+package com.google.code.http4j.metrics.connection;
 
 import java.io.IOException;
 
@@ -23,12 +23,12 @@ import org.testng.annotations.Test;
 
 import com.google.code.http4j.Connection;
 import com.google.code.http4j.ConnectionTestCase;
-import com.google.code.http4j.impl.SocketConnection;
+import com.google.code.http4j.impl.connection.SocketConnection;
 import com.google.code.http4j.metrics.Counter;
-import com.google.code.http4j.metrics.MetricConnectionDecorator;
 import com.google.code.http4j.metrics.Metrics;
 import com.google.code.http4j.metrics.ThreadLocalMetrics;
 import com.google.code.http4j.metrics.Timer;
+import com.google.code.http4j.metrics.connection.MetricConnectionDecorator;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>

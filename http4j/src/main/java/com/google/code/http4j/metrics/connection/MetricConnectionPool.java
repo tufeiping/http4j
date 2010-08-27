@@ -13,26 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.http4j.impl;
 
-import org.testng.annotations.Test;
+package com.google.code.http4j.metrics.connection;
+
+import java.io.IOException;
 
 import com.google.code.http4j.Connection;
-import com.google.code.http4j.ConnectionTestCase;
-import com.google.code.http4j.impl.SocketConnection;
+import com.google.code.http4j.HttpHost;
+import com.google.code.http4j.impl.connection.BasicConnectionPool;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
+ *
  */
-public class SocketConnectionTestCase extends ConnectionTestCase {
-	
-	@Override
-	protected Connection createConnection() {
-		return new SocketConnection(host);
+public class MetricConnectionPool extends BasicConnectionPool {
+
+	public MetricConnectionPool() {
+		super();
 	}
 	
-	@Test
-	public void testNothing() {
-		// do nothing, testng will not recognize a class without testng specific annotation
+	@Override
+	protected Connection createConnection(HttpHost host) throws IOException {
+		return new MetricConnectionDecorator(super.createConnection(host));
 	}
 }

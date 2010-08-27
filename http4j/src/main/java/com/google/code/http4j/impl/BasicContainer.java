@@ -21,6 +21,7 @@ import com.google.code.http4j.Container;
 import com.google.code.http4j.CookieCache;
 import com.google.code.http4j.DnsCache;
 import com.google.code.http4j.Factory;
+import com.google.code.http4j.impl.connection.BasicConnectionPool;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
