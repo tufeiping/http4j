@@ -33,6 +33,7 @@ public class BasicConnectionPool implements ConnectionPool {
 	protected ConcurrentHashMap<HttpHost, ConcurrentLinkedQueue<Connection>> pool;
 	
 	public BasicConnectionPool() {
+		// FIXME concurrent requests will not share pool now. Instead, two connections created.
 		pool = new ConcurrentHashMap<HttpHost, ConcurrentLinkedQueue<Connection>>();
 	}
 	

@@ -16,28 +16,10 @@
 
 package com.google.code.http4j.client;
 
-import java.io.Serializable;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public abstract class DnsCache implements Serializable {
+public interface Factory<P> {
 	
-	private static final long serialVersionUID = -2294441769086049537L;
-	
-	private static volatile DnsCache instance;
-	
-	public static DnsCache getDefault() {
-		return instance;
-	}
-
-	public static void setDefault(DnsCache dnsCache) {
-		instance = dnsCache;
-	}
-	
-	abstract public InetAddress getInetAddress(String host) throws UnknownHostException;
-	
-	abstract public void cache(String host, InetAddress address);
+	P create();
 }

@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.google.code.http4j.client.Connection;
 import com.google.code.http4j.client.ConnectionPool;
 import com.google.code.http4j.client.CookieCache;
+import com.google.code.http4j.client.Container;
 import com.google.code.http4j.client.DnsCache;
 import com.google.code.http4j.client.HttpClient;
 import com.google.code.http4j.client.HttpHeader;
@@ -56,17 +57,30 @@ public class BasicHttpClient implements HttpClient {
 	 * @see #createConnectionPool()
 	 */
 	public BasicHttpClient() {
+		ensureContainerCreated();
 		connectionPool = createConnectionPool();
 		cookieCache = createCookieCache();
 		DnsCache.setDefault(createDnsCache());
 	}
+	
+	protected void ensureContainerCreated() {
+		Container container = Container.getDefault();
+		if(null == container) {
+			container = createContainer();
+			Container.setDefault(container);
+		}
+	}
+
+	protected Container createContainer() {
+		return new BasicContainer();
+	}
 
 	protected ConnectionPool createConnectionPool() {
-		return new BasicConnectionPool();
+		return Container.getDefault().getConnectionPoolFactory().create();
 	}
 
 	protected CookieCache createCookieCache() {
-		return new CookieStoreAdapter();
+		return Container.getDefault().getCookieCacheFactory().create();
 	}
 
 	protected DnsCache createDnsCache() {

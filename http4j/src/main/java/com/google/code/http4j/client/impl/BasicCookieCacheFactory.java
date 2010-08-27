@@ -14,30 +14,19 @@
  * limitations under the License.
  */
 
-package com.google.code.http4j.client;
+package com.google.code.http4j.client.impl;
 
-import java.io.Serializable;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import com.google.code.http4j.client.CookieCache;
+import com.google.code.http4j.client.Factory;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public abstract class DnsCache implements Serializable {
-	
-	private static final long serialVersionUID = -2294441769086049537L;
-	
-	private static volatile DnsCache instance;
-	
-	public static DnsCache getDefault() {
-		return instance;
+public class BasicCookieCacheFactory implements Factory<CookieCache> {
+
+	@Override
+	public CookieCache create() {
+		return new CookieStoreAdapter();
 	}
 
-	public static void setDefault(DnsCache dnsCache) {
-		instance = dnsCache;
-	}
-	
-	abstract public InetAddress getInetAddress(String host) throws UnknownHostException;
-	
-	abstract public void cache(String host, InetAddress address);
 }
