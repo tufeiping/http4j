@@ -40,7 +40,7 @@ public abstract class RequestTestCase {
 		return "User-Agent:" 
 		+ AbstractRequest.DEFAULT_USER_AGENT
 		+ "\r\nAccept:" + AbstractRequest.DEFAULT_ACCEPT
-		+ "\r\n\r\n";
+		+ "\r\n";
 	}
 	
 	abstract protected Request createRequest(String url) throws MalformedURLException;
