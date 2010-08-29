@@ -18,36 +18,37 @@ package com.google.code.http.impl;
 
 import java.net.MalformedURLException;
 
-import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import com.google.code.http.Request;
+import com.google.code.http.RequestTestCase;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  *
  */
-public final class PostTestCase {
-	
-	private Post post;
-	
-	@BeforeClass
-	public void beforeClass() throws MalformedURLException {
-		post = new Post("http://www.google.com/search?q=http4j");
-	}
+public final class PostTestCase extends RequestTestCase {
 	
 	@Test(expectedExceptions = MalformedURLException.class)
 	public void construct_cause_exception() throws MalformedURLException {
 		new Post("code.google.com");
 	}
 	
+	@Test(expectedExceptions = IllegalStateException.class)
+	public void toMessage_cause_exception() throws MalformedURLException {
+		Request request = createRequest("http://www.google.com");
+		request.toMessage();
+	}
+	
 	@Test
-	public void toMessage() {
-		String m = post.toMessage();
-		StringBuilder sb = new StringBuilder("POST /search HTTP/1.1\r\n");
-		sb.append("Host:www.google.com\r\n");
-		sb.append("Content-Length:").append("q=http4j".length()).append("\r\n");
-		sb.append("\r\n");
-		sb.append("q=http4j");
-		Assert.assertEquals(m, sb.toString());
+	public void toMessage() throws MalformedURLException {
+		assertion("http://www.google.com/search?q=http4j", "POST /search HTTP/1.1\r\nHost:www.google.com\r\nContent-Length:8\r\n\r\nq=http4j");
+		assertion("https://www.google.com:444/search?q=http4j&hl=en","POST /search HTTP/1.1\r\nHost:www.google.com:444\r\nContent-Length:14\r\n\r\nq=http4j&hl=en");
+		assertion("http://localhost:8080/index.jsp;jsessionid=ABCDE?u=colin&pwd=http4j","POST /index.jsp;jsessionid=ABCDE HTTP/1.1\r\nHost:localhost:8080\r\nContent-Length:18\r\n\r\nu=colin&pwd=http4j");
+	}
+
+	@Override
+	protected Request createRequest(String url) throws MalformedURLException {
+		return new Post(url);
 	}
 }

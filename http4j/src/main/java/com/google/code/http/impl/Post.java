@@ -51,6 +51,9 @@ public class Post extends AbstractRequest {
 	
 	@Override
 	protected CharSequence formatBody() {
+		if(query.length() == 0) {
+			throw new IllegalStateException("No parameter(s) to be post.");
+		}
 		return query;
 	}
 
