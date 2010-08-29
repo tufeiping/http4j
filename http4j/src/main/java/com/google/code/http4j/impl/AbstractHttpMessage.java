@@ -105,6 +105,7 @@ public abstract class AbstractHttpMessage implements HttpMessage {
 			found = headers.get(i).getName().equalsIgnoreCase(header.getName());
 			if(found) {
 				headers.set(i, header);
+				break;
 			}
 		}
 		if(!found) {
