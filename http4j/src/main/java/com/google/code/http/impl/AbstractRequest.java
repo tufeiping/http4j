@@ -80,7 +80,7 @@ public abstract class AbstractRequest implements Request {
 		return m.toString();
 	}
 
-	private StringBuilder formatHeaders() {
+	protected StringBuilder formatHeaders() {
 		StringBuilder m = new StringBuilder();
 		for (Header h : headers) {
 			m.append(HTTP.CRLF);
