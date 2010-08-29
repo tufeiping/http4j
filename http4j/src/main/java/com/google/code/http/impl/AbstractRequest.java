@@ -16,6 +16,7 @@
 
 package com.google.code.http.impl;
 
+import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,17 +36,20 @@ public abstract class AbstractRequest implements Request {
 	protected List<Header> headers;
 
 	protected StringBuilder query;
+	
+	protected String path;
 
-	public AbstractRequest() {
-		query = new StringBuilder();
+	public AbstractRequest(URL url) {
+		path = url.getPath();
+		query = new StringBuilder(url.getQuery());
 		headers = new LinkedList<Header>();
 	}
 
 	abstract protected Method getMethod();
 
-	abstract protected StringBuilder formatBody();
+	abstract protected CharSequence formatBody();
 
-	abstract protected StringBuilder formatURI();
+	abstract protected CharSequence formatURI();
 
 	@Override
 	public void addParameter(String name, String... values) {
