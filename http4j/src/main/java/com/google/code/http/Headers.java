@@ -24,4 +24,8 @@ public interface Headers {
 	
 	String HOST = "Host";
 	String CONTENT_LENGTH = "Content-Length";
+	String USER_AGENT = "User-Agent";
+	String ACCEPT = "Accept";
+	
+	
 }
