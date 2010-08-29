@@ -36,13 +36,11 @@ public class StatusLineParser implements Parser<StatusLine, byte[]> {
 		protected final String version;
 		protected final int statusCode;
 		protected final String reason;
-		protected final String line;
 
 		public BasicStatusLine(String version, int responseCode, String reason) {
 			this.version = version;
 			this.statusCode = responseCode;
 			this.reason = reason;
-			this.line = toLine();
 		}
 
 		protected String toLine() {
@@ -63,11 +61,6 @@ public class StatusLineParser implements Parser<StatusLine, byte[]> {
 		@Override
 		public String getVersion() {
 			return version;
-		}
-
-		@Override
-		public String toString() {
-			return line;
 		}
 	}
 }
