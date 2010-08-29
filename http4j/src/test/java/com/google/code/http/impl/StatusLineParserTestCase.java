@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.code.http;
+package com.google.code.http.impl;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.code.http.impl.StatusLineParser;
+import com.google.code.http.Parser;
 import com.google.code.http.StatusLine;
 
 /**
