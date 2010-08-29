@@ -17,42 +17,35 @@
 package com.google.code.http.impl;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 
-import com.google.code.http.Method;
+import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  *
  */
-public class Get extends AbstractRequest {
-
-	private static final long serialVersionUID = -7662562240040943759L;
-
-	public Get(String url) throws MalformedURLException {
-		super(url);
+public final class GetTestCase {
+	
+	private Get get;
+	
+	@BeforeClass
+	public void beforeClass() throws MalformedURLException {
+		get = new Get("http://code.google.com/q/http4j");
 	}
 	
-	public Get(URL url) {
-		super(url);
+	@Test(expectedExceptions = MalformedURLException.class)
+	public void construct_cause_exception() throws MalformedURLException {
+		new Get("code.google.com");
 	}
-
-	@Override
-	protected Method getMethod() {
-		return Method.GET;
-	}
-
-	@Override
-	protected CharSequence formatBody() {
-		return "";
-	}
-
-	@Override
-	protected CharSequence formatURI() {
-		StringBuilder sb = new StringBuilder(path);
-		if(query.length() > 0) {
-			sb.append('?').append(query);
-		}
-		return sb;
+	
+	@Test
+	public void toMessage() {
+		String m = get.toMessage();
+		StringBuilder sb = new StringBuilder("GET /q/http4j HTTP/1.1\r\n");
+		sb.append("Host:code.google.com\r\n");
+		sb.append("\r\n");
+		Assert.assertEquals(m, sb.toString());
 	}
 }

@@ -23,6 +23,7 @@ import java.util.List;
 
 import com.google.code.http.HTTP;
 import com.google.code.http.Header;
+import com.google.code.http.Headers;
 import com.google.code.http.Method;
 import com.google.code.http.Request;
 
@@ -45,9 +46,11 @@ public abstract class AbstractRequest implements Request {
 	}
 	
 	public AbstractRequest(URL url) {
-		path = url.getPath();
-		query = new StringBuilder(url.getQuery());
+		path = url.getPath() == null ? "/" : url.getPath();
+		String q = url.getQuery() == null ? "" : url.getQuery();
+		query = new StringBuilder(q);
 		headers = new LinkedList<Header>();
+		setHeader(Headers.HOST, url.getAuthority());
 	}
 
 	abstract protected Method getMethod();
