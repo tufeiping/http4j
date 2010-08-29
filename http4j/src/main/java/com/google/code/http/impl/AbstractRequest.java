@@ -16,6 +16,7 @@
 
 package com.google.code.http.impl;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,6 +40,10 @@ public abstract class AbstractRequest implements Request {
 	
 	protected String path;
 
+	public AbstractRequest(String url) throws MalformedURLException {
+		this(new URL(url));
+	}
+	
 	public AbstractRequest(URL url) {
 		path = url.getPath();
 		query = new StringBuilder(url.getQuery());
