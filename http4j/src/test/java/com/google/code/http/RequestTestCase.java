@@ -33,11 +33,14 @@ public abstract class RequestTestCase {
 	 */
 	protected void assertion(String url, String m) throws MalformedURLException {
 		Request r = createRequest(url);
-		m += "User-Agent:" 
-			+ AbstractRequest.DEFAULT_USER_AGENT
-			+ "\r\nAccept:" + AbstractRequest.DEFAULT_ACCEPT
-			+ "\r\n\r\n";
 		Assert.assertEquals(r.toMessage(), m);
+	}
+	
+	protected String getDefaultHeaderString() {
+		return "User-Agent:" 
+		+ AbstractRequest.DEFAULT_USER_AGENT
+		+ "\r\nAccept:" + AbstractRequest.DEFAULT_ACCEPT
+		+ "\r\n\r\n";
 	}
 	
 	abstract protected Request createRequest(String url) throws MalformedURLException;
