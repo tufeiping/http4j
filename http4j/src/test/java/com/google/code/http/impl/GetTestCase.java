@@ -19,7 +19,6 @@ package com.google.code.http.impl;
 import java.net.MalformedURLException;
 
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
@@ -28,24 +27,20 @@ import org.testng.annotations.Test;
  */
 public final class GetTestCase {
 	
-	private Get get;
-	
-	@BeforeClass
-	public void beforeClass() throws MalformedURLException {
-		get = new Get("http://www.google.com/search?q=http4j");
-	}
-	
 	@Test(expectedExceptions = MalformedURLException.class)
 	public void construct_cause_exception() throws MalformedURLException {
 		new Get("code.google.com/p/http4j");
 	}
 	
 	@Test
-	public void toMessage() {
+	public void toMessage() throws MalformedURLException {
+		assertion("http://www.google.com","GET / HTTP/1.1\r\nHost:www.google.com\r\n\r\n");
+		assertion("http://www.google.com/search?q=http4j", "GET /search?q=http4j HTTP/1.1\r\nHost:www.google.com\r\n\r\n");
+	}
+	
+	private void assertion(String url, String message) throws MalformedURLException {
+		Get get = new Get(url);
 		String m = get.toMessage();
-		StringBuilder sb = new StringBuilder("GET /search?q=http4j HTTP/1.1\r\n");
-		sb.append("Host:www.google.com\r\n");
-		sb.append("\r\n");
-		Assert.assertEquals(m, sb.toString());
+		Assert.assertEquals(m, message);
 	}
 }

@@ -46,7 +46,7 @@ public abstract class AbstractRequest implements Request {
 	}
 	
 	public AbstractRequest(URL url) {
-		path = url.getPath() == null ? "/" : url.getPath();
+		path = url.getPath().length() == 0 ? "/" : url.getPath();
 		String q = url.getQuery() == null ? "" : url.getQuery();
 		query = new StringBuilder(q);
 		headers = new LinkedList<Header>();
