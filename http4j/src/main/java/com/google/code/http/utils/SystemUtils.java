@@ -14,31 +14,19 @@
  * limitations under the License.
  */
 
-package com.google.code.http;
-
-import java.net.MalformedURLException;
-
-import org.testng.Assert;
-
-import com.google.code.http.impl.AbstractRequest;
+package com.google.code.http.utils;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  *
  */
-public abstract class RequestTestCase {
+public final class SystemUtils {
 	
-	/*
-	 * m should not consider default headers message
-	 */
-	protected void assertion(String url, String m) throws MalformedURLException {
-		Request r = createRequest(url);
-		m += "User-Agent:" 
-			+ AbstractRequest.DEFAULT_USER_AGENT
-			+ "\r\nAccept:" + AbstractRequest.DEFAULT_ACCEPT
-			+ "\r\n\r\n";
-		Assert.assertEquals(r.toMessage(), m);
+	public static String getOperatingSystemInformation() {
+		return System.getProperty("os.name") + " " + System.getProperty("os.version");
 	}
 	
-	abstract protected Request createRequest(String url) throws MalformedURLException;
+	public static String getLocaleInformation() {
+		return System.getProperty("user.language") + "-" + System.getProperty("user.country");
+	}
 }

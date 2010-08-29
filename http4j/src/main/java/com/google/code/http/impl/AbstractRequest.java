@@ -26,6 +26,7 @@ import com.google.code.http.Header;
 import com.google.code.http.Headers;
 import com.google.code.http.Method;
 import com.google.code.http.Request;
+import com.google.code.http.utils.SystemUtils;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -34,6 +35,11 @@ import com.google.code.http.Request;
 public abstract class AbstractRequest implements Request {
 
 	private static final long serialVersionUID = 127059666172730925L;
+
+	public static final String DEFAULT_USER_AGENT = "Google Code (" + SystemUtils.getOperatingSystemInformation() + ";"
+														+ SystemUtils.getLocaleInformation() + ") http4j/1.0";
+
+	public static final String DEFAULT_ACCEPT = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
 
 	protected List<Header> headers;
 
@@ -47,10 +53,15 @@ public abstract class AbstractRequest implements Request {
 	
 	public AbstractRequest(URL url) {
 		path = url.getPath().length() == 0 ? "/" : url.getPath();
-		String q = url.getQuery() == null ? "" : url.getQuery();
-		query = new StringBuilder(q);
+		query = new StringBuilder(url.getQuery() == null ? "" : url.getQuery());
 		headers = new LinkedList<Header>();
 		setHeader(Headers.HOST, url.getAuthority());
+		initDefaultHeaders();
+	}
+
+	private void initDefaultHeaders() {
+		setHeader(Headers.USER_AGENT, DEFAULT_USER_AGENT);
+		setHeader(Headers.ACCEPT, DEFAULT_ACCEPT);
 	}
 
 	abstract protected Method getMethod();

@@ -36,10 +36,10 @@ public final class GetTestCase extends RequestTestCase {
 	
 	@Test
 	public void toMessage() throws MalformedURLException {
-		assertion("http://www.google.com","GET / HTTP/1.1\r\nHost:www.google.com\r\n\r\n");
-		assertion("http://www.google.com/search?q=http4j", "GET /search?q=http4j HTTP/1.1\r\nHost:www.google.com\r\n\r\n");
-		assertion("https://localhost:8080/index.jsp", "GET /index.jsp HTTP/1.1\r\nHost:localhost:8080\r\n\r\n");
-		assertion("http://127.0.0.1:8080/index.xhtml;jsessionid=ABCDE?user=colin","GET /index.xhtml;jsessionid=ABCDE?user=colin HTTP/1.1\r\nHost:127.0.0.1:8080\r\n\r\n");
+		assertion("http://www.google.com","GET / HTTP/1.1\r\nHost:www.google.com\r\n");
+		assertion("http://www.google.com/search?q=http4j", "GET /search?q=http4j HTTP/1.1\r\nHost:www.google.com\r\n");
+		assertion("https://localhost:8080/index.jsp", "GET /index.jsp HTTP/1.1\r\nHost:localhost:8080\r\n");
+		assertion("http://127.0.0.1:8080/index.xhtml;jsessionid=ABCDE?user=colin","GET /index.xhtml;jsessionid=ABCDE?user=colin HTTP/1.1\r\nHost:127.0.0.1:8080\r\n");
 	}
 
 	@Override
