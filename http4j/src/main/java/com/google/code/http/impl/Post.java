@@ -19,6 +19,7 @@ package com.google.code.http.impl;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import com.google.code.http.Headers;
 import com.google.code.http.Method;
 
 /**
@@ -42,6 +43,12 @@ public class Post extends AbstractRequest {
 		return Method.POST;
 	}
 
+	@Override
+	protected StringBuilder formatHeaders() {
+		setHeader(Headers.CONTENT_LENGTH, String.valueOf(query.length()));
+		return super.formatHeaders();
+	}
+	
 	@Override
 	protected CharSequence formatBody() {
 		return query;

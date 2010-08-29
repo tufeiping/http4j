@@ -26,26 +26,28 @@ import org.testng.annotations.Test;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  *
  */
-public final class GetTestCase {
+public final class PostTestCase {
 	
-	private Get get;
+	private Post post;
 	
 	@BeforeClass
 	public void beforeClass() throws MalformedURLException {
-		get = new Get("http://www.google.com/search?q=http4j");
+		post = new Post("http://www.google.com/search?q=http4j");
 	}
 	
 	@Test(expectedExceptions = MalformedURLException.class)
 	public void construct_cause_exception() throws MalformedURLException {
-		new Get("code.google.com/p/http4j");
+		new Post("code.google.com");
 	}
 	
 	@Test
 	public void toMessage() {
-		String m = get.toMessage();
-		StringBuilder sb = new StringBuilder("GET /search?q=http4j HTTP/1.1\r\n");
+		String m = post.toMessage();
+		StringBuilder sb = new StringBuilder("POST /search HTTP/1.1\r\n");
 		sb.append("Host:www.google.com\r\n");
+		sb.append("Content-Length:").append("q=http4j".length()).append("\r\n");
 		sb.append("\r\n");
+		sb.append("q=http4j");
 		Assert.assertEquals(m, sb.toString());
 	}
 }
