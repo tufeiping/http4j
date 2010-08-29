@@ -43,11 +43,6 @@ public class StatusLineParser implements Parser<StatusLine, byte[]> {
 			this.reason = reason;
 		}
 
-		protected String toLine() {
-			return new StringBuilder(version).append(' ').append(statusCode)
-					.append(' ').append(reason).toString();
-		}
-
 		@Override
 		public String getReason() {
 			return reason;

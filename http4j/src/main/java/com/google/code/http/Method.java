@@ -22,5 +22,11 @@ package com.google.code.http;
  */
 public enum Method {
 	
-	GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT;
+	GET, 
+	HEAD, 
+	POST, 
+	PUT, 
+	DELETE, 
+	TRACE, 
+	CONNECT;
 }
