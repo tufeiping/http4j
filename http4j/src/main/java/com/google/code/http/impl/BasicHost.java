@@ -22,13 +22,13 @@ import com.google.code.http.Host;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  *
  */
-public class BasicHost implements Host {
+public final class BasicHost implements Host {
 
-	protected String authority;
+	private String authority;
 	
-	protected int port;
+	private int port;
 	
-	protected String protocol;
+	private String protocol;
 	
 	public BasicHost(String protocol, String authority, int port) {
 		this.protocol = protocol;
