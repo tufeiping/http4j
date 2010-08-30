@@ -19,26 +19,13 @@ package com.google.code.http;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
+ *
  */
-public interface Request extends Message {
+public interface Host {
 	
-	Host getHost();
+	String getAuthority();
 	
-	/**
-	 * Add the parameter with specified name and values.
-	 * name=values[0](&name=values[1] ... values[n])*
-	 * 
-	 * @param name
-	 * @param values
-	 */
-	void addParameter(String name, String... values);
-
-	/**
-	 * Set the header with specified name and value. Replace the header with same
-	 * name if it exists.
-	 * 
-	 * @param name
-	 * @param value
-	 */
-	void setHeader(String name, String value);
+	int getPort();
+	
+	String getProtocol();
 }

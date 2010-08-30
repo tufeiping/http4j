@@ -24,8 +24,8 @@ import java.util.List;
 import com.google.code.http.HTTP;
 import com.google.code.http.Header;
 import com.google.code.http.Headers;
+import com.google.code.http.Host;
 import com.google.code.http.Request;
-import com.google.code.http.utils.SystemUtils;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -35,13 +35,14 @@ public abstract class AbstractRequest implements Request {
 
 	private static final long serialVersionUID = 127059666172730925L;
 
-	public static final String DEFAULT_USER_AGENT = "Google Code (" + SystemUtils.getOperatingSystemInformation() + ";"
-														+ SystemUtils.getLocaleInformation() + ") http4j/1.0";
+	public static final String DEFAULT_USER_AGENT = "http4j v1.0";
 
 	public static final String DEFAULT_ACCEPT = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
 
 	protected List<Header> headers;
 
+	protected Host host;
+	
 	protected StringBuilder query;
 	
 	protected String path;
@@ -51,53 +52,26 @@ public abstract class AbstractRequest implements Request {
 	}
 	
 	public AbstractRequest(URL url) {
+		host = new BasicHost(url.getProtocol(), url.getAuthority(), url.getPort());
 		path = url.getPath().length() == 0 ? "/" : url.getPath();
 		query = new StringBuilder(url.getQuery() == null ? "" : url.getQuery());
 		headers = new LinkedList<Header>();
-		setHeader(Headers.HOST, url.getAuthority());
+		setHeader(Headers.HOST, host.getAuthority());
 		initDefaultHeaders();
 	}
 
-	private void initDefaultHeaders() {
-		setHeader(Headers.USER_AGENT, DEFAULT_USER_AGENT);
-		setHeader(Headers.ACCEPT, DEFAULT_ACCEPT);
-	}
-
 	abstract protected CharSequence formatBody();
-
+	
 	abstract protected CharSequence formatURI();
-
+	
+	abstract protected String getName();
+	
 	@Override
 	public void addParameter(String name, String... values) {
 		for (String value : values) {
 			query = query.length() == 0 ? query : query.append('&');
 			query.append(name).append('=').append(value);
 		}
-	}
-
-	@Override
-	public void setHeader(String name, String value) {
-		Header h = new CanonicalHeader(name, value);
-		boolean found = false;
-		for (int i = 0, size = headers.size(); i < size; i++) {
-			Header previous = headers.get(i);
-			found = previous.getName().equals(h.getName());
-			if (found) {
-				headers.set(i, h);
-				break;
-			}
-		}
-		if (!found) {
-			headers.add(h);
-		}
-	}
-
-	@Override
-	public final String toMessage() {
-		StringBuilder m = formatRequestLine();
-		m.append(formatHeaders());
-		m.append(HTTP.CRLF).append(HTTP.CRLF).append(formatBody());
-		return m.toString();
 	}
 
 	protected StringBuilder formatHeaders() {
@@ -116,5 +90,37 @@ public abstract class AbstractRequest implements Request {
 		return l;
 	}
 
-	abstract protected String getName();
+	@Override
+	public Host getHost() {
+		return host;
+	}
+
+	private void initDefaultHeaders() {
+		setHeader(Headers.USER_AGENT, DEFAULT_USER_AGENT);
+		setHeader(Headers.ACCEPT, DEFAULT_ACCEPT);
+	}
+	
+	@Override
+	public void setHeader(String name, String value) {
+		Header h = new CanonicalHeader(name, value);
+		boolean found = false;
+		for (int i = 0, size = headers.size(); i < size; i++) {
+			Header previous = headers.get(i);
+			found = previous.getName().equals(h.getName());
+			if (found) {
+				headers.set(i, h);
+				break;
+			}
+		}
+		if (!found) {
+			headers.add(h);
+		}
+	}
+	@Override
+	public final String toMessage() {
+		StringBuilder m = formatRequestLine();
+		m.append(formatHeaders());
+		m.append(HTTP.CRLF).append(HTTP.CRLF).append(formatBody());
+		return m.toString();
+	}
 }
