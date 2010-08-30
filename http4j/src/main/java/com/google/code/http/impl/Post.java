@@ -20,7 +20,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.google.code.http.Headers;
-import com.google.code.http.Method;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -39,8 +38,8 @@ public class Post extends AbstractRequest {
 	}
 
 	@Override
-	protected Method getMethod() {
-		return Method.POST;
+	protected String getName() {
+		return "POST";
 	}
 
 	@Override

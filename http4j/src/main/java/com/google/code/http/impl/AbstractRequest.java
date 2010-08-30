@@ -24,7 +24,6 @@ import java.util.List;
 import com.google.code.http.HTTP;
 import com.google.code.http.Header;
 import com.google.code.http.Headers;
-import com.google.code.http.Method;
 import com.google.code.http.Request;
 import com.google.code.http.utils.SystemUtils;
 
@@ -63,8 +62,6 @@ public abstract class AbstractRequest implements Request {
 		setHeader(Headers.USER_AGENT, DEFAULT_USER_AGENT);
 		setHeader(Headers.ACCEPT, DEFAULT_ACCEPT);
 	}
-
-	abstract protected Method getMethod();
 
 	abstract protected CharSequence formatBody();
 
@@ -113,9 +110,11 @@ public abstract class AbstractRequest implements Request {
 	}
 
 	private StringBuilder formatRequestLine() {
-		StringBuilder l = new StringBuilder(getMethod().toString());
+		StringBuilder l = new StringBuilder(getName());
 		l.append(' ').append(formatURI());
 		l.append(' ').append(HTTP.DEFAULT_VERSION);
 		return l;
 	}
+
+	abstract protected String getName();
 }
