@@ -57,5 +57,13 @@ public class StatusLineParser implements Parser<StatusLine, byte[]> {
 		public String getVersion() {
 			return version;
 		}
+
+		@Override
+		public boolean hasEntity() {
+			return statusCode >= 200 
+				&& statusCode != 204 
+				&& statusCode != 205 
+				&& statusCode != 304;
+		}
 	}
 }

@@ -28,4 +28,6 @@ public interface StatusLine extends Serializable {
 	int getStatusCode();
 	
 	String getReason();
+	
+	boolean hasEntity();
 }
