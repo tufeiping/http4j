@@ -20,18 +20,18 @@ package com.google.code.http.metrics;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  * 
  */
-public class ThreadLocalMetrics extends AbstractMetrics<Integer> {
+public class ThreadLocalMetricsRecorder extends AbstractMetricsRecorder<Integer> {
 
-	protected static final ThreadLocal<ThreadLocalMetrics> local = new ThreadLocal<ThreadLocalMetrics>();
+	protected static final ThreadLocal<ThreadLocalMetricsRecorder> local = new ThreadLocal<ThreadLocalMetricsRecorder>();
 
-	protected ThreadLocalMetrics() {
+	protected ThreadLocalMetricsRecorder() {
 		super();
 		local.set(this);
 	}
 
-	public static ThreadLocalMetrics getInstance() {
-		ThreadLocalMetrics metrics = local.get();
-		return metrics == null ? new ThreadLocalMetrics() : metrics;
+	public static ThreadLocalMetricsRecorder getInstance() {
+		ThreadLocalMetricsRecorder recorder = local.get();
+		return recorder == null ? new ThreadLocalMetricsRecorder() : recorder;
 	}
 
 	protected Counter<Integer> createCounter() {
@@ -48,9 +48,9 @@ public class ThreadLocalMetrics extends AbstractMetrics<Integer> {
 	}
 
 	public static void requestStopped(int sent) {
-		ThreadLocalMetrics metrics = getInstance();
-		metrics.getRequestTimer().stop();
-		metrics.getRequestTrafficCounter().increase(sent);
+		ThreadLocalMetricsRecorder recorder = getInstance();
+		recorder.getRequestTimer().stop();
+		recorder.getRequestTrafficCounter().increase(sent);
 	}
 
 	public static void connectStarted() {
@@ -66,9 +66,9 @@ public class ThreadLocalMetrics extends AbstractMetrics<Integer> {
 	}
 
 	public static void responseStopped(int sent) {
-		ThreadLocalMetrics metrics = getInstance();
-		metrics.getResponseTimer().stop();
-		metrics.getResponseTrafficCounter().increase(sent);
+		ThreadLocalMetricsRecorder recorder = getInstance();
+		recorder.getResponseTimer().stop();
+		recorder.getResponseTrafficCounter().increase(sent);
 	}
 
 	public static void dnsLookupStarted() {

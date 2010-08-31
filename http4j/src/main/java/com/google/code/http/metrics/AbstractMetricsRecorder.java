@@ -19,7 +19,7 @@ package com.google.code.http.metrics;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public abstract class AbstractMetrics<N extends Number> implements Metrics<N> {
+public abstract class AbstractMetricsRecorder<N extends Number> implements MetricsRecorder<N> {
 
 	protected Timer dnsTimer;
 	protected Timer connectionTimer;
@@ -28,7 +28,7 @@ public abstract class AbstractMetrics<N extends Number> implements Metrics<N> {
 	protected Counter<N> requestTrafficCounter;
 	protected Counter<N> responseTrafficCounter;
 
-	protected AbstractMetrics() {
+	protected AbstractMetricsRecorder() {
 		dnsTimer = createTimer();
 		connectionTimer = createTimer();
 		requestTimer = createTimer();

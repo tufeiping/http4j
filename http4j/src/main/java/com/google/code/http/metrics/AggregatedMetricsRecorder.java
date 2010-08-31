@@ -19,13 +19,13 @@ package com.google.code.http.metrics;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class AggregatedMetrics extends AbstractMetrics<Long> {
+public class AggregatedMetricsRecorder extends AbstractMetricsRecorder<Long> {
 
-	public AggregatedMetrics() {
+	public AggregatedMetricsRecorder() {
 		super();
 	}
 
-	public void aggregate(Metrics<? extends Number> metrics) {
+	public void aggregate(MetricsRecorder<? extends Number> metrics) {
 		((AggregatedTimer) connectionTimer).aggregate(metrics.getConnectionTimer());
 		((AggregatedTimer) dnsTimer).aggregate(metrics.getDnsTimer());
 		((AggregatedTimer) requestTimer).aggregate(metrics.getRequestTimer());

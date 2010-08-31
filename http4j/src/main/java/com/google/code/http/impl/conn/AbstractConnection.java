@@ -26,7 +26,7 @@ import java.nio.ByteBuffer;
 import com.google.code.http.Connection;
 import com.google.code.http.DnsCache;
 import com.google.code.http.Host;
-import com.google.code.http.metrics.ThreadLocalMetrics;
+import com.google.code.http.metrics.ThreadLocalMetricsRecorder;
 import com.google.code.http.utils.IOUtils;
 
 /**
@@ -66,7 +66,7 @@ public abstract class AbstractConnection implements Connection {
 	@Override
 	public final byte[] read() throws IOException {
 		byte b = readFirstByte();
-		ThreadLocalMetrics.responseStarted();
+		ThreadLocalMetricsRecorder.responseStarted();
 		ByteBuffer buffer = ByteBuffer.allocate(1 << 17);
 		ByteBuffer extended = ByteBuffer.allocate(1 << 18).put(b);
 		while (read(buffer) == buffer.capacity()) {
@@ -75,26 +75,26 @@ public abstract class AbstractConnection implements Connection {
 			IOUtils.transfer(buffer, extended);
 		}
 		byte[] data = IOUtils.extract(extended.position() == 0 ? buffer : extended);
-		ThreadLocalMetrics.responseStopped(data.length);
+		ThreadLocalMetricsRecorder.responseStopped(data.length);
 		return data;
 	}
 
 	@Override
 	public final void write(byte[] m) throws IOException {
 		writeFirstByte(m[0]);
-		ThreadLocalMetrics.requestStarted();
+		ThreadLocalMetricsRecorder.requestStarted();
 		if (m.length > 1) {
 			write(m, 1, m.length - 1);
 		}
 		flush();
-		ThreadLocalMetrics.requestStopped(m.length);
+		ThreadLocalMetricsRecorder.requestStopped(m.length);
 	}
 
 	@Override
 	public final void connect() throws IOException {
-		ThreadLocalMetrics.connectStarted();
+		ThreadLocalMetricsRecorder.connectStarted();
 		doConnect();
-		ThreadLocalMetrics.connectStopped();
+		ThreadLocalMetricsRecorder.connectStopped();
 	}
 
 	protected SocketAddress getSocketAddress(Host host)
@@ -106,9 +106,9 @@ public abstract class AbstractConnection implements Connection {
 	}
 
 	protected InetAddress getInetAddress(Host host) throws UnknownHostException {
-		ThreadLocalMetrics.dnsLookupStarted();
+		ThreadLocalMetricsRecorder.dnsLookupStarted();
 		InetAddress address = DnsCache.getAddress(host.getName());
-		ThreadLocalMetrics.dnsLookupStopped();
+		ThreadLocalMetricsRecorder.dnsLookupStopped();
 		return address;
 	}
 

@@ -20,7 +20,7 @@ package com.google.code.http.metrics;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  * 
  */
-public interface Metrics <N extends Number>{
+public interface MetricsRecorder <N extends Number>{
 
 	Timer getDnsTimer();
 
