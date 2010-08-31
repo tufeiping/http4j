@@ -45,15 +45,17 @@ public abstract class AbstractConnection implements Connection {
 
 	abstract protected int read(ByteBuffer buffer) throws IOException;
 
-	// sending start event
+	// before sending start event
 	abstract protected void writeFirstByte(byte b) throws IOException;
 
 	// sending event
 	abstract protected void write(byte[] m, int i, int j) throws IOException;
 
-	// sending stop event
+	// before sending stop event
 	abstract protected void flush() throws IOException;
 
+	abstract protected void doConnect() throws IOException ;
+	
 	@Override
 	public byte[] read() throws IOException {
 		ByteBuffer buffer = ByteBuffer.allocate(1 << 17);
@@ -75,6 +77,13 @@ public abstract class AbstractConnection implements Connection {
 		}
 		flush();
 		ThreadLocalMetrics.requestStopped();
+	}
+
+	@Override
+	public final void connect() throws IOException {
+		ThreadLocalMetrics.connectStarted();
+		doConnect();
+		ThreadLocalMetrics.connectStopped();
 	}
 
 	protected ByteBuffer ensureSpace(ByteBuffer src, ByteBuffer dest) {
