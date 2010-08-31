@@ -20,6 +20,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
@@ -29,14 +30,24 @@ public final class DnsCacheTestCase {
 	
 	private InetAddress address;
 	
+	private String host;
+	
+	@BeforeClass
+	public void beforeClass() {
+		host = "www.hao123.com";
+	}
+	
 	@Test
 	public void getAddress() throws UnknownHostException {
-		address = DnsCache.getAddress("www.google.com");
+		address = DnsCache.getAddress("www.baidu.com");
 		Assert.assertNotNull(address);
 	}
 	
 	@Test(dependsOnMethods = "getAddress")
-	public void cache() {
-		// TODO not implemented yet.
+	public void cache() throws UnknownHostException {
+		InetAddress right = InetAddress.getByName(host);
+		DnsCache.cache(host, right);
+		address = DnsCache.getAddress(host);
+		Assert.assertEquals(address, right);
 	}
 }
