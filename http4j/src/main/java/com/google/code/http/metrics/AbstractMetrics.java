@@ -37,8 +37,8 @@ public abstract class AbstractMetrics<N extends Number> implements Metrics {
 		receivingCost = getTimeCost(recorder.getResponseTimer());
 		sendingCost = getTimeCost(recorder.getRequestTimer());
 		waitingCost = calculateWaiting(recorder.getRequestTimer(), recorder.getResponseTimer());
-		bytesSent = recorder.getRequestTrafficCounter().get().longValue();
-		bytesReceived = recorder.getResponseTrafficCounter().get().longValue();
+		bytesSent = recorder.getRequestTransportCounter().get().longValue();
+		bytesReceived = recorder.getResponseTransportCounter().get().longValue();
 	}
 	
 	@Override

@@ -30,9 +30,16 @@ public interface MetricsRecorder <N extends Number>{
 
 	Timer getResponseTimer();
 	
-	Counter<N> getRequestTrafficCounter();
+	Counter<N> getConnectionCounter();
+	
+	/**
+	 * @return the counter of request-response conversations
+	 */
+	Counter<N> getConversationCounter();
+	
+	Counter<N> getRequestTransportCounter();
 
-	Counter<N> getResponseTrafficCounter();
+	Counter<N> getResponseTransportCounter();
 	
 	void reset();
 }

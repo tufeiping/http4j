@@ -46,6 +46,7 @@ public abstract class AbstractConnection implements Connection {
 	public AbstractConnection(Host host, int timeout) {
 		this.host = host;
 		this.timeout = timeout;
+		ThreadLocalMetricsRecorder.connectionCreated();
 	}
 
 	abstract protected int read(ByteBuffer buffer) throws IOException;

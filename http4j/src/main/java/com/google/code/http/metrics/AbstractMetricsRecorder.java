@@ -25,16 +25,20 @@ public abstract class AbstractMetricsRecorder<N extends Number> implements Metri
 	protected Timer connectionTimer;
 	protected Timer requestTimer;
 	protected Timer responseTimer;
-	protected Counter<N> requestTrafficCounter;
-	protected Counter<N> responseTrafficCounter;
+	protected Counter<N> requestTransportCounter;
+	protected Counter<N> responseTransportCounter;
+	protected Counter<N> connectionCounter;
+	protected Counter<N> conversationCounter;
 
 	protected AbstractMetricsRecorder() {
 		dnsTimer = createTimer();
 		connectionTimer = createTimer();
 		requestTimer = createTimer();
 		responseTimer = createTimer();
-		requestTrafficCounter = createCounter();
-		responseTrafficCounter = createCounter();
+		requestTransportCounter = createCounter();
+		responseTransportCounter = createCounter();
+		connectionCounter = createCounter();
+		conversationCounter = createCounter();
 	}
 
 	abstract protected Counter<N> createCounter();
@@ -66,18 +70,27 @@ public abstract class AbstractMetricsRecorder<N extends Number> implements Metri
 		connectionTimer.reset();
 		requestTimer.reset();
 		responseTimer.reset();
-		requestTrafficCounter.reset();
-		responseTrafficCounter.reset();
+		requestTransportCounter.reset();
+		responseTransportCounter.reset();
 	}
 
 	@Override
-	public Counter<N> getRequestTrafficCounter() {
-		return requestTrafficCounter;
+	public Counter<N> getRequestTransportCounter() {
+		return requestTransportCounter;
 	}
 
 	@Override
-	public Counter<N> getResponseTrafficCounter() {
-		return responseTrafficCounter;
+	public Counter<N> getResponseTransportCounter() {
+		return responseTransportCounter;
 	}
-
+	
+	@Override
+	public Counter<N> getConnectionCounter() {
+		return connectionCounter;
+	}
+	
+	@Override
+	public Counter<N> getConversationCounter() {
+		return conversationCounter;
+	}
 }

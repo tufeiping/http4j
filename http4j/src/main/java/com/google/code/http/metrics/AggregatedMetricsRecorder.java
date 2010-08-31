@@ -30,8 +30,8 @@ public class AggregatedMetricsRecorder extends AbstractMetricsRecorder<Long> {
 		((AggregatedTimer) dnsTimer).aggregate(metrics.getDnsTimer());
 		((AggregatedTimer) requestTimer).aggregate(metrics.getRequestTimer());
 		((AggregatedTimer) responseTimer).aggregate(metrics.getResponseTimer());
-		((AggregatedCounter<Long>) requestTrafficCounter).aggregate(metrics.getRequestTrafficCounter());
-		((AggregatedCounter<Long>) responseTrafficCounter).aggregate(metrics.getResponseTrafficCounter());
+		((AggregatedCounter<Long>) requestTransportCounter).aggregate(metrics.getRequestTransportCounter());
+		((AggregatedCounter<Long>) responseTransportCounter).aggregate(metrics.getResponseTransportCounter());
 	}
 
 	@Override

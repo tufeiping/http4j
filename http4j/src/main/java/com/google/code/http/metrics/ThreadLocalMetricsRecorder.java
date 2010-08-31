@@ -50,7 +50,7 @@ public class ThreadLocalMetricsRecorder extends AbstractMetricsRecorder<Integer>
 	public static void requestStopped(int sent) {
 		ThreadLocalMetricsRecorder recorder = getInstance();
 		recorder.getRequestTimer().stop();
-		recorder.getRequestTrafficCounter().increase(sent);
+		recorder.getRequestTransportCounter().increase(sent);
 	}
 
 	public static void connectStarted() {
@@ -68,7 +68,7 @@ public class ThreadLocalMetricsRecorder extends AbstractMetricsRecorder<Integer>
 	public static void responseStopped(int sent) {
 		ThreadLocalMetricsRecorder recorder = getInstance();
 		recorder.getResponseTimer().stop();
-		recorder.getResponseTrafficCounter().increase(sent);
+		recorder.getResponseTransportCounter().increase(sent);
 	}
 
 	public static void dnsLookupStarted() {
@@ -77,5 +77,9 @@ public class ThreadLocalMetricsRecorder extends AbstractMetricsRecorder<Integer>
 
 	public static void dnsLookupStopped() {
 		getInstance().getDnsTimer().stop();
+	}
+
+	public static void connectionCreated() {
+		getInstance().getConnectionCounter().increase(1);
 	}
 }
