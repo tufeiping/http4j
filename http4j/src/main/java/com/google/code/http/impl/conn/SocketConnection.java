@@ -105,4 +105,9 @@ public class SocketConnection extends AbstractConnection
 	protected void write(byte[] m, int i, int j) throws IOException {
 		socket.getOutputStream().write(m, i, j);
 	}
+
+	@Override
+	protected byte readFirstByte() throws IOException {
+		return (byte) socket.getInputStream().read();
+	}
 }

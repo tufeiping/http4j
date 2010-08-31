@@ -44,7 +44,9 @@ public abstract class AbstractConnection implements Connection {
 	}
 
 	abstract protected int read(ByteBuffer buffer) throws IOException;
-
+	
+	abstract protected byte readFirstByte() throws IOException;
+	
 	// before sending start event
 	abstract protected void writeFirstByte(byte b) throws IOException;
 
@@ -57,14 +59,17 @@ public abstract class AbstractConnection implements Connection {
 	abstract protected void doConnect() throws IOException ;
 	
 	@Override
-	public byte[] read() throws IOException {
+	public final byte[] read() throws IOException {
+		byte b = readFirstByte();
+		ThreadLocalMetrics.responseStarted();
 		ByteBuffer buffer = ByteBuffer.allocate(1 << 17);
-		ByteBuffer extended = ByteBuffer.allocate(1 << 18);
+		ByteBuffer extended = ByteBuffer.allocate(1 << 18).put(b);
 		while (read(buffer) == buffer.capacity()) {
 			// Increasing buffer's capacity reduces the chance to get here
 			extended = IOUtils.ensureSpace(buffer, extended);
 			IOUtils.transfer(buffer, extended);
 		}
+		ThreadLocalMetrics.responseStopped();
 		return IOUtils.extract(extended.position() == 0 ? buffer : extended);
 	}
 
