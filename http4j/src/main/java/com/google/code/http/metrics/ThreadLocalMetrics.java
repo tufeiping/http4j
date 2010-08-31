@@ -20,7 +20,7 @@ package com.google.code.http.metrics;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  * 
  */
-public class ThreadLocalMetrics extends AbstractMetrics implements Metrics {
+public class ThreadLocalMetrics extends AbstractMetrics<Integer> {
 
 	protected static final ThreadLocal<ThreadLocalMetrics> local = new ThreadLocal<ThreadLocalMetrics>();
 
@@ -34,8 +34,8 @@ public class ThreadLocalMetrics extends AbstractMetrics implements Metrics {
 		return metrics == null ? new ThreadLocalMetrics() : metrics;
 	}
 
-	protected Counter<Long> createLongCounter() {
-		return new LongCounter();
+	protected Counter<Integer> createCounter() {
+		return new IntCounter();
 	}
 
 	@Override
@@ -47,8 +47,8 @@ public class ThreadLocalMetrics extends AbstractMetrics implements Metrics {
 		getInstance().getRequestTimer().start();
 	}
 
-	public static void requestStopped(long sent) {
-		Metrics metrics = getInstance();
+	public static void requestStopped(int sent) {
+		ThreadLocalMetrics metrics = getInstance();
 		metrics.getRequestTimer().stop();
 		metrics.getRequestTrafficCounter().increase(sent);
 	}
@@ -65,8 +65,8 @@ public class ThreadLocalMetrics extends AbstractMetrics implements Metrics {
 		getInstance().getResponseTimer().start();
 	}
 
-	public static void responseStopped(long sent) {
-		Metrics metrics = getInstance();
+	public static void responseStopped(int sent) {
+		ThreadLocalMetrics metrics = getInstance();
 		metrics.getResponseTimer().stop();
 		metrics.getResponseTrafficCounter().increase(sent);
 	}

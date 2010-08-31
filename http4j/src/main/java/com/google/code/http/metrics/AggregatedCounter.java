@@ -21,5 +21,5 @@ package com.google.code.http.metrics;
  */
 public interface AggregatedCounter<T extends Number> extends Counter<T> {
 	
-	void aggregate(Counter<T> counter);
+	void aggregate(Counter<? extends Number> counter);
 }

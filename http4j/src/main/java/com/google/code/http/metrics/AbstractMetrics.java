@@ -19,25 +19,25 @@ package com.google.code.http.metrics;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public abstract class AbstractMetrics implements Metrics {
+public abstract class AbstractMetrics<N extends Number> implements Metrics<N> {
 
 	protected Timer dnsTimer;
 	protected Timer connectionTimer;
 	protected Timer requestTimer;
 	protected Timer responseTimer;
-	protected Counter<Long> requestTrafficCounter;
-	protected Counter<Long> responseTrafficCounter;
+	protected Counter<N> requestTrafficCounter;
+	protected Counter<N> responseTrafficCounter;
 
 	protected AbstractMetrics() {
 		dnsTimer = createTimer();
 		connectionTimer = createTimer();
 		requestTimer = createTimer();
 		responseTimer = createTimer();
-		requestTrafficCounter = createLongCounter();
-		responseTrafficCounter = createLongCounter();
+		requestTrafficCounter = createCounter();
+		responseTrafficCounter = createCounter();
 	}
 
-	abstract protected Counter<Long> createLongCounter();
+	abstract protected Counter<N> createCounter();
 
 	abstract protected Timer createTimer();
 	
@@ -71,12 +71,12 @@ public abstract class AbstractMetrics implements Metrics {
 	}
 
 	@Override
-	public Counter<Long> getRequestTrafficCounter() {
+	public Counter<N> getRequestTrafficCounter() {
 		return requestTrafficCounter;
 	}
 
 	@Override
-	public Counter<Long> getResponseTrafficCounter() {
+	public Counter<N> getResponseTrafficCounter() {
 		return responseTrafficCounter;
 	}
 

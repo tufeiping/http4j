@@ -20,7 +20,7 @@ package com.google.code.http.metrics;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  * 
  */
-public interface Metrics {
+public interface Metrics <N extends Number>{
 
 	Timer getDnsTimer();
 
@@ -30,9 +30,9 @@ public interface Metrics {
 
 	Timer getResponseTimer();
 	
-	Counter<Long> getRequestTrafficCounter();
+	Counter<N> getRequestTrafficCounter();
 
-	Counter<Long> getResponseTrafficCounter();
+	Counter<N> getResponseTrafficCounter();
 	
 	void reset();
 }
