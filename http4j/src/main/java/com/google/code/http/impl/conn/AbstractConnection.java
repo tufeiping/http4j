@@ -21,6 +21,7 @@ import java.nio.ByteBuffer;
 
 import com.google.code.http.Connection;
 import com.google.code.http.Host;
+import com.google.code.http.metrics.ThreadLocalMetrics;
 import com.google.code.http.utils.IOUtils;
 
 /**
@@ -68,10 +69,12 @@ public abstract class AbstractConnection implements Connection {
 	@Override
 	public final void write(byte[] m) throws IOException {
 		writeFirstByte(m[0]);
+		ThreadLocalMetrics.requestStarted();
 		if (m.length > 1) {
 			write(m, 1, m.length - 1);
 		}
 		flush();
+		ThreadLocalMetrics.requestStopped();
 	}
 
 	protected ByteBuffer ensureSpace(ByteBuffer src, ByteBuffer dest) {

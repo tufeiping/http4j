@@ -78,13 +78,11 @@ public class SocketConnection extends AbstractConnection
 	@Override
 	protected void flush() throws IOException {
 		socket.getOutputStream().flush();
-		// TODO record time
 	}
 	
 	@Override
 	protected void writeFirstByte(byte b) throws IOException {
 		socket.getOutputStream().write(b);
-		// TODO record time
 	}
 
 	@Override
