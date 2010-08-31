@@ -25,9 +25,11 @@ import java.io.IOException;
  */
 public interface Connection extends Closeable {
 	
-	void setTimeout();
+	void connect() throws IOException;
 	
-	boolean isOpen();
+	void setTimeout(int timeout);
+	
+	boolean isClosed();
 	
 	byte[] read() throws IOException;
 	

@@ -28,4 +28,6 @@ public interface Host {
 	int getPort();
 	
 	String getProtocol();
+	
+	int getDefaultPort();
 }

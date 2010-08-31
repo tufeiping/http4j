@@ -25,18 +25,34 @@ import com.google.code.http.utils.IOUtils;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
- *
+ * 
  */
 public abstract class AbstractConnection implements Connection {
-	
+
 	protected Host host;
-	
+
+	protected int timeout;
+
 	public AbstractConnection(Host host) {
-		this.host = host;
+		this(host, 0);
 	}
-	
+
+	public AbstractConnection(Host host, int timeout) {
+		this.host = host;
+		this.timeout = timeout;
+	}
+
 	abstract protected int read(ByteBuffer buffer) throws IOException;
-	
+
+	// sending start event
+	abstract protected void writeFirstByte(byte b) throws IOException;
+
+	// sending event
+	abstract protected void write(byte[] m, int i, int j) throws IOException;
+
+	// sending stop event
+	abstract protected void flush() throws IOException;
+
 	@Override
 	public byte[] read() throws IOException {
 		ByteBuffer buffer = ByteBuffer.allocate(1 << 17);
@@ -48,9 +64,18 @@ public abstract class AbstractConnection implements Connection {
 		}
 		return IOUtils.extract(extended.position() == 0 ? buffer : extended);
 	}
-	
+
+	@Override
+	public final void write(byte[] m) throws IOException {
+		writeFirstByte(m[0]);
+		if (m.length > 1) {
+			write(m, 1, m.length - 1);
+		}
+		flush();
+	}
+
 	protected ByteBuffer ensureSpace(ByteBuffer src, ByteBuffer dest) {
-		return dest.remaining() < src.position() ? IOUtils.extendBuffer(dest): dest;
+		return dest.remaining() < src.position() ? IOUtils.extendBuffer(dest) : dest;
 	}
 
 	@Override

@@ -85,4 +85,9 @@ public final class BasicHost implements Host {
 			return false;
 		return true;
 	}
+
+	@Override
+	public int getDefaultPort() {
+		return "http".equals(protocol) ? 80 : 443;
+	}
 }
