@@ -46,6 +46,20 @@ public final class IOUtils {
 		}
 	}
 
+	/**
+	 * @param src
+	 * @param dest
+	 * @return ensure that destination buffer has enough remaining space to put
+	 *         the data in source
+	 */
+	public static ByteBuffer ensureSpace(ByteBuffer src, ByteBuffer dest) {
+		return dest.remaining() < src.position() ? extendBuffer(dest) : dest;
+	}
+
+	/**
+	 * @param buffer
+	 * @return extended buffer, the capacity becomes double of original
+	 */
 	public static ByteBuffer extendBuffer(ByteBuffer buffer) {
 		ByteBuffer newBuffer = ByteBuffer.allocate(buffer.capacity() << 1);
 		transfer(buffer, newBuffer);
@@ -65,31 +79,32 @@ public final class IOUtils {
 	}
 
 	/**
-	 * Extract data from buffer by given end expression.e.g.
-	 * <li>http4j [4j] -&gt; http</li>
-	 * <li>http4j [4] -&gt; http</li>
-	 * <li>http4j [ttp4j] -&gt; h</li>
-	 * <li>http4j [http4j] -&gt; ""</li>
-	 * <li>http4j [4g] -&gt; "http4j"</li>
+	 * Extract data from buffer by given end expression.e.g. <li>http4j [4j]
+	 * -&gt; http</li> <li>http4j [4] -&gt; http</li> <li>http4j [ttp4j] -&gt; h
+	 * </li> <li>http4j [http4j] -&gt; ""</li> <li>http4j [4g] -&gt; "http4j"</li>
+	 * 
 	 * @param buffer
-	 * @param endExpression minimum length of 1
+	 * @param endExpression
+	 *            minimum length of 1
 	 * @return bytes
 	 */
 	public static byte[] extractByEnd(ByteBuffer buffer, byte... endExpression) {
 		ByteBuffer valueHolder = ByteBuffer.allocate(buffer.limit());
 		byte b;
 		int count = 0;
-		while(buffer.hasRemaining() && count < endExpression.length) {
-			count = ((b = buffer.get()) == endExpression[count]) ? count + 1 : 0;
+		while (buffer.hasRemaining() && count < endExpression.length) {
+			count = ((b = buffer.get()) == endExpression[count]) ? count + 1
+					: 0;
 			valueHolder.put(b);
 		}
 		valueHolder.position(valueHolder.position() - count);
 		return extract(valueHolder);
 	}
-	
+
 	/**
-	 * Transfer data of src[0 - position] to dest buffer.
-	 * And then clear the src buffer.
+	 * Transfer data of src[0 - position] to dest buffer. And then clear the src
+	 * buffer.
+	 * 
 	 * @see ByteBuffer#flip()
 	 * @see ByteBuffer#put(ByteBuffer)
 	 * @see ByteBuffer#clear()

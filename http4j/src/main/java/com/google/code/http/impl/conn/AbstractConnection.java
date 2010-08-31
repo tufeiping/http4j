@@ -62,7 +62,7 @@ public abstract class AbstractConnection implements Connection {
 		ByteBuffer extended = ByteBuffer.allocate(1 << 18);
 		while (read(buffer) == buffer.capacity()) {
 			// Increasing buffer's capacity reduces the chance to get here
-			extended = ensureSpace(buffer, extended);
+			extended = IOUtils.ensureSpace(buffer, extended);
 			IOUtils.transfer(buffer, extended);
 		}
 		return IOUtils.extract(extended.position() == 0 ? buffer : extended);
@@ -84,10 +84,6 @@ public abstract class AbstractConnection implements Connection {
 		ThreadLocalMetrics.connectStarted();
 		doConnect();
 		ThreadLocalMetrics.connectStopped();
-	}
-
-	protected ByteBuffer ensureSpace(ByteBuffer src, ByteBuffer dest) {
-		return dest.remaining() < src.position() ? IOUtils.extendBuffer(dest) : dest;
 	}
 
 	@Override
