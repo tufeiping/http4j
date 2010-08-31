@@ -74,8 +74,9 @@ public abstract class AbstractConnection implements Connection {
 			extended = IOUtils.ensureSpace(buffer, extended);
 			IOUtils.transfer(buffer, extended);
 		}
-		ThreadLocalMetrics.responseStopped();
-		return IOUtils.extract(extended.position() == 0 ? buffer : extended);
+		byte[] data = IOUtils.extract(extended.position() == 0 ? buffer : extended);
+		ThreadLocalMetrics.responseStopped(data.length);
+		return data;
 	}
 
 	@Override
@@ -86,7 +87,7 @@ public abstract class AbstractConnection implements Connection {
 			write(m, 1, m.length - 1);
 		}
 		flush();
-		ThreadLocalMetrics.requestStopped();
+		ThreadLocalMetrics.requestStopped(m.length);
 	}
 
 	@Override

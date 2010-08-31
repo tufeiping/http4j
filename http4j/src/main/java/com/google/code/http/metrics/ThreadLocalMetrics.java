@@ -47,8 +47,10 @@ public class ThreadLocalMetrics extends AbstractMetrics implements Metrics {
 		getInstance().getRequestTimer().start();
 	}
 
-	public static void requestStopped() {
-		getInstance().getRequestTimer().stop();
+	public static void requestStopped(long sent) {
+		Metrics metrics = getInstance();
+		metrics.getRequestTimer().stop();
+		metrics.getRequestTrafficCounter().increase(sent);
 	}
 
 	public static void connectStarted() {
@@ -63,8 +65,10 @@ public class ThreadLocalMetrics extends AbstractMetrics implements Metrics {
 		getInstance().getResponseTimer().start();
 	}
 
-	public static void responseStopped() {
-		getInstance().getResponseTimer().stop();
+	public static void responseStopped(long sent) {
+		Metrics metrics = getInstance();
+		metrics.getResponseTimer().stop();
+		metrics.getResponseTrafficCounter().increase(sent);
 	}
 
 	public static void dnsLookupStarted() {
