@@ -69,12 +69,11 @@ public abstract class DnsCache {
 
 		protected InetAddress getInetAddress(String host)
 				throws UnknownHostException {
+			ThreadLocalMetricsRecorder.resetDnsTimer();
 			InetAddress address = CACHE.get(host);
 			if (address == null) {
 				address = lookupDns(host);
-				InetAddress exist = CACHE.putIfAbsent(host, address);// multi
-																		// request
-																		// concurrent
+				InetAddress exist = CACHE.putIfAbsent(host, address);
 				if (null != exist) {
 					address = exist;
 				}

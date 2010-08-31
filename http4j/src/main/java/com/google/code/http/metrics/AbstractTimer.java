@@ -38,7 +38,6 @@ public abstract class AbstractTimer<T extends Number> implements Timer {
 	
 	@Override
 	public void start() {
-		reset();
 		start = getCurrentTime();
 	}
 

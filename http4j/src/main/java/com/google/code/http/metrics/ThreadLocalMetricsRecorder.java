@@ -62,7 +62,9 @@ public class ThreadLocalMetricsRecorder extends AbstractMetricsRecorder<Integer>
 	}
 
 	public static void responseStarted() {
-		getInstance().getResponseTimer().start();
+		Timer timer = getInstance().getResponseTimer();
+		timer.reset();
+		timer.start();
 	}
 
 	public static void responseStopped(int sent) {
@@ -81,5 +83,9 @@ public class ThreadLocalMetricsRecorder extends AbstractMetricsRecorder<Integer>
 
 	public static void connectionCreated() {
 		getInstance().getConnectionCounter().increase(1);
+	}
+
+	public static void resetDnsTimer() {
+		getInstance().getDnsTimer().reset();
 	}
 }
