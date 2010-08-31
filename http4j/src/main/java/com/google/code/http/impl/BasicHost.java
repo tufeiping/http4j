@@ -17,6 +17,9 @@
 package com.google.code.http.impl;
 
 import com.google.code.http.Host;
+import com.google.code.http.impl.protocol.HttpProtocol;
+import com.google.code.http.impl.protocol.HttpsProtocol;
+import com.google.code.http.impl.protocol.Protocol;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -28,17 +31,18 @@ public final class BasicHost implements Host {
 	
 	private final int port;
 	
-	private final String protocol;
-	
-	private final String authority;
+	private final Protocol protocol;
 	
 	public BasicHost(String protocol, String name, int port) {
-		this.protocol = protocol;
+		this.protocol = selectProtocol(protocol);
 		this.name = name;
 		this.port = port;
-		this.authority = "TODO";
 	}
 	
+	private Protocol selectProtocol(String scheme) {
+		return "https".equals(scheme) ? HttpsProtocol.getInstance() : HttpProtocol.getInstance();
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -76,12 +80,12 @@ public final class BasicHost implements Host {
 
 	@Override
 	public String getAuthority() {
-		return authority;
+		return protocol.getAuthority(name, port);
 	}
 
 	@Override
 	public int getDefaultPort() {
-		return "http".equals(protocol) ? 80 : 443;
+		return protocol.getDefaultPort();
 	}
 
 	@Override
@@ -96,6 +100,6 @@ public final class BasicHost implements Host {
 
 	@Override
 	public String getProtocol() {
-		return protocol;
+		return protocol.getProtocol();
 	}
 }

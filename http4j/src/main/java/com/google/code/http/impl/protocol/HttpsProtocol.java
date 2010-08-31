@@ -21,6 +21,11 @@ package com.google.code.http.impl.protocol;
  */
 public final class HttpsProtocol extends AbstractProtocol implements Protocol {
 
+	private static final HttpsProtocol instance = new HttpsProtocol();
+	
+	private HttpsProtocol() {
+	}
+	
 	@Override
 	public int getDefaultPort() {
 		return 443;
@@ -29,6 +34,10 @@ public final class HttpsProtocol extends AbstractProtocol implements Protocol {
 	@Override
 	public String getProtocol() {
 		return "https";
+	}
+
+	public static HttpsProtocol getInstance() {
+		return instance;
 	}
 
 }
