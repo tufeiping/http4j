@@ -58,4 +58,12 @@ public class ThreadLocalMetrics extends AbstractMetrics implements Metrics {
 	public static void connectStopped() {
 		getInstance().getConnectionTimer().stop();
 	}
+
+	public static void responseStarted() {
+		getInstance().getResponseTimer().start();
+	}
+
+	public static void responseStopped() {
+		getInstance().getResponseTimer().stop();
+	}
 }
