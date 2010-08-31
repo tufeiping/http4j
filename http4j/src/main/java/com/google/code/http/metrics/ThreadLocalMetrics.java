@@ -66,4 +66,12 @@ public class ThreadLocalMetrics extends AbstractMetrics implements Metrics {
 	public static void responseStopped() {
 		getInstance().getResponseTimer().stop();
 	}
+
+	public static void dnsLookupStarted() {
+		getInstance().getDnsTimer().start();
+	}
+
+	public static void dnsLookupStopped() {
+		getInstance().getDnsTimer().stop();
+	}
 }
