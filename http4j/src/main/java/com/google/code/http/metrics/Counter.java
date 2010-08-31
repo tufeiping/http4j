@@ -20,10 +20,16 @@ package com.google.code.http.metrics;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public interface Counter<T extends Number> {
-	
+
 	T get();
-	
+
+	/**
+	 * Do not need to consider the total becomes greater than {@code MAX_VALUE}, this
+	 * will not happen normally
+	 * 
+	 * @param number
+	 */
 	void increase(T number);
-	
+
 	void reset();
 }
