@@ -37,4 +37,8 @@ public interface Metrics {
 	long getReceivingCost();
 
 	TimeUnit getTimeUnit();
+	
+	long getBytesSent();
+	
+	long getBytesReceived();
 }

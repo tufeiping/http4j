@@ -28,6 +28,8 @@ public abstract class AbstractMetrics<N extends Number> implements Metrics {
 	protected long receivingCost;
 	protected long sendingCost;
 	protected long waitingCost;
+	protected long bytesSent;
+	protected long bytesReceived;
 	
 	public AbstractMetrics(MetricsRecorder<N> recorder) {
 		connectingCost = getTimeCost(recorder.getConnectionTimer());
@@ -35,6 +37,8 @@ public abstract class AbstractMetrics<N extends Number> implements Metrics {
 		receivingCost = getTimeCost(recorder.getResponseTimer());
 		sendingCost = getTimeCost(recorder.getRequestTimer());
 		waitingCost = calculateWaiting(recorder.getRequestTimer(), recorder.getResponseTimer());
+		bytesSent = recorder.getRequestTrafficCounter().get().longValue();
+		bytesReceived = recorder.getResponseTrafficCounter().get().longValue();
 	}
 	
 	@Override
@@ -77,5 +81,15 @@ public abstract class AbstractMetrics<N extends Number> implements Metrics {
 	@Override
 	public long getWaitingCost() {
 		return waitingCost;
+	}
+	
+	@Override
+	public long getBytesSent() {
+		return bytesSent;
+	}
+	
+	@Override
+	public long getBytesReceived() {
+		return bytesReceived;
 	}
 }
