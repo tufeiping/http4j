@@ -31,15 +31,15 @@ public class StatusLineParser implements Parser<StatusLine, byte[]> {
 		return new BasicStatusLine(fields[0], Integer.parseInt(fields[1]), fields[2]);
 	}
 
-	protected static class BasicStatusLine implements StatusLine {
+	public static class BasicStatusLine implements StatusLine {
 		private static final long serialVersionUID = -5318592976726582472L;
 		protected final String version;
 		protected final int statusCode;
 		protected final String reason;
 
-		public BasicStatusLine(String version, int responseCode, String reason) {
+		public BasicStatusLine(String version, int statusCode, String reason) {
 			this.version = version;
-			this.statusCode = responseCode;
+			this.statusCode = statusCode;
 			this.reason = reason;
 		}
 
