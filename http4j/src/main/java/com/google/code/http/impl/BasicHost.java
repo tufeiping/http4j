@@ -24,44 +24,32 @@ import com.google.code.http.Host;
  */
 public final class BasicHost implements Host {
 
-	private String authority;
+	private final String name;
 	
-	private int port;
+	private final int port;
 	
-	private String protocol;
+	private final String protocol;
 	
-	public BasicHost(String protocol, String authority, int port) {
+	private final String authority;
+	
+	public BasicHost(String protocol, String name, int port) {
 		this.protocol = protocol;
-		this.authority = authority;
+		this.name = name;
 		this.port = port;
+		this.authority = "TODO";
 	}
 	
-	@Override
-	public String getAuthority() {
-		return authority;
-	}
-
-	@Override
-	public int getPort() {
-		return port;
-	}
-
-	@Override
-	public String getProtocol() {
-		return protocol;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((authority == null) ? 0 : authority.hashCode());
+				+ ((name == null) ? 0 : name.hashCode());
 		result = prime * result + port;
 		result = prime * result + ((protocol == null) ? 0 : protocol.hashCode());
 		return result;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -71,10 +59,10 @@ public final class BasicHost implements Host {
 		if (getClass() != obj.getClass())
 			return false;
 		BasicHost other = (BasicHost) obj;
-		if (authority == null) {
-			if (other.authority != null)
+		if (name == null) {
+			if (other.name != null)
 				return false;
-		} else if (!authority.equals(other.authority))
+		} else if (!name.equals(other.name))
 			return false;
 		if (port != other.port)
 			return false;
@@ -87,7 +75,27 @@ public final class BasicHost implements Host {
 	}
 
 	@Override
+	public String getAuthority() {
+		return authority;
+	}
+
+	@Override
 	public int getDefaultPort() {
 		return "http".equals(protocol) ? 80 : 443;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public int getPort() {
+		return port;
+	}
+
+	@Override
+	public String getProtocol() {
+		return protocol;
 	}
 }

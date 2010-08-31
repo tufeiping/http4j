@@ -16,18 +16,19 @@
 
 package com.google.code.http;
 
-
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
- *
+ * 
  */
 public interface Host {
-	
+
 	String getAuthority();
-	
-	int getPort();
-	
-	String getProtocol();
-	
+
 	int getDefaultPort();
+
+	String getName();
+
+	int getPort();
+
+	String getProtocol();
 }

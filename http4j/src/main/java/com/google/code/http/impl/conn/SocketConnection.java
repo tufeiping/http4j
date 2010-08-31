@@ -18,11 +18,8 @@ package com.google.code.http.impl.conn;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
 import com.google.code.http.Connection;
@@ -59,18 +56,6 @@ public class SocketConnection extends AbstractConnection
 	
 	protected Socket createSocket() {
 		return new Socket();
-	}
-
-	protected SocketAddress getSocketAddress(Host host)
-			throws UnknownHostException {
-		int port = (host.getPort() < 0) ? host.getDefaultPort() : host.getPort();
-		InetAddress address = getInetAddress(host);
-		return new InetSocketAddress(address, port);
-	}
-
-	protected InetAddress getInetAddress(Host host) {
-		// TODO get from DNS
-		return null;
 	}
 
 	@Override

@@ -17,9 +17,14 @@
 package com.google.code.http.impl.conn;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
 import com.google.code.http.Connection;
+import com.google.code.http.DnsCache;
 import com.google.code.http.Host;
 import com.google.code.http.metrics.ThreadLocalMetrics;
 import com.google.code.http.utils.IOUtils;
@@ -44,9 +49,9 @@ public abstract class AbstractConnection implements Connection {
 	}
 
 	abstract protected int read(ByteBuffer buffer) throws IOException;
-	
+
 	abstract protected byte readFirstByte() throws IOException;
-	
+
 	// before sending start event
 	abstract protected void writeFirstByte(byte b) throws IOException;
 
@@ -56,8 +61,8 @@ public abstract class AbstractConnection implements Connection {
 	// before sending stop event
 	abstract protected void flush() throws IOException;
 
-	abstract protected void doConnect() throws IOException ;
-	
+	abstract protected void doConnect() throws IOException;
+
 	@Override
 	public final byte[] read() throws IOException {
 		byte b = readFirstByte();
@@ -89,6 +94,21 @@ public abstract class AbstractConnection implements Connection {
 		ThreadLocalMetrics.connectStarted();
 		doConnect();
 		ThreadLocalMetrics.connectStopped();
+	}
+
+	protected SocketAddress getSocketAddress(Host host)
+			throws UnknownHostException {
+		int port = (host.getPort() < 0) ? host.getDefaultPort() : host
+				.getPort();
+		InetAddress address = getInetAddress(host);
+		return new InetSocketAddress(address, port);
+	}
+
+	protected InetAddress getInetAddress(Host host) throws UnknownHostException {
+		ThreadLocalMetrics.dnsLookupStarted();
+		InetAddress address = DnsCache.getAddress(host.getName());
+		ThreadLocalMetrics.dnsLookupStopped();
+		return address;
 	}
 
 	@Override
