@@ -22,8 +22,16 @@ package com.google.code.http.metrics;
  */
 public interface MetricsRecorder <N extends Number>{
 
+	/**
+	 * DNS timer should be reset firstly while getting from DNS Cache.
+	 * @return dnsTimer
+	 */
 	Timer getDnsTimer();
 
+	/**
+	 * Connection timer should be reset firstly while getting from Connection Pool.
+	 * @return
+	 */
 	Timer getConnectionTimer();
 
 	Timer getRequestTimer();
