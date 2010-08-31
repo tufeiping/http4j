@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class DnsCache {
 	private static volatile DnsCache instance = new InMemoryDnsCache();
-	
+
 	public static DnsCache getDefault() {
 		return instance;
 	}
@@ -33,32 +33,44 @@ public abstract class DnsCache {
 	public static void setDefault(DnsCache dnsCache) {
 		instance = dnsCache;
 	}
-	
-	public static InetAddress getAddress(String host) throws UnknownHostException {
+
+	/**
+	 * @param host
+	 * @return get address by host, create one if no one in cache and put it
+	 *         into the cache.
+	 * @throws UnknownHostException
+	 */
+	public static InetAddress getAddress(String host)
+			throws UnknownHostException {
 		return instance.getInetAddress(host);
 	}
-	
+
 	public static void cache(String host, InetAddress address) {
 		instance.doCache(host, address);
 	}
-	
-	abstract protected InetAddress getInetAddress(String host) throws UnknownHostException;
-	
+
+	abstract protected InetAddress getInetAddress(String host)
+			throws UnknownHostException;
+
 	abstract protected void doCache(String host, InetAddress address);
-	
+
 	public static class InMemoryDnsCache extends DnsCache {
 		protected static final ConcurrentHashMap<String, InetAddress> CACHE = new ConcurrentHashMap<String, InetAddress>();
-		
-		protected InetAddress lookupDns(String host) throws UnknownHostException {
+
+		protected InetAddress lookupDns(String host)
+				throws UnknownHostException {
 			return InetAddress.getByName(host);
 		}
-		
-		protected InetAddress getInetAddress(String host) throws UnknownHostException {
+
+		protected InetAddress getInetAddress(String host)
+				throws UnknownHostException {
 			InetAddress address = CACHE.get(host);
-			if(address == null) {
+			if (address == null) {
 				address = lookupDns(host);
-				InetAddress exist = CACHE.putIfAbsent(host, address);// multi request concurrent
-				if(null != exist) {
+				InetAddress exist = CACHE.putIfAbsent(host, address);// multi
+																		// request
+																		// concurrent
+				if (null != exist) {
 					address = exist;
 				}
 			}
