@@ -99,17 +99,9 @@ public abstract class AbstractConnection implements Connection {
 
 	protected SocketAddress getSocketAddress(Host host)
 			throws UnknownHostException {
-		int port = (host.getPort() < 0) ? host.getDefaultPort() : host
-				.getPort();
-		InetAddress address = getInetAddress(host);
-		return new InetSocketAddress(address, port);
-	}
-
-	protected InetAddress getInetAddress(Host host) throws UnknownHostException {
-		ThreadLocalMetricsRecorder.dnsLookupStarted();
+		int port = (host.getPort() < 0) ? host.getDefaultPort() : host.getPort();
 		InetAddress address = DnsCache.getAddress(host.getName());
-		ThreadLocalMetricsRecorder.dnsLookupStopped();
-		return address;
+		return new InetSocketAddress(address, port);
 	}
 
 	@Override

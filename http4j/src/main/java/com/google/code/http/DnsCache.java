@@ -20,6 +20,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.google.code.http.metrics.ThreadLocalMetricsRecorder;
+
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
@@ -59,7 +61,10 @@ public abstract class DnsCache {
 
 		protected InetAddress lookupDns(String host)
 				throws UnknownHostException {
-			return InetAddress.getByName(host);
+			ThreadLocalMetricsRecorder.dnsLookupStarted();
+			InetAddress address = InetAddress.getByName(host);
+			ThreadLocalMetricsRecorder.dnsLookupStopped();
+			return address;
 		}
 
 		protected InetAddress getInetAddress(String host)
