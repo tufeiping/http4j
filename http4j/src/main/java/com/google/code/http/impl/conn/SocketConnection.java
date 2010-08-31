@@ -93,6 +93,10 @@ public class SocketConnection extends AbstractConnection
 
 	@Override
 	protected byte readFirstByte() throws IOException {
-		return (byte) socket.getInputStream().read();
+		int read = socket.getInputStream().read();
+		if(read == -1) {
+			throw new IOException("Socket ends while reading the first byte.");
+		}
+		return (byte) read;
 	}
 }
