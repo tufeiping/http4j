@@ -22,6 +22,7 @@
 	<test name="http">
 		<packages>
 			<package name="com.google.code.http" />
+			<package name="com.google.code.http.metrics" />
 			<package name="com.google.code.http.impl" />
 			<package name="com.google.code.http.impl.utils" />
 		</packages>
