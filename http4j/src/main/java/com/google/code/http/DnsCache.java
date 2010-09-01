@@ -28,10 +28,13 @@ import com.google.code.http.metrics.ThreadLocalMetricsRecorder;
 public abstract class DnsCache {
 	private static volatile DnsCache instance = new InMemoryDnsCache();
 
-	public static DnsCache getDefault() {
-		return instance;
-	}
-
+	/**
+	 * This method would be used if the application need to extends
+	 * {@link InMemoryDnsCache}. For example, use database to store address,
+	 * etc.
+	 * 
+	 * @param dnsCache
+	 */
 	public static void setDefault(DnsCache dnsCache) {
 		instance = dnsCache;
 	}
