@@ -52,7 +52,7 @@ public abstract class AbstractRequest implements Request {
 	}
 	
 	public AbstractRequest(URL url) {
-		host = new BasicHost(url.getProtocol(), url.getAuthority(), url.getPort());
+		host = new BasicHost(url.getProtocol(), url.getHost(), url.getPort());
 		path = url.getPath().length() == 0 ? "/" : url.getPath();
 		query = new StringBuilder(url.getQuery() == null ? "" : url.getQuery());
 		headers = new LinkedList<Header>();
