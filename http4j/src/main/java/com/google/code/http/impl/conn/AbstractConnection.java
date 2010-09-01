@@ -104,6 +104,11 @@ public abstract class AbstractConnection implements Connection {
 		InetAddress address = DnsCache.getAddress(host.getName());
 		return new InetSocketAddress(address, port);
 	}
+	
+	@Override
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
+	}
 
 	@Override
 	public Host getHost() {

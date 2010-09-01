@@ -72,11 +72,6 @@ public class SocketConnection extends AbstractConnection
 	}
 
 	@Override
-	public void setTimeout(int timeout) {
-		this.timeout = timeout;
-	}
-
-	@Override
 	protected void flush() throws IOException {
 		socket.getOutputStream().flush();
 	}
