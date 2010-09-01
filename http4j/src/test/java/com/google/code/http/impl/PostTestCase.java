@@ -18,6 +18,7 @@ package com.google.code.http.impl;
 
 import java.net.MalformedURLException;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.google.code.http.Request;
@@ -45,6 +46,14 @@ public final class PostTestCase extends RequestTestCase {
 		assertion("http://www.google.com/search?q=http4j", "POST /search HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Content-Length:8\r\n\r\nq=http4j");
 		assertion("https://www.google.com:444/search?q=http4j&hl=en","POST /search HTTP/1.1\r\nHost:www.google.com:444\r\n" + getDefaultHeaderString() + "Content-Length:14\r\n\r\nq=http4j&hl=en");
 		assertion("http://localhost:8080/index.jsp;jsessionid=ABCDE?u=colin&pwd=http4j","POST /index.jsp;jsessionid=ABCDE HTTP/1.1\r\nHost:localhost:8080\r\n" + getDefaultHeaderString() + "Content-Length:18\r\n\r\nu=colin&pwd=http4j");
+	}
+	
+	@Test(dependsOnMethods = "toMessage")
+	public void addParameter_string_strings() throws MalformedURLException {
+		Post post = new Post("http://www.google.com/search");
+		post.addParameter("q", "http4j");
+		String message = post.toMessage();
+		Assert.assertEquals(message, "POST /search HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Content-Length:8\r\n\r\nq=http4j");
 	}
 
 	@Override
