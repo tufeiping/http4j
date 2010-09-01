@@ -66,10 +66,9 @@ public final class BasicHost implements Host {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + name.hashCode();
 		result = prime * result + port;
-		result = prime * result
-				+ ((protocol == null) ? 0 : protocol.hashCode());
+		result = prime * result	+ protocol.hashCode();
 		return result;
 	}
 
