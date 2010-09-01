@@ -19,8 +19,10 @@ package com.google.code.http;
 import java.net.MalformedURLException;
 
 import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import com.google.code.http.impl.AbstractRequest;
+import com.google.code.http.impl.BasicHost;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -41,6 +43,12 @@ public abstract class RequestTestCase {
 		+ AbstractRequest.DEFAULT_USER_AGENT
 		+ "\r\nAccept:" + AbstractRequest.DEFAULT_ACCEPT
 		+ "\r\n";
+	}
+	
+	@Test
+	public void getHost() throws MalformedURLException {
+		Request request = createRequest("http://www.google.com");
+		Assert.assertEquals(request.getHost(), new BasicHost("http", "www.google.com", -1));
 	}
 	
 	abstract protected Request createRequest(String url) throws MalformedURLException;
