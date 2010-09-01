@@ -26,6 +26,5 @@ public interface Headers {
 	String CONTENT_LENGTH = "Content-Length";
 	String USER_AGENT = "User-Agent";
 	String ACCEPT = "Accept";
-	
-	
+	String ACCEPT_ENCODING = "Accept-Encoding";
 }
