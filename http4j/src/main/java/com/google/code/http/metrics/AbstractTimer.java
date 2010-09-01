@@ -53,9 +53,4 @@ public abstract class AbstractTimer<T extends Number> implements Timer {
 	public long getStop() {
 		return stop.longValue();
 	}
-	
-	@Override
-	public String toString() {
-		return getStop() + " - " + getStart() + " = " + getDuration();
-	}
 }
