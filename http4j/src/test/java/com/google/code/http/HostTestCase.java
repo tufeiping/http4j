@@ -48,6 +48,30 @@ public final class HostTestCase {
 	}
 	
 	@Test
+	public void construct_cause_exception() {
+		try {
+			new BasicHost("ftp", host, 22);
+			Assert.fail("ftp should not be supported.");
+		} catch(IllegalArgumentException e) {
+			// OK
+		}
+		
+		try {
+			new BasicHost("http", null, 22);
+			Assert.fail("host name is required.");
+		} catch(IllegalArgumentException e) {
+			// OK
+		}
+		
+		try {
+			new BasicHost("http", "www.google.com", -3);
+			Assert.fail("host port is invalid.");
+		} catch(IllegalArgumentException e) {
+			// OK
+		}
+	}
+	
+	@Test
 	public void getName() {
 		Assert.assertEquals(googleHttp.getName(), host);
 		Assert.assertEquals(googleHttps.getName(), host);
@@ -85,5 +109,14 @@ public final class HostTestCase {
 		Assert.assertEquals(googleHttps.getDefaultPort(), 443);
 		Assert.assertEquals(specialHttp.getDefaultPort(), 80);
 		Assert.assertEquals(specialHttps.getDefaultPort(), 443);
+	}
+	
+	@Test
+	public void equals_object() {
+		Assert.assertTrue(googleHttp.equals(googleHttp));
+		Assert.assertTrue(googleHttp.equals(new BasicHost("http", "www.google.com", 80)));
+		Assert.assertFalse(googleHttp.equals(new Object()));
+		Assert.assertFalse(googleHttp.equals(googleHttps));
+		Assert.assertFalse(googleHttp.equals(null));
 	}
 }

@@ -23,37 +23,56 @@ import com.google.code.http.impl.protocol.Protocol;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
- *
+ * 
  */
 public final class BasicHost implements Host {
 
 	private final String name;
-	
+
 	private final int port;
-	
+
 	private final Protocol protocol;
-	
+
+	/**
+	 * @param protocol
+	 * @param name
+	 * @param port
+	 */
 	public BasicHost(String protocol, String name, int port) {
+		checkParameters(protocol, name, port);
 		this.protocol = selectProtocol(protocol);
 		this.name = name;
 		this.port = port;
 	}
-	
+
+	private void checkParameters(String _protocol, String _name, int _port) {
+		if (!"http".equals(_protocol) && !"https".equals(_protocol)) {
+			throw new IllegalArgumentException("Invalid protocol:" + _protocol);
+		}
+		if (null == _name || _name.length() == 0) {
+			throw new IllegalArgumentException("Invalid host name:" + _name);
+		}
+		if (_port < -1) {
+			throw new IllegalArgumentException("Invalid port number:" + _port);
+		}
+	}
+
 	private Protocol selectProtocol(String scheme) {
-		return "https".equals(scheme) ? HttpsProtocol.getInstance() : HttpProtocol.getInstance();
+		return "https".equals(scheme) ? HttpsProtocol.getInstance()
+				: HttpProtocol.getInstance();
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + port;
-		result = prime * result + ((protocol == null) ? 0 : protocol.hashCode());
+		result = prime * result
+				+ ((protocol == null) ? 0 : protocol.hashCode());
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -63,19 +82,9 @@ public final class BasicHost implements Host {
 		if (getClass() != obj.getClass())
 			return false;
 		BasicHost other = (BasicHost) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (port != other.port)
-			return false;
-		if (protocol == null) {
-			if (other.protocol != null)
-				return false;
-		} else if (!protocol.equals(other.protocol))
-			return false;
-		return true;
+		return name.equals(other.name) 
+				&& port == other.port
+				&& protocol.equals(other.protocol);
 	}
 
 	@Override
