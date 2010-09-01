@@ -111,4 +111,9 @@ public final class HostTestCase {
 		Assert.assertFalse(googleHttp.equals(googleHttps));
 		Assert.assertFalse(googleHttp.equals(null));
 	}
+	
+	@Test
+	public void _hashCode() {
+		Assert.assertEquals(googleHttp.hashCode(), new BasicHost("http", "www.google.com", 80).hashCode());
+	}
 }
