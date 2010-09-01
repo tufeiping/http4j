@@ -48,8 +48,9 @@ public final class GetTestCase extends RequestTestCase {
 	public void addParameter_string_strings() throws MalformedURLException {
 		Get get = new Get("http://www.google.com/search");
 		get.addParameter("q", "http4j");
-		String message = get.toMessage();
-		Assert.assertEquals(message, "GET /search?q=http4j HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "\r\n");
+		Assert.assertEquals(get.toMessage(), "GET /search?q=http4j HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "\r\n");
+		get.addParameter("m", "GET", "POST");
+		Assert.assertEquals(get.toMessage(), "GET /search?q=http4j&m=GET&m=POST HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "\r\n");
 	}
 	
 	@Test(dependsOnMethods = "toMessage")
