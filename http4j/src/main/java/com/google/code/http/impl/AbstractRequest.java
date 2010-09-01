@@ -103,18 +103,14 @@ public abstract class AbstractRequest implements Request {
 	@Override
 	public void setHeader(String name, String value) {
 		Header h = new CanonicalHeader(name, value);
-		boolean found = false;
 		for (int i = 0, size = headers.size(); i < size; i++) {
 			Header previous = headers.get(i);
-			found = previous.getName().equals(h.getName());
-			if (found) {
+			if (previous.getName().equals(h.getName())) {
 				headers.set(i, h);
-				break;
+				return;
 			}
 		}
-		if (!found) {
-			headers.add(h);
-		}
+		headers.add(h);
 	}
 	@Override
 	public final String toMessage() {
