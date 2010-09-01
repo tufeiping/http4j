@@ -49,23 +49,15 @@ public final class HostTestCase {
 	
 	@Test
 	public void construct_cause_exception() {
+		construct_with_error("ftp", host, 22);
+		construct_with_error("http", null, 22);
+		construct_with_error("http", "www.google.com", -3);
+	}
+	
+	private void construct_with_error(String protocol, String host, int port) {
 		try {
-			new BasicHost("ftp", host, 22);
-			Assert.fail("ftp should not be supported.");
-		} catch(IllegalArgumentException e) {
-			// OK
-		}
-		
-		try {
-			new BasicHost("http", null, 22);
-			Assert.fail("host name is required.");
-		} catch(IllegalArgumentException e) {
-			// OK
-		}
-		
-		try {
-			new BasicHost("http", "www.google.com", -3);
-			Assert.fail("host port is invalid.");
+			new BasicHost(protocol, host, port);
+			Assert.fail("Exception should be thrown, but not.");
 		} catch(IllegalArgumentException e) {
 			// OK
 		}
