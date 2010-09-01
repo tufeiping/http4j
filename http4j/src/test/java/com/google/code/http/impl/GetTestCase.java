@@ -21,6 +21,7 @@ import java.net.MalformedURLException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.google.code.http.Headers;
 import com.google.code.http.Request;
 import com.google.code.http.RequestTestCase;
 
@@ -49,6 +50,15 @@ public final class GetTestCase extends RequestTestCase {
 		get.addParameter("q", "http4j");
 		String message = get.toMessage();
 		Assert.assertEquals(message, "GET /search?q=http4j HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "\r\n");
+	}
+	
+	@Test(dependsOnMethods = "toMessage")
+	public void setHeader() throws MalformedURLException {
+		Get get = new Get("http://www.google.com");
+		get.setHeader(Headers.ACCEPT_ENCODING, "ISO-8859-1");
+		Assert.assertEquals(get.toMessage(), "GET / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Encoding:ISO-8859-1\r\n\r\n");
+		get.setHeader(Headers.ACCEPT_ENCODING, "UTF-8");
+		Assert.assertEquals(get.toMessage(), "GET / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Encoding:UTF-8\r\n\r\n");
 	}
 	
 	@Override

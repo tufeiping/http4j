@@ -21,6 +21,7 @@ import java.net.MalformedURLException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.google.code.http.Headers;
 import com.google.code.http.Request;
 import com.google.code.http.RequestTestCase;
 
@@ -56,6 +57,15 @@ public final class PostTestCase extends RequestTestCase {
 		Assert.assertEquals(message, "POST /search HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Content-Length:8\r\n\r\nq=http4j");
 	}
 
+	@Test(dependsOnMethods = "toMessage")
+	public void setHeader() throws MalformedURLException {
+		Post post = new Post("http://www.google.com/?u=http4j&p=http4j");
+		post.setHeader(Headers.ACCEPT_ENCODING, "ISO-8859-1");
+		Assert.assertEquals(post.toMessage(), "POST / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Encoding:ISO-8859-1\r\nContent-Length:17\r\n\r\nu=http4j&p=http4j");
+		post.setHeader(Headers.ACCEPT_ENCODING, "UTF-8");
+		Assert.assertEquals(post.toMessage(), "POST / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Encoding:UTF-8\r\nContent-Length:17\r\n\r\nu=http4j&p=http4j");
+	}
+	
 	@Override
 	protected Request createRequest(String url) throws MalformedURLException {
 		return new Post(url);
