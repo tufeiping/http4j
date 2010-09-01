@@ -18,6 +18,7 @@ package com.google.code.http.impl;
 
 import java.net.MalformedURLException;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.google.code.http.Request;
@@ -42,6 +43,14 @@ public final class GetTestCase extends RequestTestCase {
 		assertion("http://127.0.0.1:8080/index.xhtml;jsessionid=ABCDE?user=colin","GET /index.xhtml;jsessionid=ABCDE?user=colin HTTP/1.1\r\nHost:127.0.0.1:8080\r\n" + getDefaultHeaderString() + "\r\n");
 	}
 
+	@Test(dependsOnMethods = "toMessage")
+	public void addParameter_string_strings() throws MalformedURLException {
+		Get get = new Get("http://www.google.com/search");
+		get.addParameter("q", "http4j");
+		String message = get.toMessage();
+		Assert.assertEquals(message, "GET /search?q=http4j HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "\r\n");
+	}
+	
 	@Override
 	protected Request createRequest(String url) throws MalformedURLException {
 		return new Get(url);
