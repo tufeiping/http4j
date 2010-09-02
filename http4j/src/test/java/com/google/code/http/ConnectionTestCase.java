@@ -74,6 +74,13 @@ public final class ConnectionTestCase {
 	
 	@Test(dependsOnMethods = "read")
 	public void close() throws IOException {
+		Assert.assertFalse(connection.isClosed());
 		connection.close();
+		Assert.assertTrue(connection.isClosed());
+	}
+	
+	@Test
+	public void getHost() {
+		Assert.assertEquals(connection.getHost(), host);
 	}
 }
