@@ -25,9 +25,13 @@ public class IntCounter implements Counter<Integer> {
 	protected Integer total;
 	
 	public IntCounter() {
-		reset();
+		this(0);
 	}
 	
+	public IntCounter(int i) {
+		this.total = i;
+	}
+
 	@Override
 	public Integer get() {
 		return total;
