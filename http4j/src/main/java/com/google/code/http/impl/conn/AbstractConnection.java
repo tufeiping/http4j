@@ -68,16 +68,17 @@ public abstract class AbstractConnection implements Connection {
 	public final byte[] read() throws IOException {
 		byte b = readFirstByte();
 		ThreadLocalMetricsRecorder.responseStarted();
-		ByteBuffer buffer = ByteBuffer.allocate(1 << 17);
-		ByteBuffer extended = ByteBuffer.allocate(1 << 18).put(b);
+		ByteBuffer buffer = ByteBuffer.allocate(2 << 19);
+		ByteBuffer extended = ByteBuffer.allocate(buffer.capacity() << 1);
 		while (read(buffer) == buffer.capacity()) {
 			// Increasing buffer's capacity reduces the chance to get here
 			extended = IOUtils.ensureSpace(buffer, extended);
 			IOUtils.transfer(buffer, extended);
 		}
 		byte[] data = IOUtils.extract(extended.position() == 0 ? buffer : extended);
-		ThreadLocalMetricsRecorder.responseStopped(data.length);
-		return data;
+		extended = ByteBuffer.allocate(data.length + 1).put(b).put(data);
+		ThreadLocalMetricsRecorder.responseStopped(extended.capacity());
+		return extended.array();
 	}
 
 	@Override

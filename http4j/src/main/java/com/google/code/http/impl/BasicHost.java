@@ -33,11 +33,10 @@ public final class BasicHost implements Host {
 
 	private final Protocol protocol;
 
-	/**
-	 * @param protocol
-	 * @param name
-	 * @param port
-	 */
+	public BasicHost(String name) {
+		this("http", name, 80);
+	}
+	
 	public BasicHost(String protocol, String name, int port) {
 		checkParameters(protocol, name, port);
 		this.protocol = selectProtocol(protocol);
