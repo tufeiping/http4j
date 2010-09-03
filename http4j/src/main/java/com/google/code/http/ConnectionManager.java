@@ -20,10 +20,16 @@ package com.google.code.http;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public interface ConnectionManager {
-	
+
 	Connection acquire(Host host);
-	
-	void release(Connection connection);
-	
+
+	/**
+	 * @param connection
+	 * @return <code>true</code> if the connection has been release,
+	 *         <code>false</code> if the manager has been shutdown or connection
+	 *         is closed.
+	 */
+	boolean release(Connection connection);
+
 	void shutdown();
 }
