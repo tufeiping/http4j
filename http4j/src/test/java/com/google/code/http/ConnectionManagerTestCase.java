@@ -57,7 +57,7 @@ public final class ConnectionManagerTestCase {
 	public void release() {
 		boolean success1 = manager.release(connection1);
 		boolean success2 = manager.release(connection2);
-		Assert.assertTrue(success1 & success2);
+		Assert.assertTrue(success1 && success2);
 	}
 	
 	@Test(dependsOnMethods = "release")
