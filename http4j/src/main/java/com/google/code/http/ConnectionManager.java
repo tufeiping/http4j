@@ -24,4 +24,6 @@ public interface ConnectionManager {
 	Connection acquire(Host host);
 	
 	void release(Connection connection);
+	
+	void shutdown();
 }
