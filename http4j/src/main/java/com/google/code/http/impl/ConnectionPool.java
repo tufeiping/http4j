@@ -51,7 +51,7 @@ public class ConnectionPool implements ConnectionManager {
 	public Connection acquire(Host host) {
 		Queue<Connection> queue = getFreeQueue(host);
 		Connection connection = queue.poll();// do not use blocking queue
-		connection = connection == null ? createConnection(host) : connection;
+		connection = connection == null || connection.isClosed() ? createConnection(host) : connection;
 		increaseUsed(host);
 		return connection;
 	}
@@ -71,7 +71,7 @@ public class ConnectionPool implements ConnectionManager {
 
 	@Override
 	public void shutdown() {
-		if(shutdown.compareAndSet(false, true)) {
+		if (shutdown.compareAndSet(false, true)) {
 			closeAllConnections();
 			free.clear();
 			used.clear();
@@ -84,8 +84,8 @@ public class ConnectionPool implements ConnectionManager {
 
 	private void closeAllConnections() {
 		Collection<ConcurrentLinkedQueue<Connection>> queues = free.values();
-		for(ConcurrentLinkedQueue<Connection> queue : queues) {
-			while(!queue.isEmpty()) {
+		for (ConcurrentLinkedQueue<Connection> queue : queues) {
+			while (!queue.isEmpty()) {
 				IOUtils.close(queue.poll());
 			}
 		}
@@ -103,7 +103,8 @@ public class ConnectionPool implements ConnectionManager {
 		ConcurrentLinkedQueue<Connection> queue = free.get(host);
 		if (queue == null) {
 			queue = new ConcurrentLinkedQueue<Connection>();
-			ConcurrentLinkedQueue<Connection> exist = free.putIfAbsent(host, queue);
+			ConcurrentLinkedQueue<Connection> exist = free.putIfAbsent(host,
+					queue);
 			queue = exist == null ? queue : exist;
 		}
 		return queue;
