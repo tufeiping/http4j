@@ -35,11 +35,12 @@ public class SocketConnection extends AbstractConnection
 	protected Socket socket;
 
 	public SocketConnection(Host host) {
-		super(host);
+		this(host, 0);
 	}
 	
 	public SocketConnection(Host host, int timeout) {
 		super(host, timeout);
+		socket = createSocket();
 	}
 
 	@Override
@@ -50,7 +51,6 @@ public class SocketConnection extends AbstractConnection
 	@Override
 	public void doConnect() throws IOException {
 		SocketAddress address = getSocketAddress(host);
-		socket = createSocket();
 		socket.connect(address, timeout);
 	}
 	
