@@ -19,7 +19,7 @@ package com.google.code.http.impl;
 import java.util.Collection;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -34,7 +34,7 @@ import com.google.code.http.utils.IOUtils;
  */
 public class ConnectionPool implements ConnectionManager {
 
-	protected ConcurrentHashMap<Host, Queue<Connection>> free;
+	protected ConcurrentHashMap<Host, ConcurrentLinkedQueue<Connection>> free;
 
 	// TODO this field might be used by customized connection reuse strategy
 	protected ConcurrentHashMap<Host, AtomicInteger> used;
@@ -42,7 +42,7 @@ public class ConnectionPool implements ConnectionManager {
 	protected AtomicBoolean shutdown;
 
 	public ConnectionPool() {
-		free = new ConcurrentHashMap<Host, Queue<Connection>>();
+		free = new ConcurrentHashMap<Host, ConcurrentLinkedQueue<Connection>>();
 		used = new ConcurrentHashMap<Host, AtomicInteger>();
 		shutdown = new AtomicBoolean(false);
 	}
@@ -50,7 +50,7 @@ public class ConnectionPool implements ConnectionManager {
 	@Override
 	public Connection acquire(Host host) {
 		Queue<Connection> queue = getFreeQueue(host);
-		Connection connection = queue.poll();
+		Connection connection = queue.poll();// do not use blocking queue
 		connection = connection == null ? createConnection(host) : connection;
 		increaseUsed(host);
 		return connection;
@@ -79,13 +79,9 @@ public class ConnectionPool implements ConnectionManager {
 		return new SocketConnection(host);
 	}
 
-	protected Queue<Connection> createQueue() {
-		return new LinkedBlockingQueue<Connection>();
-	}
-
 	private void closeAllConnections() {
-		Collection<Queue<Connection>> queues = free.values();
-		for(Queue<Connection> queue : queues) {
+		Collection<ConcurrentLinkedQueue<Connection>> queues = free.values();
+		for(ConcurrentLinkedQueue<Connection> queue : queues) {
 			while(!queue.isEmpty()) {
 				IOUtils.close(queue.poll());
 			}
@@ -100,11 +96,11 @@ public class ConnectionPool implements ConnectionManager {
 		getUsedCounter(host).decrementAndGet();
 	}
 
-	private Queue<Connection> getFreeQueue(Host host) {
-		Queue<Connection> queue = free.get(host);
+	private ConcurrentLinkedQueue<Connection> getFreeQueue(Host host) {
+		ConcurrentLinkedQueue<Connection> queue = free.get(host);
 		if (queue == null) {
-			queue = createQueue();
-			Queue<Connection> exist = free.putIfAbsent(host, queue);
+			queue = new ConcurrentLinkedQueue<Connection>();
+			ConcurrentLinkedQueue<Connection> exist = free.putIfAbsent(host, queue);
 			queue = exist == null ? queue : exist;
 		}
 		return queue;
