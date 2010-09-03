@@ -69,10 +69,11 @@ public class ConnectionPool implements ConnectionManager {
 
 	@Override
 	public void shutdown() {
-		shutdown.compareAndSet(false, true);
-		closeAllConnections();
-		free.clear();
-		used.clear();
+		if(shutdown.compareAndSet(false, true)) {
+			closeAllConnections();
+			free.clear();
+			used.clear();
+		}
 	}
 
 	protected Connection createConnection(Host host) {
