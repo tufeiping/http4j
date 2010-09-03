@@ -49,11 +49,7 @@ public class ConnectionPool implements ConnectionManager {
 
 	@Override
 	public Connection acquire(Host host) {
-		Queue<Connection> queue = getFreeQueue(host);
-		Connection connection = queue.poll();// do not use blocking queue
-		connection = connection == null || connection.isClosed() ? createConnection(host) : connection;
-		increaseUsed(host);
-		return connection;
+		return shutdown.get() ? null : getConnection(host);
 	}
 
 	@Override
@@ -81,6 +77,15 @@ public class ConnectionPool implements ConnectionManager {
 	protected Connection createConnection(Host host) {
 		return new SocketConnection(host);
 	}
+	
+	private Connection getConnection(Host host) {
+		Queue<Connection> queue = getFreeQueue(host);
+		Connection connection = queue.poll();// do not use blocking queue
+		connection = connection == null || connection.isClosed() ? createConnection(host) : connection;
+		increaseUsed(host);
+		return connection;
+	}
+
 
 	private void closeAllConnections() {
 		Collection<ConcurrentLinkedQueue<Connection>> queues = free.values();
