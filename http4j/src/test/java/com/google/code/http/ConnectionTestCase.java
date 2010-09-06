@@ -83,4 +83,17 @@ public final class ConnectionTestCase {
 	public void getHost() {
 		Assert.assertEquals(connection.getHost(), host);
 	}
+	
+	@Test
+	public void isReusable() {
+		Assert.assertTrue(connection.isReusable());
+	}
+	
+	@Test(dependsOnMethods = "isReusable")
+	public void setReusable() {
+		connection.setReusable(false);
+		Assert.assertFalse(connection.isReusable());
+		connection.setReusable(true);
+		Assert.assertTrue(connection.isReusable());
+	}
 }

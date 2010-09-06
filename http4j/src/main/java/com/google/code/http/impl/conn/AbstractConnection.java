@@ -123,4 +123,9 @@ public abstract class AbstractConnection implements Connection {
 	public void setReusable(boolean reusable) {
 		this.reusable = reusable;
 	}
+	
+	@Override
+	public boolean isReusable() {
+		return reusable;
+	}
 }

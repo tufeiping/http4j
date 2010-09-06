@@ -38,4 +38,6 @@ public interface Connection extends Closeable {
 	Host getHost();
 	
 	void setReusable(boolean reusable);
+	
+	boolean isReusable();
 }

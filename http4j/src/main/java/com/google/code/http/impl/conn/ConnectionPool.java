@@ -52,7 +52,7 @@ public class ConnectionPool implements ConnectionManager {
 
 	@Override
 	public boolean release(Connection connection) {
-		boolean success = !shutdown.get() && !connection.isClosed();
+		boolean success = !shutdown.get() && connection.isReusable() && !connection.isClosed();
 		if (success) {
 			Host host = connection.getHost();
 			Queue<Connection> queue = getFreeQueue(host);
