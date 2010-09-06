@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.code.http.impl;
+package com.google.code.http.impl.conn;
 
 import java.util.Collection;
 import java.util.Queue;
@@ -26,7 +26,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.google.code.http.Connection;
 import com.google.code.http.ConnectionManager;
 import com.google.code.http.Host;
-import com.google.code.http.impl.conn.SocketConnection;
 import com.google.code.http.utils.IOUtils;
 
 /**
@@ -36,7 +35,6 @@ public class ConnectionPool implements ConnectionManager {
 
 	protected ConcurrentHashMap<Host, ConcurrentLinkedQueue<Connection>> free;
 
-	// TODO this field might be used by customized connection reuse strategy
 	protected ConcurrentHashMap<Host, AtomicInteger> used;
 
 	protected AtomicBoolean shutdown;

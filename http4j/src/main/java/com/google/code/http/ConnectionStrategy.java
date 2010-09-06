@@ -16,26 +16,10 @@
 
 package com.google.code.http;
 
-import java.io.Closeable;
-import java.io.IOException;
-
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  *
  */
-public interface Connection extends Closeable {
+public interface ConnectionStrategy {
 	
-	void connect() throws IOException;
-	
-	void setTimeout(int timeout);
-	
-	boolean isClosed();
-	
-	byte[] read() throws IOException;
-	
-	void write(byte[] message) throws IOException;
-	
-	Host getHost();
-	
-	void setReusable(boolean reusable);
 }

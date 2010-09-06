@@ -38,6 +38,8 @@ public abstract class AbstractConnection implements Connection {
 	protected Host host;
 
 	protected int timeout;
+	
+	protected boolean reusable;
 
 	public AbstractConnection(Host host) {
 		this(host, 0);
@@ -46,6 +48,7 @@ public abstract class AbstractConnection implements Connection {
 	public AbstractConnection(Host host, int timeout) {
 		this.host = host;
 		this.timeout = timeout;
+		this.reusable = true;
 		ThreadLocalMetricsRecorder.connectionCreated();
 	}
 
@@ -114,5 +117,10 @@ public abstract class AbstractConnection implements Connection {
 	@Override
 	public Host getHost() {
 		return host;
+	}
+	
+	@Override
+	public void setReusable(boolean reusable) {
+		this.reusable = reusable;
 	}
 }
