@@ -126,6 +126,6 @@ public abstract class AbstractConnection implements Connection {
 	
 	@Override
 	public boolean isReusable() {
-		return reusable;
+		return reusable && !isClosed();
 	}
 }

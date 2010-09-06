@@ -39,5 +39,9 @@ public interface Connection extends Closeable {
 	
 	void setReusable(boolean reusable);
 	
+	/**
+	 * @return <code>true</code> if the connection is based on HTTP/1.1 above and is not closed.
+	 * 			<code>false</code> if the connection is based on HTTP/1.0 or is closed.
+	 */
 	boolean isReusable();
 }

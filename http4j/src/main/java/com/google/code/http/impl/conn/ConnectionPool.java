@@ -52,7 +52,7 @@ public class ConnectionPool implements ConnectionManager {
 
 	@Override
 	public boolean release(Connection connection) {
-		boolean success = !shutdown.get() && connection.isReusable() && !connection.isClosed();
+		boolean success = !shutdown.get() && connection.isReusable();
 		if (success) {
 			Host host = connection.getHost();
 			Queue<Connection> queue = getFreeQueue(host);
@@ -83,7 +83,6 @@ public class ConnectionPool implements ConnectionManager {
 		increaseUsed(host);
 		return connection;
 	}
-
 
 	private void closeAllConnections() {
 		Collection<ConcurrentLinkedQueue<Connection>> queues = free.values();

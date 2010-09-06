@@ -90,6 +90,7 @@ public class SocketConnection extends AbstractConnection
 	protected byte readFirstByte() throws IOException {
 		int read = socket.getInputStream().read();
 		if(read == -1) {
+			IOUtils.close(socket);
 			throw new IOException("Socket ends while reading the first byte.");
 		}
 		return (byte) read;
