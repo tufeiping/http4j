@@ -21,7 +21,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.code.http.impl.BasicHost;
-import com.google.code.http.impl.ConnectionPool;
+import com.google.code.http.impl.conn.ConnectionPool;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
