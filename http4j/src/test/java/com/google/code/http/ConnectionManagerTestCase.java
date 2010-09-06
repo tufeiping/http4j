@@ -65,5 +65,7 @@ public final class ConnectionManagerTestCase {
 		manager.shutdown();
 		Connection connection = manager.acquire(host);
 		Assert.assertNull(connection);
+		boolean released = manager.release(connection);
+		Assert.assertFalse(released);
 	}
 }
