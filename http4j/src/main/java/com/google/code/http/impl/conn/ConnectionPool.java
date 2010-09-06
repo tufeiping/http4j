@@ -20,8 +20,8 @@ import java.util.Collection;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.code.http.Connection;
 import com.google.code.http.ConnectionManager;
@@ -35,32 +35,38 @@ public class ConnectionPool implements ConnectionManager {
 
 	protected ConcurrentHashMap<Host, ConcurrentLinkedQueue<Connection>> free;
 
-	protected ConcurrentHashMap<Host, AtomicInteger> used;
+	protected ConcurrentHashMap<Host, Semaphore> used;
 
 	protected AtomicBoolean shutdown;
+	
+	protected int maxConnectionsPerHost;
 
 	public ConnectionPool() {
+		this(15);
+	}
+	
+	public ConnectionPool(int maxConnectionsPerHost) {
 		free = new ConcurrentHashMap<Host, ConcurrentLinkedQueue<Connection>>();
-		used = new ConcurrentHashMap<Host, AtomicInteger>();
+		used = new ConcurrentHashMap<Host, Semaphore>();
 		shutdown = new AtomicBoolean(false);
+		this.maxConnectionsPerHost = maxConnectionsPerHost;
 	}
 
 	@Override
-	public Connection acquire(Host host) {
+	public Connection acquire(Host host) throws InterruptedException {
 		return shutdown.get() ? null : getConnection(host);
 	}
 
 	@Override
 	public boolean release(Connection connection) {
-		boolean success = !shutdown.get() && connection.isReusable();
-		if (success) {
+		boolean reuse = !shutdown.get() && connection.isReusable();
+		if (reuse) {
 			Host host = connection.getHost();
 			Queue<Connection> queue = getFreeQueue(host);
-			if (queue.offer(connection)) {
-				decreaseUsed(host);
-			}
+			reuse = queue.offer(connection);
 		}
-		return success;
+		decreaseUsed(connection.getHost());
+		return reuse;
 	}
 
 	@Override
@@ -76,11 +82,11 @@ public class ConnectionPool implements ConnectionManager {
 		return new SocketConnection(host);
 	}
 	
-	private Connection getConnection(Host host) {
+	private Connection getConnection(Host host) throws InterruptedException {
 		Queue<Connection> queue = getFreeQueue(host);
-		Connection connection = queue.poll();// do not use blocking queue
-		connection = connection == null || connection.isClosed() ? createConnection(host) : connection;
 		increaseUsed(host);
+		Connection connection = queue.poll();
+		connection = connection == null || connection.isClosed() ? createConnection(host) : connection;
 		return connection;
 	}
 
@@ -93,12 +99,12 @@ public class ConnectionPool implements ConnectionManager {
 		}
 	}
 
-	private void increaseUsed(Host host) {
-		getUsedCounter(host).incrementAndGet();
+	private void increaseUsed(Host host) throws InterruptedException {
+		getSemaphore(host).acquire();
 	}
 
 	private void decreaseUsed(Host host) {
-		getUsedCounter(host).decrementAndGet();
+		getSemaphore(host).release();
 	}
 
 	private ConcurrentLinkedQueue<Connection> getFreeQueue(Host host) {
@@ -112,13 +118,18 @@ public class ConnectionPool implements ConnectionManager {
 		return queue;
 	}
 
-	private AtomicInteger getUsedCounter(Host host) {
-		AtomicInteger counter = used.get(host);
-		if (counter == null) {
-			counter = new AtomicInteger(0);
-			AtomicInteger exist = used.putIfAbsent(host, counter);
-			counter = exist == null ? counter : exist;
+	private Semaphore getSemaphore(Host host) {
+		Semaphore semaphore = used.get(host);
+		if (semaphore == null) {
+			semaphore = new Semaphore(maxConnectionsPerHost);
+			Semaphore exist = used.putIfAbsent(host, semaphore);
+			semaphore = exist == null ? semaphore : exist;
 		}
-		return counter;
+		return semaphore;
+	}
+	
+	@Override
+	public void setMaxConnectionsPerHost(int maxConnectionsPerHost) {
+		this.maxConnectionsPerHost = maxConnectionsPerHost;
 	}
 }

@@ -43,7 +43,7 @@ public final class ConnectionManagerTestCase {
 	}
 	
 	@Test
-	public void acquire() {
+	public void acquire() throws InterruptedException {
 		connection1 = manager.acquire(host);
 		Assert.assertNotNull(connection1);
 		Assert.assertEquals(connection1.getHost(), host);
@@ -61,11 +61,11 @@ public final class ConnectionManagerTestCase {
 	}
 	
 	@Test(dependsOnMethods = "release")
-	public void shutdown() {
+	public void shutdown() throws InterruptedException {
 		manager.shutdown();
 		Connection connection = manager.acquire(host);
 		Assert.assertNull(connection);
-		boolean released = manager.release(connection);
+		boolean released = manager.release(connection1);
 		Assert.assertFalse(released);
 	}
 }

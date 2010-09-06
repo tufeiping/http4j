@@ -21,7 +21,7 @@ package com.google.code.http;
  */
 public interface ConnectionManager {
 
-	Connection acquire(Host host);
+	Connection acquire(Host host) throws InterruptedException;
 
 	/**
 	 * @param connection
@@ -31,5 +31,7 @@ public interface ConnectionManager {
 	 */
 	boolean release(Connection connection);
 
+	void setMaxConnectionsPerHost(int maxConnectionsPerHost);
+	
 	void shutdown();
 }
