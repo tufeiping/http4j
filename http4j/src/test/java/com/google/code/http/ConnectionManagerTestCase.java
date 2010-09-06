@@ -16,6 +16,14 @@
 
 package com.google.code.http;
 
+import java.util.Collections;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -27,21 +35,21 @@ import com.google.code.http.impl.conn.ConnectionPool;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public final class ConnectionManagerTestCase {
-	
+
 	private ConnectionManager manager;
-	
+
 	private Host host;
-	
+
 	private Connection connection1;
-	
+
 	private Connection connection2;
-	
+
 	@BeforeClass
 	public void beforeClass() {
 		manager = new ConnectionPool();
 		host = new BasicHost("www.google.com");
 	}
-	
+
 	@Test
 	public void acquire() throws InterruptedException {
 		connection1 = manager.acquire(host);
@@ -52,14 +60,14 @@ public final class ConnectionManagerTestCase {
 		Assert.assertEquals(connection2.getHost(), host);
 		Assert.assertFalse(connection1 == connection2);
 	}
-	
+
 	@Test(dependsOnMethods = "acquire")
 	public void release() {
 		boolean success1 = manager.release(connection1);
 		boolean success2 = manager.release(connection2);
 		Assert.assertTrue(success1 && success2);
 	}
-	
+
 	@Test(dependsOnMethods = "release")
 	public void shutdown() throws InterruptedException {
 		manager.shutdown();
@@ -67,5 +75,24 @@ public final class ConnectionManagerTestCase {
 		Assert.assertNull(connection);
 		boolean released = manager.release(connection1);
 		Assert.assertFalse(released);
+	}
+
+	@Test(expectedExceptions = TimeoutException.class)
+	public void setMaxConnectionsPerHost() throws InterruptedException,
+			ExecutionException, TimeoutException {
+		final ConnectionManager pool = new ConnectionPool();
+		pool.setMaxConnectionsPerHost(1);
+		Connection connection = pool.acquire(host);
+		Assert.assertNotNull(connection);
+		pool.release(connection);
+		connection = pool.acquire(host);
+		Assert.assertNotNull(connection);
+		ExecutorService service = Executors.newSingleThreadExecutor();
+		service.invokeAny(Collections.singleton(new Callable<Connection>() {
+			@Override
+			public Connection call() throws Exception {
+				return pool.acquire(host);
+			}
+		}), 2, TimeUnit.SECONDS);
 	}
 }

@@ -21,6 +21,13 @@ package com.google.code.http;
  */
 public interface ConnectionManager {
 
+	/**
+	 * @see #setMaxConnectionsPerHost(int)
+	 * @param host
+	 * @return connection for {@code host}, blocked util connections for this
+	 *         host is less than max connections per host value.
+	 * @throws InterruptedException
+	 */
 	Connection acquire(Host host) throws InterruptedException;
 
 	/**
@@ -32,6 +39,6 @@ public interface ConnectionManager {
 	boolean release(Connection connection);
 
 	void setMaxConnectionsPerHost(int maxConnectionsPerHost);
-	
+
 	void shutdown();
 }
