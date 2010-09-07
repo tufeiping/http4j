@@ -16,12 +16,11 @@
 
 package com.google.code.http.metrics;
 
-
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public abstract class AbstractMetrics implements Metrics {
-	
+public class BasicMetrics implements Metrics {
+
 	protected long connectingCost;
 	protected long dnsLookupCost;
 	protected long receivingCost;
@@ -29,59 +28,77 @@ public abstract class AbstractMetrics implements Metrics {
 	protected long waitingCost;
 	protected long bytesSent;
 	protected long bytesReceived;
-	
-	public AbstractMetrics(MetricsRecorder recorder) {
-		connectingCost = getTimeCost(recorder.getConnectionTimer());
-		dnsLookupCost = getTimeCost(recorder.getDnsTimer());
-		receivingCost = getTimeCost(recorder.getResponseTimer());
-		sendingCost = getTimeCost(recorder.getRequestTimer());
-		waitingCost = calculateWaiting(recorder.getRequestTimer(), recorder.getResponseTimer());
-		bytesSent = recorder.getRequestTransportCounter().get().longValue();
-		bytesReceived = recorder.getResponseTransportCounter().get().longValue();
-	}
-	
-	protected long getTimeCost(Timer timer) {
-		return timer.getDuration();
-	}
-	
-	protected long calculateWaiting(Timer requestTimer, Timer responseTimer) {
-		long stop = responseTimer.getStart();
-		long start = requestTimer.getStop();
-		return stop - start;
+
+	public BasicMetrics() {
+		super();
 	}
 
-	@Override
+	public BasicMetrics(long connectingCost, long dnsLookupCost,
+			long receivingCost, long sendingCost, long waitingCost,
+			long bytesSent, long bytesReceived) {
+		super();
+		this.connectingCost = connectingCost;
+		this.dnsLookupCost = dnsLookupCost;
+		this.receivingCost = receivingCost;
+		this.sendingCost = sendingCost;
+		this.waitingCost = waitingCost;
+		this.bytesSent = bytesSent;
+		this.bytesReceived = bytesReceived;
+	}
+
 	public long getConnectingCost() {
 		return connectingCost;
 	}
 
-	@Override
+	public void setConnectingCost(long connectingCost) {
+		this.connectingCost = connectingCost;
+	}
+
 	public long getDnsLookupCost() {
 		return dnsLookupCost;
 	}
 
-	@Override
+	public void setDnsLookupCost(long dnsLookupCost) {
+		this.dnsLookupCost = dnsLookupCost;
+	}
+
 	public long getReceivingCost() {
 		return receivingCost;
 	}
 
-	@Override
+	public void setReceivingCost(long receivingCost) {
+		this.receivingCost = receivingCost;
+	}
+
 	public long getSendingCost() {
 		return sendingCost;
 	}
 
-	@Override
+	public void setSendingCost(long sendingCost) {
+		this.sendingCost = sendingCost;
+	}
+
 	public long getWaitingCost() {
 		return waitingCost;
 	}
-	
-	@Override
+
+	public void setWaitingCost(long waitingCost) {
+		this.waitingCost = waitingCost;
+	}
+
 	public long getBytesSent() {
 		return bytesSent;
 	}
-	
-	@Override
+
+	public void setBytesSent(long bytesSent) {
+		this.bytesSent = bytesSent;
+	}
+
 	public long getBytesReceived() {
 		return bytesReceived;
+	}
+
+	public void setBytesReceived(long bytesReceived) {
+		this.bytesReceived = bytesReceived;
 	}
 }
