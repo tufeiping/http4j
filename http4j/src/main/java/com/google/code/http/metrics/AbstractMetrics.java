@@ -16,12 +16,11 @@
 
 package com.google.code.http.metrics;
 
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public abstract class AbstractMetrics<N extends Number> implements Metrics {
+public abstract class AbstractMetrics implements Metrics {
 	
 	protected long connectingCost;
 	protected long dnsLookupCost;
@@ -31,7 +30,7 @@ public abstract class AbstractMetrics<N extends Number> implements Metrics {
 	protected long bytesSent;
 	protected long bytesReceived;
 	
-	public AbstractMetrics(MetricsRecorder<N> recorder) {
+	public AbstractMetrics(MetricsRecorder recorder) {
 		connectingCost = getTimeCost(recorder.getConnectionTimer());
 		dnsLookupCost = getTimeCost(recorder.getDnsTimer());
 		receivingCost = getTimeCost(recorder.getResponseTimer());
@@ -39,13 +38,6 @@ public abstract class AbstractMetrics<N extends Number> implements Metrics {
 		waitingCost = calculateWaiting(recorder.getRequestTimer(), recorder.getResponseTimer());
 		bytesSent = recorder.getRequestTransportCounter().get().longValue();
 		bytesReceived = recorder.getResponseTransportCounter().get().longValue();
-	}
-	
-	@Override
-	abstract public TimeUnit getTimeUnit();
-	
-	protected long convert(long duration, TimeUnit timeUnit) {
-		return getTimeUnit().convert(duration, timeUnit);
 	}
 	
 	protected long getTimeCost(Timer timer) {

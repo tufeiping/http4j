@@ -16,41 +16,41 @@
 
 package com.google.code.http.metrics;
 
-import java.util.concurrent.atomic.AtomicLong;
-
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
+ *
  */
-public class AtomicLongCounter implements AggregatedCounter<Long> {
+public class AtomicIntegerCounter implements AggregatedCounter<Integer> {
 	
-	protected AtomicLong total;
+	protected AtomicInteger total;
 	
-	public AtomicLongCounter() {
+	public AtomicIntegerCounter() {
 		this(0);
 	}
 	
-	public AtomicLongCounter(int i) {
-		total = new AtomicLong(i);
+	public AtomicIntegerCounter(int i) {
+		total = new AtomicInteger(i);
 	}
-
+	
 	@Override
-	public Long get() {
+	public Integer get() {
 		return total.get();
 	}
 
 	@Override
-	public void increase(Long number) {
+	public void increase(Integer number) {
 		total.addAndGet(number);
 	}
 
 	@Override
-	public void aggregate(Counter<? extends Number> counter) {
-		total.addAndGet(counter.get().longValue());
+	public void reset() {
+		total = new AtomicInteger(0);
 	}
 
 	@Override
-	public void reset() {
-		total = new AtomicLong(0);
+	public void aggregate(Counter<? extends Number> counter) {
+		total.addAndGet(counter.get().intValue());
 	}
 }

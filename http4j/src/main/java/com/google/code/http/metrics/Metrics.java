@@ -16,7 +16,6 @@
 
 package com.google.code.http.metrics;
 
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -35,8 +34,6 @@ public interface Metrics {
 	long getWaitingCost();
 
 	long getReceivingCost();
-
-	TimeUnit getTimeUnit();
 	
 	long getBytesSent();
 	

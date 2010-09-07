@@ -20,7 +20,7 @@ package com.google.code.http.metrics;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  * 
  */
-public interface MetricsRecorder <N extends Number>{
+public interface MetricsRecorder {
 
 	/**
 	 * DNS timer should be reset firstly while getting from DNS Cache.
@@ -38,16 +38,16 @@ public interface MetricsRecorder <N extends Number>{
 
 	Timer getResponseTimer();
 	
-	Counter<N> getConnectionCounter();
+	Counter<Integer> getConnectionCounter();
 	
 	/**
 	 * @return the counter of request-response conversations
 	 */
-	Counter<N> getConversationCounter();
+	Counter<Integer> getConversationCounter();
 	
-	Counter<N> getRequestTransportCounter();
+	Counter<Long> getRequestTransportCounter();
 
-	Counter<N> getResponseTransportCounter();
+	Counter<Long> getResponseTransportCounter();
 	
 	void reset();
 }

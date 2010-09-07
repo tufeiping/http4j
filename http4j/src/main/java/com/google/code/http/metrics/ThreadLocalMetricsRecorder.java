@@ -20,7 +20,7 @@ package com.google.code.http.metrics;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  * 
  */
-public class ThreadLocalMetricsRecorder extends AbstractMetricsRecorder<Integer> {
+public class ThreadLocalMetricsRecorder extends AbstractMetricsRecorder {
 
 	protected static final ThreadLocal<ThreadLocalMetricsRecorder> local = new ThreadLocal<ThreadLocalMetricsRecorder>();
 
@@ -34,10 +34,16 @@ public class ThreadLocalMetricsRecorder extends AbstractMetricsRecorder<Integer>
 		return recorder == null ? new ThreadLocalMetricsRecorder() : recorder;
 	}
 
-	protected Counter<Integer> createCounter() {
+	@Override
+	protected Counter<Integer> createIntegerCounter() {
 		return new IntCounter();
 	}
 
+	@Override
+	protected Counter<Long> createLongCounter() {
+		return new LongCounter();
+	}
+	
 	@Override
 	protected Timer createTimer() {
 		return new NanoSecondTimer();
@@ -47,7 +53,7 @@ public class ThreadLocalMetricsRecorder extends AbstractMetricsRecorder<Integer>
 		getInstance().getRequestTimer().start();
 	}
 
-	public static void requestStopped(int sent) {
+	public static void requestStopped(long sent) {
 		ThreadLocalMetricsRecorder recorder = getInstance();
 		recorder.getRequestTimer().stop();
 		recorder.getRequestTransportCounter().increase(sent);
@@ -67,7 +73,7 @@ public class ThreadLocalMetricsRecorder extends AbstractMetricsRecorder<Integer>
 		timer.start();
 	}
 
-	public static void responseStopped(int sent) {
+	public static void responseStopped(long sent) {
 		ThreadLocalMetricsRecorder recorder = getInstance();
 		recorder.getResponseTimer().stop();
 		recorder.getResponseTransportCounter().increase(sent);

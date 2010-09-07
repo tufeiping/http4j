@@ -16,10 +16,7 @@
 
 package com.google.code.http.metrics;
 
-import java.util.concurrent.TimeUnit;
-
 /**
- * All time unit should be {@link TimeUnit#NANOSECONDS}
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public interface Timer {

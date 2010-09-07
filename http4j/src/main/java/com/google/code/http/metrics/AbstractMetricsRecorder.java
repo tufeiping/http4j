@@ -19,32 +19,34 @@ package com.google.code.http.metrics;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public abstract class AbstractMetricsRecorder<N extends Number> implements MetricsRecorder<N> {
+public abstract class AbstractMetricsRecorder implements MetricsRecorder {
 
 	protected Timer dnsTimer;
 	protected Timer connectionTimer;
 	protected Timer requestTimer;
 	protected Timer responseTimer;
-	protected Counter<N> requestTransportCounter;
-	protected Counter<N> responseTransportCounter;
-	protected Counter<N> connectionCounter;
-	protected Counter<N> conversationCounter;
+	protected Counter<Long> requestTransportCounter;
+	protected Counter<Long> responseTransportCounter;
+	protected Counter<Integer> connectionCounter;
+	protected Counter<Integer> conversationCounter;
 
 	protected AbstractMetricsRecorder() {
 		dnsTimer = createTimer();
 		connectionTimer = createTimer();
 		requestTimer = createTimer();
 		responseTimer = createTimer();
-		requestTransportCounter = createCounter();
-		responseTransportCounter = createCounter();
-		connectionCounter = createCounter();
-		conversationCounter = createCounter();
+		requestTransportCounter = createLongCounter();
+		responseTransportCounter = createLongCounter();
+		connectionCounter = createIntegerCounter();
+		conversationCounter = createIntegerCounter();
 	}
 
-	abstract protected Counter<N> createCounter();
+	abstract protected Counter<Long> createLongCounter();
+
+	abstract protected Counter<Integer> createIntegerCounter();
 
 	abstract protected Timer createTimer();
-	
+
 	@Override
 	public Timer getDnsTimer() {
 		return dnsTimer;
@@ -75,22 +77,22 @@ public abstract class AbstractMetricsRecorder<N extends Number> implements Metri
 	}
 
 	@Override
-	public Counter<N> getRequestTransportCounter() {
+	public Counter<Long> getRequestTransportCounter() {
 		return requestTransportCounter;
 	}
 
 	@Override
-	public Counter<N> getResponseTransportCounter() {
+	public Counter<Long> getResponseTransportCounter() {
 		return responseTransportCounter;
 	}
-	
+
 	@Override
-	public Counter<N> getConnectionCounter() {
+	public Counter<Integer> getConnectionCounter() {
 		return connectionCounter;
 	}
-	
+
 	@Override
-	public Counter<N> getConversationCounter() {
+	public Counter<Integer> getConversationCounter() {
 		return conversationCounter;
 	}
 }
