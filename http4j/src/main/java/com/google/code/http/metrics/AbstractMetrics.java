@@ -49,12 +49,12 @@ public abstract class AbstractMetrics<N extends Number> implements Metrics {
 	}
 	
 	protected long getTimeCost(Timer timer) {
-		return convert(timer.getDuration(), timer.getTimeUnit());
+		return timer.getDuration();
 	}
 	
 	protected long calculateWaiting(Timer requestTimer, Timer responseTimer) {
-		long stop = convert(responseTimer.getStart(), responseTimer.getTimeUnit());
-		long start = convert(requestTimer.getStop(), requestTimer.getTimeUnit());
+		long stop = responseTimer.getStart();
+		long start = requestTimer.getStop();
 		return stop - start;
 	}
 

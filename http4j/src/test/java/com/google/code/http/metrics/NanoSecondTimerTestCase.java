@@ -16,8 +16,6 @@
 
 package com.google.code.http.metrics;
 
-import java.util.concurrent.TimeUnit;
-
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -32,11 +30,6 @@ public final class NanoSecondTimerTestCase {
 	@BeforeClass
 	public void beforeClass() {
 		timer = new NanoSecondTimer();
-	}
-	
-	@Test
-	public void getTimeUnit() {
-		Assert.assertEquals(timer.getTimeUnit(), TimeUnit.NANOSECONDS);
 	}
 	
 	@Test

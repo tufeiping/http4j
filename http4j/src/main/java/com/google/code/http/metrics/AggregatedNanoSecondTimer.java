@@ -16,7 +16,6 @@
 
 package com.google.code.http.metrics;
 
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -53,10 +52,5 @@ public class AggregatedNanoSecondTimer extends AbstractTimer<AtomicLong> impleme
 	@Override
 	protected AtomicLong getCurrentTime() {
 		return new AtomicLong(System.nanoTime());
-	}
-
-	@Override
-	public TimeUnit getTimeUnit() {
-		return TimeUnit.NANOSECONDS;
 	}
 }

@@ -16,8 +16,6 @@
 
 package com.google.code.http.metrics;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
@@ -27,11 +25,6 @@ public class NanoSecondTimer extends AbstractTimer<Long> implements Timer {
 	public void reset() {
 		start = 0L;
 		stop = 0L;
-	}
-	
-	@Override
-	public TimeUnit getTimeUnit() {
-		return TimeUnit.NANOSECONDS;
 	}
 
 	@Override
