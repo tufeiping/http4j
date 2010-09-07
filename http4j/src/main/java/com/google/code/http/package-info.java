@@ -15,6 +15,3 @@
  */
 
 package com.google.code.http;
-
-// this package is used for refactory
-// FIXME do remember to make things as simple as possible.
