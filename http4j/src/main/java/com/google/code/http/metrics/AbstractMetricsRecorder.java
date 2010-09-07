@@ -95,4 +95,44 @@ public abstract class AbstractMetricsRecorder implements MetricsRecorder {
 	public Counter<Integer> getConversationCounter() {
 		return conversationCounter;
 	}
+
+	@Override
+	public Metrics captureMetrics() {
+		return new Metrics() {
+			@Override
+			public long getDnsLookupCost() {
+				return dnsTimer.getDuration();
+			}
+
+			@Override
+			public long getConnectingCost() {
+				return connectionTimer.getDuration();
+			}
+
+			@Override
+			public long getSendingCost() {
+				return requestTimer.getDuration();
+			}
+
+			@Override
+			public long getWaitingCost() {
+				return responseTimer.getStart() - requestTimer.getStop();
+			}
+
+			@Override
+			public long getReceivingCost() {
+				return responseTimer.getDuration();
+			}
+
+			@Override
+			public long getBytesSent() {
+				return requestTransportCounter.get();
+			}
+
+			@Override
+			public long getBytesReceived() {
+				return responseTransportCounter.get();
+			}
+		};
+	}
 }

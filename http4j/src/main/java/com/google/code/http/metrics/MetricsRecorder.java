@@ -49,5 +49,10 @@ public interface MetricsRecorder {
 
 	Counter<Long> getResponseTransportCounter();
 	
+	/**
+	 * @return snapshot at calling moment
+	 */
+	Metrics captureMetrics();
+	
 	void reset();
 }
