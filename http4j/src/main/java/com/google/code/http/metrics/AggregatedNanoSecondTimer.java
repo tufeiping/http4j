@@ -25,6 +25,8 @@ public class AggregatedNanoSecondTimer extends AbstractTimer<AtomicLong> impleme
 	
 	@Override
 	public void aggregate(Timer timer) {
+		if(start.compareAndSet(0, timer.getStart()))
+			return;
 		minStart(timer.getStart());
 		maxStop(timer.getStop());
 	}
