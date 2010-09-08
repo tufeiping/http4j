@@ -20,8 +20,7 @@ package com.google.code.http.metrics;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class SpanTimer extends AbstractAggregatedTimer
-		implements AggregatedTimer {
+public class SpanTimer extends AbstractAggregatedTimer {
 
 	@Override
 	public void aggregate(Timer timer) {

@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public abstract class AbstractAggregatedTimer extends AbstractTimer<AtomicLong> {
+public abstract class AbstractAggregatedTimer extends AbstractTimer<AtomicLong> implements AggregatedTimer{
 	@Override
 	public void reset() {
 		start = new AtomicLong(0);
