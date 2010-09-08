@@ -21,8 +21,11 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class AggregatedNanoSecondTimer extends AbstractTimer<AtomicLong> implements AggregatedTimer {
-	
+public class AggregatedNanoSecondTimer extends AbstractTimer<AtomicLong>
+		implements AggregatedTimer {
+
+	// TODO: some timer need to record total duration such as execution time,
+	// but some need just aggregate all durations such as total response time
 	@Override
 	public void aggregate(Timer timer) {
 		minStart(timer.getStart());
@@ -30,21 +33,21 @@ public class AggregatedNanoSecondTimer extends AbstractTimer<AtomicLong> impleme
 	}
 
 	protected void minStart(long t) {
-		if(start.compareAndSet(0, t))
+		if (start.compareAndSet(0, t))
 			return;
 		long s;
 		do {
 			s = getStart();
-		} while(t < s && !start.compareAndSet(s, t));
+		} while (t < s && !start.compareAndSet(s, t));
 	}
-	
+
 	protected void maxStop(long t) {
 		long s;
 		do {
 			s = getStop();
-		} while(t > s && !stop.compareAndSet(s, t));
+		} while (t > s && !stop.compareAndSet(s, t));
 	}
-	
+
 	@Override
 	public void reset() {
 		start = new AtomicLong(0);
