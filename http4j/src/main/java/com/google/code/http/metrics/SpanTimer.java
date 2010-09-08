@@ -16,16 +16,13 @@
 
 package com.google.code.http.metrics;
 
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class AggregatedNanoSecondTimer extends AbstractTimer<AtomicLong>
+public class SpanTimer extends AbstractAggregatedTimer
 		implements AggregatedTimer {
 
-	// TODO: some timer need to record total duration such as execution time,
-	// but some need just aggregate all durations such as total response time
 	@Override
 	public void aggregate(Timer timer) {
 		minStart(timer.getStart());
@@ -46,16 +43,5 @@ public class AggregatedNanoSecondTimer extends AbstractTimer<AtomicLong>
 		do {
 			s = getStop();
 		} while (t > s && !stop.compareAndSet(s, t));
-	}
-
-	@Override
-	public void reset() {
-		start = new AtomicLong(0);
-		stop = new AtomicLong(0);
-	}
-
-	@Override
-	protected AtomicLong getCurrentTime() {
-		return new AtomicLong(System.nanoTime());
 	}
 }

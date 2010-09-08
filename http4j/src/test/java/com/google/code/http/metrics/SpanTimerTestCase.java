@@ -32,12 +32,12 @@ import org.testng.annotations.Test;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  *
  */
-public final class AggregatedNanoSecondTimerTestCase {
-	private AggregatedNanoSecondTimer timer;
+public final class SpanTimerTestCase {
+	private SpanTimer timer;
 
 	@BeforeClass
 	public void beforeClass() {
-		timer = new AggregatedNanoSecondTimer();
+		timer = new SpanTimer();
 	}
 
 	@Test

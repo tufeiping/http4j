@@ -46,6 +46,6 @@ public class AggregatedMetricsRecorder extends AbstractMetricsRecorder {
 
 	@Override
 	protected Timer createTimer() {
-		return new AggregatedNanoSecondTimer();
+		return new SpanTimer();
 	}
 }
