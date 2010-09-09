@@ -16,17 +16,15 @@
 
 package com.google.code.http;
 
+import java.net.URI;
+import java.util.Collection;
+
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
- *
  */
-public interface Headers {
+public interface CookieCache {
 	
-	String HOST = "Host";
-	String CONTENT_LENGTH = "Content-Length";
-	String USER_AGENT = "User-Agent";
-	String ACCEPT = "Accept";
-	String ACCEPT_ENCODING = "Accept-Encoding";
-	String REQUEST_COOKIE = "Cookie";
-	String RESPONSE_COOKIE = "Set-Cookie";
+	int storeCookies(URI uri, Collection<Header> headers);
+	
+	Header getCookies(URI uri);
 }
