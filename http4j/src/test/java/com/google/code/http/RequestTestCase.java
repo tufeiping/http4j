@@ -17,6 +17,7 @@
 package com.google.code.http;
 
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -33,7 +34,7 @@ public abstract class RequestTestCase {
 	/*
 	 * m should not consider default headers message
 	 */
-	protected void assertion(String url, String m) throws MalformedURLException {
+	protected void assertion(String url, String m) throws MalformedURLException, URISyntaxException {
 		Request r = createRequest(url);
 		Assert.assertEquals(r.toMessage(), m);
 	}
@@ -46,10 +47,10 @@ public abstract class RequestTestCase {
 	}
 	
 	@Test
-	public void getHost() throws MalformedURLException {
+	public void getHost() throws MalformedURLException, URISyntaxException {
 		Request request = createRequest("http://www.google.com");
 		Assert.assertEquals(request.getHost(), new BasicHost("http", "www.google.com", -1));
 	}
 	
-	abstract protected Request createRequest(String url) throws MalformedURLException;
+	abstract protected Request createRequest(String url) throws MalformedURLException, URISyntaxException;
 }

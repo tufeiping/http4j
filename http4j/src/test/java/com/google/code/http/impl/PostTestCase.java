@@ -17,6 +17,7 @@
 package com.google.code.http.impl;
 
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.testng.Assert;
@@ -33,25 +34,25 @@ import com.google.code.http.RequestTestCase;
 public final class PostTestCase extends RequestTestCase {
 	
 	@Test(expectedExceptions = MalformedURLException.class)
-	public void construct_cause_exception() throws MalformedURLException {
+	public void construct_cause_exception() throws MalformedURLException, URISyntaxException {
 		new Post("code.google.com");
 	}
 	
 	@Test(expectedExceptions = IllegalStateException.class)
-	public void toMessage_cause_exception() throws MalformedURLException {
+	public void toMessage_cause_exception() throws MalformedURLException, URISyntaxException {
 		Request request = createRequest("http://www.google.com");
 		request.toMessage();
 	}
 	
 	@Test
-	public void toMessage() throws MalformedURLException {
+	public void toMessage() throws MalformedURLException, URISyntaxException {
 		assertion("http://www.google.com/search?q=http4j", "POST /search HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Content-Length:8\r\n\r\nq=http4j");
 		assertion("https://www.google.com:444/search?q=http4j&hl=en","POST /search HTTP/1.1\r\nHost:www.google.com:444\r\n" + getDefaultHeaderString() + "Content-Length:14\r\n\r\nq=http4j&hl=en");
 		assertion("http://localhost:8080/index.jsp;jsessionid=ABCDE?u=colin&pwd=http4j","POST /index.jsp;jsessionid=ABCDE HTTP/1.1\r\nHost:localhost:8080\r\n" + getDefaultHeaderString() + "Content-Length:18\r\n\r\nu=colin&pwd=http4j");
 	}
 	
 	@Test(dependsOnMethods = "toMessage")
-	public void addParameter_string_strings() throws MalformedURLException {
+	public void addParameter_string_strings() throws MalformedURLException, URISyntaxException {
 		Post post = new Post("http://www.google.com/search");
 		post.addParameter("q", "http4j");
 		Assert.assertEquals( post.toMessage(), "POST /search HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Content-Length:8\r\n\r\nq=http4j");
@@ -60,7 +61,7 @@ public final class PostTestCase extends RequestTestCase {
 	}
 
 	@Test(dependsOnMethods = "toMessage")
-	public void setHeader() throws MalformedURLException {
+	public void setHeader() throws MalformedURLException, URISyntaxException {
 		Post post = new Post("http://www.google.com/?u=http4j&p=http4j");
 		post.setHeader(Headers.ACCEPT_ENCODING, "ISO-8859-1");
 		Assert.assertEquals(post.toMessage(), "POST / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Encoding:ISO-8859-1\r\nContent-Length:17\r\n\r\nu=http4j&p=http4j");
@@ -69,14 +70,14 @@ public final class PostTestCase extends RequestTestCase {
 	}
 	
 	@Test(dependsOnMethods = "toMessage")
-	public void construct_url() throws MalformedURLException {
+	public void construct_url() throws MalformedURLException, URISyntaxException {
 		URL url = new URL("http://www.google.com/search?q=http4j");
 		Post post = new Post(url);
 		Assert.assertEquals(post.toMessage(), "POST /search HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Content-Length:8\r\n\r\nq=http4j");
 	}
 	
 	@Override
-	protected Request createRequest(String url) throws MalformedURLException {
+	protected Request createRequest(String url) throws MalformedURLException, URISyntaxException {
 		return new Post(url);
 	}
 }
