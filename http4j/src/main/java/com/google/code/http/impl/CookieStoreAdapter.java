@@ -90,10 +90,9 @@ public class CookieStoreAdapter implements CookieCache {
 	}
 
 	@Override
-	public int set(URI uri, Collection<Header> headers) {
+	public void set(URI uri, Collection<Header> headers) {
 		for (Header header : headers) {
 			processHeader(uri, header);
 		}
-		return headers.size();
 	}
 }
