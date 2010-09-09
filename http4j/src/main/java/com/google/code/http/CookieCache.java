@@ -24,7 +24,7 @@ import java.util.Collection;
  */
 public interface CookieCache {
 	
-	int storeCookies(URI uri, Collection<Header> headers);
+	int set(URI uri, Collection<Header> headers);
 	
-	Header getCookies(URI uri);
+	Header get(URI uri);
 }

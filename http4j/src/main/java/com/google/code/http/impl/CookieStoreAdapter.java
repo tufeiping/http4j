@@ -65,7 +65,7 @@ public class CookieStoreAdapter implements CookieCache {
 	}
 	
 	@Override
-	public Header getCookies(URI uri) {
+	public Header get(URI uri) {
 		List<HttpCookie> cookies = store.get(uri);
 		return null == cookies || cookies.isEmpty()? null : convertToHeader(cookies);
 	}
@@ -90,7 +90,7 @@ public class CookieStoreAdapter implements CookieCache {
 	}
 
 	@Override
-	public int storeCookies(URI uri, Collection<Header> headers) {
+	public int set(URI uri, Collection<Header> headers) {
 		for (Header header : headers) {
 			processHeader(uri, header);
 		}
