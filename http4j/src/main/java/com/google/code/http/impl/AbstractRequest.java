@@ -17,6 +17,8 @@
 package com.google.code.http.impl;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,13 +48,16 @@ public abstract class AbstractRequest implements Request {
 	protected StringBuilder query;
 	
 	protected String path;
+	
+	protected URI uri;
 
-	public AbstractRequest(String url) throws MalformedURLException {
+	public AbstractRequest(String url) throws MalformedURLException, URISyntaxException {
 		this(new URL(url));
 	}
 	
-	public AbstractRequest(URL url) {
+	public AbstractRequest(URL url) throws URISyntaxException {
 		host = new BasicHost(url.getProtocol(), url.getHost(), url.getPort());
+		uri = url.toURI();
 		path = url.getPath().length() == 0 ? "/" : url.getPath();
 		query = new StringBuilder(url.getQuery() == null ? "" : url.getQuery());
 		headers = new LinkedList<Header>();
@@ -118,5 +123,10 @@ public abstract class AbstractRequest implements Request {
 		m.append(formatHeaders());
 		m.append(HTTP.CRLF).append(HTTP.CRLF).append(formatBody());
 		return m.toString();
+	}
+	
+	@Override
+	public URI getURI() {
+		return uri;
 	}
 }

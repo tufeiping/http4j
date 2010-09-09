@@ -16,6 +16,8 @@
 
 package com.google.code.http;
 
+import java.net.URI;
+
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -23,6 +25,8 @@ package com.google.code.http;
 public interface Request extends Message {
 	
 	Host getHost();
+	
+	URI getURI();
 	
 	/**
 	 * Add the parameter with specified name and values.
