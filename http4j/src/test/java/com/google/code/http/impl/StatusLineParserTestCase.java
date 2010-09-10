@@ -16,6 +16,8 @@
 
 package com.google.code.http.impl;
 
+import java.io.IOException;
+
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -37,13 +39,13 @@ public final class StatusLineParserTestCase {
 	}
 	
 	@Test
-	public void parse() {
+	public void parse() throws IOException {
 		assertion("HTTP/1.1 200 OK", "HTTP/1.1", 200, "OK");
 		assertion("HTTP/1.1 404\tNot Found", "HTTP/1.1", 404, "Not Found");
 		assertion("HTTP/1.1	204  No Content", "HTTP/1.1", 204, "No Content");
 	}
 	
-	private void assertion(String source, String version, int statusCode, String reason) {
+	private void assertion(String source, String version, int statusCode, String reason) throws IOException {
 		byte[] line = source.getBytes();
 		StatusLine statusLine = parser.parse(line);
 		Assert.assertNotNull(statusLine);
