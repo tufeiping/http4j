@@ -31,10 +31,10 @@ import com.google.code.http.Headers;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
- * 
  */
 public class CookieStoreAdapter implements CookieCache {
-
+	
+	// FIXME : This only works for English Locale now because of JDK bug
 	protected CookieStore store;
 
 	public CookieStoreAdapter() {
