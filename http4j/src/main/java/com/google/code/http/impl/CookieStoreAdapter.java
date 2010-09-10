@@ -24,7 +24,6 @@ import java.net.HttpCookie;
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 
 import com.google.code.http.CookieCache;
 import com.google.code.http.Header;
@@ -39,8 +38,6 @@ public class CookieStoreAdapter implements CookieCache {
 
 	public CookieStoreAdapter() {
 		this(CookiePolicy.ACCEPT_ALL);
-		// FIXME : This only works for English Locale now because of JDK bug
-		Locale.setDefault(Locale.ENGLISH);
 	}
 
 	public CookieStoreAdapter(CookiePolicy policy) {
