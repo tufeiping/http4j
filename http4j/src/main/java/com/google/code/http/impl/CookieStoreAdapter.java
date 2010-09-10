@@ -74,21 +74,12 @@ public class CookieStoreAdapter implements CookieCache {
 
 	protected void processHeader(URI uri, Header header) {
 		if (Headers.RESPONSE_COOKIE.equalsIgnoreCase(header.getName())) {
-			String value = getValue(header.getValue());
+			String value = header.getValue();
 			List<HttpCookie> cookies = HttpCookie.parse(value);
 			for(HttpCookie cookie : cookies) {
 				store.add(uri, cookie);
 			}
 		}
-	}
-
-	/*
-	 * Just a workaround for http://bugs.sun.com/view_bug.do?bug_id=6790677
-	 */
-	protected String getValue(String value) {
-		int splitter = value.lastIndexOf(';');
-		boolean flag = splitter < value.length() && value.indexOf('=', splitter) < 0;
-		return flag ? value.substring(0, splitter + 1) : value;
 	}
 
 	@Override
