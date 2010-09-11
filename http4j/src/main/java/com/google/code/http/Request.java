@@ -22,7 +22,7 @@ import java.net.URI;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public interface Request extends Message {
+public interface Request {
 	
 	Host getHost();
 	
@@ -45,4 +45,6 @@ public interface Request extends Message {
 	 * @param value
 	 */
 	void setHeader(String name, String value);
+	
+	String toMessage();
 }

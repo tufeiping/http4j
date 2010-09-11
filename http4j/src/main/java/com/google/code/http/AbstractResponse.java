@@ -20,12 +20,36 @@ import java.util.List;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
+ *
  */
-public interface Response {
+public abstract class AbstractResponse implements Response {
 	
-	StatusLine getStatusLine();
+	protected StatusLine statusLine;
 	
-	List<Header> getHeaders();
+	protected List<Header> headers;
 	
-	byte[] getEntity();
+	protected byte[] entity;
+	
+	public AbstractResponse(StatusLine statusLine, List<Header> headers, byte[] entitySource) {
+		this.statusLine = statusLine;
+		this.headers = headers;
+		this.entity = readEntity(entitySource);
+	}
+	
+	abstract protected byte[] readEntity(byte[] entitySource);
+	
+	@Override
+	public StatusLine getStatusLine() {
+		return statusLine;
+	}
+
+	@Override
+	public List<Header> getHeaders() {
+		return headers;
+	}
+
+	@Override
+	public byte[] getEntity() {
+		return entity;
+	}
 }

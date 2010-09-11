@@ -16,17 +16,50 @@
 
 package com.google.code.http;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
- *
+ * 
  */
-public interface Headers {
+public final class Headers {
+
+	public static final String HOST = "Host";
+	public static final String CONTENT_LENGTH = "Content-Length";
+	public static final String USER_AGENT = "User-Agent";
+	public static final String ACCEPT = "Accept";
+	public static final String ACCEPT_ENCODING = "Accept-Encoding";
+	public static final String REQUEST_COOKIE = "Cookie";
+	public static final String RESPONSE_COOKIE = "Set-Cookie";
+	public static final String TRANSFER_ENCODING = "Transfer-Encoding";
 	
-	String HOST = "Host";
-	String CONTENT_LENGTH = "Content-Length";
-	String USER_AGENT = "User-Agent";
-	String ACCEPT = "Accept";
-	String ACCEPT_ENCODING = "Accept-Encoding";
-	String REQUEST_COOKIE = "Cookie";
-	String RESPONSE_COOKIE = "Set-Cookie";
+	public static final String CHUNKED = "chunked";
+
+	public static List<Header> filter(List<Header> headers, String name) {
+		List<Header> list = new LinkedList<Header>();
+		for (Header header : headers) {
+			if (header.getName().equalsIgnoreCase(name)) {
+				list.add(header);
+			}
+		}
+		return list;
+	}
+
+	public static String[] getValuesByName(List<Header> headers, String name) {
+		headers = filter(headers, name);
+		String[] values = null;
+		if (!headers.isEmpty()) {
+			values = new String[headers.size()];
+			for (int i = 0, len = values.length; i < len; i++) {
+				values[i] = headers.get(i).getValue();
+			}
+		}
+		return values;
+	}
+	
+	public static String getValueByName(List<Header> headers, String name) {
+		String[] values = getValuesByName(headers, name);
+		return null == values ? null : values[0];
+	}
 }

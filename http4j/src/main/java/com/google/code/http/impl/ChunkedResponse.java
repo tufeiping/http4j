@@ -14,18 +14,29 @@
  * limitations under the License.
  */
 
-package com.google.code.http;
+package com.google.code.http.impl;
 
 import java.util.List;
 
+import com.google.code.http.AbstractResponse;
+import com.google.code.http.Header;
+import com.google.code.http.StatusLine;
+
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
+ *
  */
-public interface Response {
-	
-	StatusLine getStatusLine();
-	
-	List<Header> getHeaders();
-	
-	byte[] getEntity();
+public class ChunkedResponse extends AbstractResponse {
+
+	public ChunkedResponse(StatusLine statusLine, List<Header> headers,
+			byte[] entitySource) {
+		super(statusLine, headers, entitySource);
+	}
+
+	@Override
+	protected byte[] readEntity(byte[] entitySource) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
