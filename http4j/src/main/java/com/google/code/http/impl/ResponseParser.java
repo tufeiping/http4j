@@ -44,8 +44,7 @@ public final class ResponseParser implements Parser<Response, byte[]> {
 	}
 
 	private Response createResponse(StatusLine line, List<Header> headers, byte[] entity) {
-		String encoding = Headers.getValueByName(headers, Headers.TRANSFER_ENCODING);
-		return Headers.CHUNKED.equals(encoding) ? new ChunkedResponse(line, headers, entity) : new IdentityResponse(line, headers, entity);
+		return Headers.isChunked(headers) ? new ChunkedResponse(line, headers, entity) : new IdentityResponse(line, headers, entity);
 	}
 
 	private byte[] parseEntity(ByteBuffer buffer) {

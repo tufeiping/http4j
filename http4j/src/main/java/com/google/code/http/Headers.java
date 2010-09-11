@@ -34,8 +34,6 @@ public final class Headers {
 	public static final String RESPONSE_COOKIE = "Set-Cookie";
 	public static final String TRANSFER_ENCODING = "Transfer-Encoding";
 	
-	public static final String CHUNKED = "chunked";
-
 	public static List<Header> filter(List<Header> headers, String name) {
 		List<Header> list = new LinkedList<Header>();
 		for (Header header : headers) {
@@ -61,5 +59,11 @@ public final class Headers {
 	public static String getValueByName(List<Header> headers, String name) {
 		String[] values = getValuesByName(headers, name);
 		return null == values ? null : values[0];
+	}
+
+	public static boolean isChunked(List<Header> headers) {
+		String encoding = Headers.getValueByName(headers, Headers.TRANSFER_ENCODING);
+		encoding = null == encoding ? "" : encoding.toLowerCase();
+		return encoding.startsWith("chunked") ? true : false;
 	}
 }
