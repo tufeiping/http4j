@@ -35,8 +35,6 @@ public class IdentityResponse extends AbstractResponse {
 
 	@Override
 	protected byte[] readEntity(byte[] entitySource) {
-		return null;
+		return entitySource;
 	}
-
-	
 }
