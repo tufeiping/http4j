@@ -95,8 +95,7 @@ public final class IOUtils {
 		byte b;
 		int count = 0;
 		while (buffer.hasRemaining() && count < endExpression.length) {
-			count = ((b = buffer.get()) == endExpression[count]) ? count + 1
-					: 0;
+			count = ((b = buffer.get()) == endExpression[count]) ? count + 1 : 0;
 			valueHolder.put(b);
 		}
 		valueHolder.position(valueHolder.position() - count);
