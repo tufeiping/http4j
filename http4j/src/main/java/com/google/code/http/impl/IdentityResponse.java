@@ -16,6 +16,7 @@
 
 package com.google.code.http.impl;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.google.code.http.AbstractResponse;
@@ -30,7 +31,7 @@ import com.google.code.http.StatusLine;
 public class IdentityResponse extends AbstractResponse {
 
 	public IdentityResponse(StatusLine statusLine, List<Header> headers,
-			byte[] entitySource) {
+			byte[] entitySource) throws IOException {
 		super(statusLine, headers, entitySource);
 	}
 

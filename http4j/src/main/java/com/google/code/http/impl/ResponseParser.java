@@ -43,7 +43,7 @@ public final class ResponseParser implements Parser<Response, byte[]> {
 		return createResponse(line, headers, entity);
 	}
 
-	private Response createResponse(StatusLine line, List<Header> headers, byte[] entity) {
+	private Response createResponse(StatusLine line, List<Header> headers, byte[] entity) throws IOException {
 		return Headers.isChunked(headers) ? new ChunkedResponse(line, headers, entity) : new IdentityResponse(line, headers, entity);
 	}
 

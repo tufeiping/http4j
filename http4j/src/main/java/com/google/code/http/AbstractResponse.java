@@ -16,6 +16,7 @@
 
 package com.google.code.http;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -30,13 +31,13 @@ public abstract class AbstractResponse implements Response {
 	
 	protected byte[] entity;
 	
-	public AbstractResponse(StatusLine statusLine, List<Header> headers, byte[] entitySource) {
+	public AbstractResponse(StatusLine statusLine, List<Header> headers, byte[] entitySource) throws IOException {
 		this.statusLine = statusLine;
 		this.headers = headers;
 		this.entity = readEntity(entitySource);
 	}
 	
-	abstract protected byte[] readEntity(byte[] entitySource);
+	abstract protected byte[] readEntity(byte[] entitySource) throws IOException;
 	
 	@Override
 	public StatusLine getStatusLine() {

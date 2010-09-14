@@ -16,11 +16,15 @@
 
 package com.google.code.http.impl;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.List;
 
 import com.google.code.http.AbstractResponse;
+import com.google.code.http.HTTP;
 import com.google.code.http.Header;
 import com.google.code.http.StatusLine;
+import com.google.code.http.utils.IOUtils;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -29,14 +33,35 @@ import com.google.code.http.StatusLine;
 public class ChunkedResponse extends AbstractResponse {
 
 	public ChunkedResponse(StatusLine statusLine, List<Header> headers,
-			byte[] entitySource) {
+			byte[] entitySource) throws IOException {
 		super(statusLine, headers, entitySource);
 	}
 
 	@Override
-	protected byte[] readEntity(byte[] entitySource) {
-		// TODO Auto-generated method stub
-		return null;
+	protected byte[] readEntity(byte[] entitySource) throws IOException {
+		ByteBuffer buffer = ByteBuffer.wrap(entitySource);
+		byte[] entityData = readEntity(buffer);
+		if(buffer.hasRemaining()) {
+			readTrailerHeaders(buffer);
+		}
+		return entityData;
+	}
+	
+	private byte[] readEntity(ByteBuffer buffer) {
+		ByteBuffer entityBuffer = ByteBuffer.allocate(buffer.capacity());
+		byte[] data;
+		while((data = IOUtils.getNextChunk(buffer)) != null) {
+			entityBuffer.put(data);
+		}
+		entityBuffer.flip();
+		data = new byte[entityBuffer.limit()];
+		System.arraycopy(entityBuffer.array(), 0, data, 0, data.length);
+		return data;
 	}
 
+	private void readTrailerHeaders(ByteBuffer buffer) throws IOException {
+		byte[] headerBytes = IOUtils.extractByEnd(buffer, HTTP.CR, HTTP.LF, HTTP.CR, HTTP.LF);
+		List<Header> trailers = new HeadersParser().parse(headerBytes);
+		headers.addAll(trailers);
+	}
 }

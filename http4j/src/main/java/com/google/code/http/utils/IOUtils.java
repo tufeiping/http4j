@@ -116,4 +116,8 @@ public final class IOUtils {
 		dest.put(src);
 		src.clear();
 	}
+
+	public static byte[] getNextChunk(ByteBuffer buffer) {
+		return null;
+	}
 }
