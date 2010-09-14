@@ -81,9 +81,12 @@ public final class IOUtils {
 	}
 
 	/**
-	 * Extract data from buffer by given end expression.e.g. <li>http4j [4j]
-	 * -&gt; http</li> <li>http4j [4] -&gt; http</li> <li>http4j [ttp4j] -&gt; h
-	 * </li> <li>http4j [http4j] -&gt; ""</li> <li>http4j [4g] -&gt; "http4j"</li>
+	 * Extract data from buffer by given end expression.e.g. 
+	 * <li>http4j [4j] -&gt; http</li>
+	 * <li>http4j [4] -&gt; http</li>
+	 * <li>http4j [ttp4j] -&gt; h</li>
+	 * <li>http4j [http4j] -&gt; ""</li>
+	 * <li>http4j [4g] -&gt; "http4j"</li>
 	 * 
 	 * @param buffer
 	 * @param endExpression
