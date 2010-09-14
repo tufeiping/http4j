@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 
+import com.google.code.http.HTTP;
+
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
@@ -118,6 +120,17 @@ public final class IOUtils {
 	}
 
 	public static byte[] getNextChunk(ByteBuffer buffer) {
-		return null;
+		int size = getNextChunkSize(buffer);
+		byte[] chunk = new byte[size];
+		buffer.get(chunk);
+		return chunk;
+	}
+	
+	public static int getNextChunkSize(ByteBuffer buffer) {
+		byte[] chunkSize = extractByEnd(buffer, HTTP.CR, HTTP.LF);
+		String s = new String(chunkSize);
+		int end = s.indexOf(';');
+		s = end < 0 ? s : s.substring(0, end);
+		return Integer.parseInt(s, 16);
 	}
 }
