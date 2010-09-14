@@ -71,7 +71,7 @@ public abstract class AbstractConnection implements Connection {
 	public final byte[] read() throws IOException {
 		byte b = readFirstByte();
 		ThreadLocalMetricsRecorder.responseStarted();
-		ByteBuffer buffer = ByteBuffer.allocate(2 << 19);
+		ByteBuffer buffer = ByteBuffer.allocate(2 << 13);
 		ByteBuffer extended = ByteBuffer.allocate(buffer.capacity() << 1);
 		while (read(buffer) == buffer.capacity()) {
 			// Increasing buffer's capacity reduces the chance to get here
