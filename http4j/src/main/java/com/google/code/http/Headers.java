@@ -23,7 +23,7 @@ import java.util.List;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  * 
  */
-public final class Headers {
+public class Headers {
 
 	public static final String HOST = "Host";
 	public static final String CONTENT_LENGTH = "Content-Length";
