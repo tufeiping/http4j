@@ -66,4 +66,9 @@ public final class Headers {
 		encoding = null == encoding ? "" : encoding.toLowerCase();
 		return encoding.startsWith("chunked") ? true : false;
 	}
+
+	public static int getContentLength(List<Header> headers) {
+		String length = getValueByName(headers, CONTENT_LENGTH);
+		return null == length ? 0 : Integer.parseInt(length);
+	}
 }
