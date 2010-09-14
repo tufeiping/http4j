@@ -120,7 +120,7 @@ public final class IOUtils {
 
 	/**
 	 * @param buffer
-	 * @return next chunk, <code>null</code> if reached the end of chunk body.
+	 * @return next chunk, <code>null</code> if reaches the end of chunk body.
 	 */
 	public static byte[] getNextChunk(ByteBuffer buffer) {
 		int size = getNextChunkSize(buffer);
@@ -132,6 +132,10 @@ public final class IOUtils {
 		return null;
 	}
 
+	/**
+	 * @param buffer
+	 * @return next chunk size, <code>0</code> if reaches the end of chunk body.
+	 */
 	public static int getNextChunkSize(ByteBuffer buffer) {
 		byte[] chunkSize = extractByEnd(buffer, HTTP.CR, HTTP.LF);
 		if (chunkSize.length > 0) {
