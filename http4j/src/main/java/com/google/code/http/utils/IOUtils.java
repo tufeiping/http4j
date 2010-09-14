@@ -118,18 +118,28 @@ public final class IOUtils {
 		src.clear();
 	}
 
+	/**
+	 * @param buffer
+	 * @return next chunk, <code>null</code> if reached the end of chunk body.
+	 */
 	public static byte[] getNextChunk(ByteBuffer buffer) {
 		int size = getNextChunkSize(buffer);
-		byte[] chunk = new byte[size];
-		buffer.get(chunk);
-		return chunk;
+		if (size > 0) {
+			byte[] chunk = new byte[size];
+			buffer.get(chunk);
+			return chunk;
+		}
+		return null;
 	}
-	
+
 	public static int getNextChunkSize(ByteBuffer buffer) {
 		byte[] chunkSize = extractByEnd(buffer, HTTP.CR, HTTP.LF);
-		String s = new String(chunkSize);
-		int end = s.indexOf(';');
-		s = end < 0 ? s : s.substring(0, end);
-		return Integer.parseInt(s, 16);
+		if (chunkSize.length > 0) {
+			String s = new String(chunkSize);
+			int end = s.indexOf(';');
+			s = end < 0 ? s : s.substring(0, end);
+			return Integer.parseInt(s.trim(), 16);
+		}
+		return 0;
 	}
 }
