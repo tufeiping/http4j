@@ -40,9 +40,9 @@ public final class IOUtils {
 	public static void close(Socket socket) {
 		if (null != socket && !socket.isClosed()) {
 			try {
-				socket.close();
 				socket.shutdownInput();
 				socket.shutdownOutput();
+				socket.close();
 			} catch (IOException e) {
 			}
 		}
