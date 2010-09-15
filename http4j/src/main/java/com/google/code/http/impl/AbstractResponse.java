@@ -46,7 +46,7 @@ public abstract class AbstractResponse implements Response {
 		entity = null == entitySource ? null : readEntity(entitySource);
 		charset = Headers.getCharset(headers);
 		if(!HTTP.DEFAULT_CHARSET.equalsIgnoreCase(charset)) {
-			entity = IOUtils.convertBytes(entity, charset);
+			entity = null == entity ? null : IOUtils.convertBytes(entity, charset);
 		}
 	}
 	

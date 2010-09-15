@@ -150,6 +150,6 @@ public final class IOUtils {
 	}
 
 	public static byte[] convertBytes(byte[] entity, String charset) throws UnsupportedEncodingException {
-		return null == entity ? null : new String(entity).getBytes(charset);
+		return new String(entity).getBytes(charset);
 	}
 }
