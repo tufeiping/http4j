@@ -39,6 +39,7 @@ public class SumTimer extends SpanTimer {
 	
 	@Override
 	public long getDuration() {
-		return duration.get();
+		long d = duration.get();
+		return d == 0 ? stop.get() - start.get() : d;
 	}
 }
