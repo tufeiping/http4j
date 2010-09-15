@@ -18,14 +18,14 @@ package com.google.code.http.impl;
 
 import java.net.URL;
 
-import com.google.code.http.Client;
+import com.google.code.http.RequestExecutor;
 import com.google.code.http.Request;
 import com.google.code.http.Response;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class BasicClient implements Client {
+public class BasicRequestExecutor implements RequestExecutor {
 
 	@Override
 	public Response get(URL url) {

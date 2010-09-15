@@ -21,7 +21,7 @@ import java.net.URL;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public interface Client {
+public interface RequestExecutor {
 	
 	Response submit(Request request);
 	
