@@ -29,4 +29,8 @@ public interface HTTP {
 	String HTTP_1_0 = "HTTP/1.0";
 	String HTTP_1_1 = "HTTP/1.1";
 	String DEFAULT_VERSION = HTTP_1_1;
+	
+	String ISO_8859_1 = "ISO-8859-1";
+	String UTF_8 = "UTF-8";
+	String DEFAULT_CHARSET = ISO_8859_1;
 }

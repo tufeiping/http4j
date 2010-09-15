@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
-package com.google.code.http;
+package com.google.code.http.impl;
 
 import java.io.IOException;
 import java.util.List;
+
+import com.google.code.http.HTTP;
+import com.google.code.http.Header;
+import com.google.code.http.Response;
+import com.google.code.http.StatusLine;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -31,10 +36,13 @@ public abstract class AbstractResponse implements Response {
 	
 	protected byte[] entity;
 	
+	protected String charset;
+	
 	public AbstractResponse(StatusLine statusLine, List<Header> headers, byte[] entitySource) throws IOException {
 		this.statusLine = statusLine;
 		this.headers = headers;
 		this.entity = null == entitySource ? null : readEntity(entitySource);
+		this.charset = HTTP.DEFAULT_CHARSET;
 	}
 	
 	abstract protected byte[] readEntity(byte[] entitySource) throws IOException;
@@ -52,5 +60,10 @@ public abstract class AbstractResponse implements Response {
 	@Override
 	public byte[] getEntity() {
 		return entity;
+	}
+	
+	@Override
+	public String getCharset() {
+		return charset;
 	}
 }

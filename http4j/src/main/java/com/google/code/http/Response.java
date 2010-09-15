@@ -28,4 +28,6 @@ public interface Response {
 	List<Header> getHeaders();
 	
 	byte[] getEntity();
+	
+	String getCharset();
 }

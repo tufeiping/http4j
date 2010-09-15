@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.List;
 
-import com.google.code.http.AbstractResponse;
 import com.google.code.http.HTTP;
 import com.google.code.http.Header;
 import com.google.code.http.StatusLine;

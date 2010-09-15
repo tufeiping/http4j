@@ -19,7 +19,6 @@ package com.google.code.http.impl;
 import java.io.IOException;
 import java.util.List;
 
-import com.google.code.http.AbstractResponse;
 import com.google.code.http.Header;
 import com.google.code.http.Headers;
 import com.google.code.http.StatusLine;
