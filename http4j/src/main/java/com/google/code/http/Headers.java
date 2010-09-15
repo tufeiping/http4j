@@ -80,6 +80,8 @@ public class Headers {
 	}
 	
 	public static String getCharset(String contentType) {
-		return null;
+		String pattern = "charset=";
+		int index = contentType.indexOf(pattern);
+		return index < 0 ? HTTP.DEFAULT_CHARSET : contentType.substring(index + pattern.length()).trim();
 	}
 }
