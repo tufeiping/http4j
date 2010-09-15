@@ -16,18 +16,10 @@
 
 package com.google.code.http;
 
-import java.net.URL;
-
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public interface RequestExecutor {
 	
-	Response submit(Request request);
-	
-	Response get(URL url);
-	Response get(String url);
-	
-	Response post(URL url);
-	Response post(String url);
+	Response execute(Request request);
 }

@@ -16,10 +16,8 @@
 
 package com.google.code.http.impl;
 
-import java.net.URL;
-
-import com.google.code.http.RequestExecutor;
 import com.google.code.http.Request;
+import com.google.code.http.RequestExecutor;
 import com.google.code.http.Response;
 
 /**
@@ -28,31 +26,7 @@ import com.google.code.http.Response;
 public class BasicRequestExecutor implements RequestExecutor {
 
 	@Override
-	public Response get(URL url) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Response get(String url) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Response post(URL url) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Response post(String url) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Response submit(Request request) {
+	public Response execute(Request request) {
 		// TODO Auto-generated method stub
 		return null;
 	}
