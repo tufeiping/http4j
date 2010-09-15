@@ -34,7 +34,7 @@ public abstract class AbstractResponse implements Response {
 	public AbstractResponse(StatusLine statusLine, List<Header> headers, byte[] entitySource) throws IOException {
 		this.statusLine = statusLine;
 		this.headers = headers;
-		this.entity = readEntity(entitySource);
+		this.entity = null == entitySource ? null : readEntity(entitySource);
 	}
 	
 	abstract protected byte[] readEntity(byte[] entitySource) throws IOException;
