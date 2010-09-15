@@ -51,7 +51,7 @@ public final class ResponseParser implements Parser<Response, byte[]> {
 		int position = buffer.position();
 		int length = buffer.limit() - position;
 		byte[] result = new byte[length];
-		System.arraycopy(buffer.array(), 0, result, 0, length);
+		System.arraycopy(buffer.array(), position, result, 0, length);
 		return result;
 	}
 
