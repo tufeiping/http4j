@@ -40,11 +40,14 @@ public final class ResponseParserTestCase {
 	
 	private byte[] chunked;
 	
+	private byte[] chunkedWithTrailers;
+	
 	@BeforeClass
 	public void beforeClass() {
 		parser = new ResponseParser();
 		identity = "HTTP/1.1 200 OK\r\nContent-Type:text/html; charset=UTF-8\r\nContent-Length:12\r\n\r\nHello World!".getBytes();
 		chunked = "HTTP/1.1 200 OK\r\nContent-Type:text/html; charset=GBK\r\nTransfer-Encoding:chunked\r\n\r\n19\r\nHello World!-from http4j.\r\n1f\r\nauthor:guilin.zhang@hotmail.com\r\n0\r\n\r\n".getBytes();
+		chunkedWithTrailers = "HTTP/1.1 200 OK\r\nContent-Type:text/html; charset=GBK\r\nTransfer-Encoding:chunked\r\n\r\n19\r\nHello World!-from http4j.\r\n1f\r\nauthor:guilin.zhang@hotmail.com\r\n0\r\nContent-Encoding:gzip\r\n\r\n".getBytes();
 	}
 	
 	@Test
@@ -78,6 +81,24 @@ public final class ResponseParserTestCase {
 		Assert.assertNotNull(headers);
 		Assert.assertEquals(headers.size(), 2);
 		Assert.assertTrue(Headers.isChunked(headers));
+		byte[] entity = response.getEntity();
+		Assert.assertEquals(new String(entity), "Hello World!-from http4j.author:guilin.zhang@hotmail.com");
+	}
+	
+	@Test
+	public void parseChunkedWithTrailers() throws IOException {
+		Response response = parser.parse(chunkedWithTrailers);
+		Assert.assertNotNull(response);
+		StatusLine statusLine = response.getStatusLine();
+		Assert.assertNotNull(statusLine);
+		Assert.assertEquals(statusLine.getVersion(), HTTP.HTTP_1_1);
+		Assert.assertEquals(statusLine.getStatusCode(), 200);
+		Assert.assertEquals(statusLine.getReason(), "OK");
+		List<Header> headers = response.getHeaders();
+		Assert.assertNotNull(headers);
+		Assert.assertEquals(headers.size(), 3);
+		Assert.assertTrue(Headers.isChunked(headers));
+		Assert.assertEquals(Headers.getValueByName(headers, Headers.CONTENT_ENCODING), "gzip");
 		byte[] entity = response.getEntity();
 		Assert.assertEquals(new String(entity), "Hello World!-from http4j.author:guilin.zhang@hotmail.com");
 	}

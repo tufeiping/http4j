@@ -34,6 +34,7 @@ public class Headers {
 	public static final String RESPONSE_COOKIE = "Set-Cookie";
 	public static final String TRANSFER_ENCODING = "Transfer-Encoding";
 	public static final String CONTENT_TYPE = "Content-Type";
+	public static final String CONTENT_ENCODING = "Content-Encoding";
 	
 	public static List<Header> filter(List<Header> headers, String name) {
 		List<Header> list = new LinkedList<Header>();
