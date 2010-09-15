@@ -32,8 +32,8 @@ import org.testng.annotations.Test;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  *
  */
-public final class SpanTimerTestCase {
-	private SpanTimer timer;
+public class SpanTimerTestCase {
+	protected SpanTimer timer;
 
 	@BeforeClass
 	public void beforeClass() {
@@ -109,6 +109,10 @@ public final class SpanTimerTestCase {
 		}
 		Assert.assertEquals(timer.getStart(), start);
 		Assert.assertEquals(timer.getStop(), stop);
-		Assert.assertEquals(timer.getDuration(), stop - start);
+		assertDuration(stop - start, total);
+	}
+	
+	protected void assertDuration(long span, long sum) {
+		Assert.assertEquals(timer.getDuration(), span);
 	}
 }

@@ -16,98 +16,22 @@
 
 package com.google.code.http.metrics;
 
-import java.util.Random;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletionService;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class SumTimerTestCase {
-	private SumTimer timer;
+public class SumTimerTestCase extends SpanTimerTestCase {
 
 	@BeforeClass
 	public void beforeClass() {
 		timer = new SumTimer();
 	}
-
-	@Test
-	public void getStart() {
-		Assert.assertEquals(timer.getStart(), 0);
+	
+	@Override
+	protected void assertDuration(long span, long sum) {
+		Assert.assertEquals(timer.getDuration(), sum);
 	}
 	
-	@Test
-	public void getStop() {
-		Assert.assertEquals(timer.getStop(), 0);
-	}
-	
-	@Test(dependsOnMethods = "getStart")
-	public void start() {
-		timer.start();
-		Assert.assertTrue(timer.getStart() < timer.getCurrentTime().longValue());
-	}
-	
-	@Test(dependsOnMethods = {"start", "getStop"})
-	public void stop() {
-		timer.stop();
-		Assert.assertTrue(timer.getStop() < timer.getCurrentTime().longValue());
-	}
-	
-	@Test(dependsOnMethods = "stop")
-	public void getDuration() {
-		Assert.assertTrue(timer.getDuration() > 0);
-	}
-	
-	@Test(dependsOnMethods = "stop")
-	public void reset() {
-		timer.reset();
-		Assert.assertEquals(timer.getStart(), 0);
-		Assert.assertEquals(timer.getStop(), 0);
-		Assert.assertEquals(timer.getDuration(), 0);
-	}
-	
-	@Test(dependsOnMethods = "reset")
-	public void aggregate() throws InterruptedException, ExecutionException {
-		int n = 100;
-		ExecutorService pool = Executors.newFixedThreadPool(n);
-		CompletionService<Timer> service = new ExecutorCompletionService<Timer>(pool);
-		for (int i = 0; i < n; i++) {
-			service.submit(new Callable<Timer>() {
-				@Override
-				public Timer call() {
-					Timer t = new NanoSecondTimer();
-					t.start();
-					try {
-						Thread.sleep(new Random().nextInt(3));
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					t.stop();
-					timer.aggregate(t);
-					return t;
-				}
-			});
-		}
-		
-		long total = 0;
-		long start = Long.MAX_VALUE;
-		long stop = 0;
-		while(n-- > 0) {
-			Timer t = service.take().get();
-			start = Math.min(start, t.getStart());
-			stop = Math.max(stop, t.getStop());
-			total += t.getDuration();
-		}
-		Assert.assertEquals(timer.getStart(), start);
-		Assert.assertEquals(timer.getStop(), stop);
-		Assert.assertEquals(timer.getDuration(), total);
-	}
 }
