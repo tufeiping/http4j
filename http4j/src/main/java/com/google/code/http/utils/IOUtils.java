@@ -127,19 +127,17 @@ public final class IOUtils {
 	 */
 	public static byte[] getNextChunk(ByteBuffer buffer) {
 		int size = getNextChunkSize(buffer);
-		if (size > 0) {
-			byte[] chunk = new byte[size];
-			buffer.get(chunk);
-			return chunk;
-		}
-		return null;
+		return size > 0 ? getNextChunk(buffer, size) : null;
+	}
+	
+	static byte[] getNextChunk(ByteBuffer buffer, int size) {
+		byte[] chunk = new byte[size];
+		buffer.get(chunk);
+		buffer.get(new byte[2]);//CRLF
+		return chunk;
 	}
 
-	/**
-	 * @param buffer
-	 * @return next chunk size, <code>0</code> if reaches the end of chunk body.
-	 */
-	public static int getNextChunkSize(ByteBuffer buffer) {
+	static int getNextChunkSize(ByteBuffer buffer) {
 		byte[] chunkSize = extractByEnd(buffer, HTTP.CR, HTTP.LF);
 		if (chunkSize.length > 0) {
 			String s = new String(chunkSize);
