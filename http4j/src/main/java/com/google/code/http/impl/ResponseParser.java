@@ -62,7 +62,7 @@ public final class ResponseParser implements Parser<Response, byte[]> {
 	}
 
 	private StatusLine parseStatusLine(ByteBuffer buffer) throws IOException {
-		byte[] source = IOUtils.extractByEnd(buffer, HTTP.LF);
+		byte[] source = IOUtils.extractByEnd(buffer, HTTP.CR, HTTP.LF);
 		Parser<StatusLine, byte[]> parser = new StatusLineParser();
 		return parser.parse(source);
 	}
