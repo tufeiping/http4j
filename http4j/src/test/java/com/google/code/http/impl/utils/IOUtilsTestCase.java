@@ -71,6 +71,15 @@ public class IOUtilsTestCase {
 		Assert.assertEquals(dest.position(), bytes.length);
 	}
 	
+	@Test
+	public void getNextChunk() {
+		ByteBuffer buffer = ByteBuffer.wrap("19\r\nHello World!-From http4j.\r\n1f\r\nAuthor:guilin.zhang@hotmail.com\r\n0\r\n\r\n".getBytes());
+		byte[] chunk1 = IOUtils.getNextChunk(buffer);
+		Assert.assertEquals(new String(chunk1), "Hello World!-From http4j.");
+		byte[] chunk2 = IOUtils.getNextChunk(buffer);
+		Assert.assertEquals(new String(chunk2), "Author:guilin.zhang@hotmail.com");
+	}
+	
 	private void assertionExtractByEnd(String source, String dest, String end) {
 		ByteBuffer buffer = ByteBuffer.wrap(source.getBytes());
 		byte[] bytes = IOUtils.extractByEnd(buffer, end.getBytes());
