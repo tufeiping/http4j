@@ -19,8 +19,8 @@ package com.google.code.http.impl;
 import java.io.IOException;
 import java.util.List;
 
-import com.google.code.http.HTTP;
 import com.google.code.http.Header;
+import com.google.code.http.Headers;
 import com.google.code.http.Response;
 import com.google.code.http.StatusLine;
 
@@ -42,7 +42,7 @@ public abstract class AbstractResponse implements Response {
 		this.statusLine = statusLine;
 		this.headers = headers;
 		this.entity = null == entitySource ? null : readEntity(entitySource);
-		this.charset = HTTP.DEFAULT_CHARSET;
+		this.charset = Headers.getCharset(headers);
 	}
 	
 	abstract protected byte[] readEntity(byte[] entitySource) throws IOException;
