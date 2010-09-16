@@ -29,6 +29,6 @@ public class HeadersTestCase {
 		String contentType = "text/html; charset=UTF-8 ";
 		Assert.assertEquals(Headers.getCharset(contentType), "UTF-8");
 		contentType = "text/html";
-		Assert.assertEquals(Headers.getCharset(contentType), HTTP.DEFAULT_CHARSET);
+		Assert.assertEquals(Headers.getCharset(contentType), Charset.DEFAULT);
 	}
 }

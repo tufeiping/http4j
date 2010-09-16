@@ -19,7 +19,7 @@ package com.google.code.http.impl;
 import java.io.IOException;
 import java.util.List;
 
-import com.google.code.http.HTTP;
+import com.google.code.http.Charset;
 import com.google.code.http.Header;
 import com.google.code.http.Headers;
 import com.google.code.http.Response;
@@ -45,7 +45,7 @@ public abstract class AbstractResponse implements Response {
 		this.headers = headers;
 		entity = null == entitySource ? null : readEntity(entitySource);
 		charset = Headers.getCharset(headers);
-		if(!HTTP.DEFAULT_CHARSET.equalsIgnoreCase(charset)) {
+		if(!Charset.DEFAULT.equalsIgnoreCase(charset)) {
 			entity = null == entity ? null : IOUtils.convertBytes(entity, charset);
 		}
 	}

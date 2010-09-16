@@ -19,14 +19,9 @@ package com.google.code.http;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public interface HTTP {
-	
-	byte CR = '\r';
-	byte LF = '\n';
-	
-	String CRLF = "\r\n";
-	
-	String HTTP_1_0 = "HTTP/1.0";
-	String HTTP_1_1 = "HTTP/1.1";
-	String DEFAULT_VERSION = HTTP_1_1;
+public interface Charset {
+	String ISO_8859_1 = "ISO-8859-1";
+	String UTF_8 = "UTF-8";
+	String GBK = "GBK";
+	String DEFAULT = ISO_8859_1;
 }

@@ -23,6 +23,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.google.code.http.Charset;
 import com.google.code.http.HTTP;
 import com.google.code.http.Header;
 import com.google.code.http.Headers;
@@ -69,6 +70,7 @@ public final class ResponseParserTestCase {
 		Assert.assertEquals(contentLength, 12);
 		byte[] entity = response.getEntity();
 		Assert.assertEquals(new String(entity), "Hello World!");
+		Assert.assertEquals(response.getCharset(), Charset.UTF_8);
 	}
 	
 	@Test
@@ -86,6 +88,7 @@ public final class ResponseParserTestCase {
 		Assert.assertTrue(Headers.isChunked(headers));
 		byte[] entity = response.getEntity();
 		Assert.assertEquals(new String(entity), "Hello World!-from http4j.author:guilin.zhang@hotmail.com");
+		Assert.assertEquals(response.getCharset(), Charset.GBK);
 	}
 	
 	@Test
@@ -104,6 +107,7 @@ public final class ResponseParserTestCase {
 		Assert.assertEquals(Headers.getValueByName(headers, Headers.CONTENT_ENCODING), "gzip");
 		byte[] entity = response.getEntity();
 		Assert.assertEquals(new String(entity), "Hello World!-from http4j.author:guilin.zhang@hotmail.com");
+		Assert.assertEquals(response.getCharset(), Charset.GBK);
 	}
 	
 	@Test
@@ -121,5 +125,6 @@ public final class ResponseParserTestCase {
 		int contentLength = Headers.getContentLength(headers);
 		Assert.assertEquals(contentLength, 12);
 		Assert.assertNull(response.getEntity());
+		Assert.assertEquals(response.getCharset(), Charset.UTF_8);
 	}
 }
