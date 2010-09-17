@@ -60,10 +60,11 @@ public class InputStreamDecorator extends InputStream {
 	}
 
 	public int read() throws IOException {
-		if(++count == 1) {
+		int i = in.read();
+		if(i != -1 && (++count == 1)) {// don't change logic order
 			ThreadLocalMetricsRecorder.responseStarted();
 		}
-		return in.read();
+		return i;
 	}
 
 	public int read(byte[] b) throws IOException {
@@ -71,9 +72,16 @@ public class InputStreamDecorator extends InputStream {
 	}
 
 	public int read(byte[] b, int off, int len) throws IOException {
-		b[off++] = (byte) read();
-		count += --len;
-		return in.read(b, off, len);
+		int i = read();
+		if(i == -1) {
+			return -1;
+		}
+		b[off++] = (byte) i;
+		if(--len > 0) { 
+			count += len;
+			return in.read(b, off, len);
+		}
+		return 1;
 	}
 
 	public void reset() throws IOException {
