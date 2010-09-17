@@ -38,9 +38,9 @@ public final class RequestExecutorTestCase {
 		executor = new BasicRequestExecutor();
 	}
 	
-	@Test
+	@Test(enabled = false)
 	public void execute() throws URISyntaxException, InterruptedException, IOException {
-		Request request = new Get("http://code.google.com/p/http4j/");
+		Request request = new Get("http://www.baidu.com/");
 		Response response = executor.execute(request);
 		Assert.assertNotNull(response);
 	}

@@ -53,7 +53,7 @@ public class ThreadLocalMetricsRecorder extends AbstractMetricsRecorder {
 		getInstance().getRequestTimer().start();
 	}
 
-	public static void requestStopped(long sent) {
+	public static void requestSent(long sent) {
 		ThreadLocalMetricsRecorder recorder = getInstance();
 		recorder.getRequestTimer().stop();
 		recorder.getRequestTransportCounter().increase(sent);
@@ -73,7 +73,7 @@ public class ThreadLocalMetricsRecorder extends AbstractMetricsRecorder {
 		timer.start();
 	}
 
-	public static void responseStopped(long sent) {
+	public static void responseReceived(long sent) {
 		ThreadLocalMetricsRecorder recorder = getInstance();
 		recorder.getResponseTimer().stop();
 		recorder.getResponseTransportCounter().increase(sent);

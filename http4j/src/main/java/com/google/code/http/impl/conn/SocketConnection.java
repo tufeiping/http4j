@@ -20,11 +20,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.net.SocketException;
 import java.nio.ByteBuffer;
 
 import com.google.code.http.Connection;
 import com.google.code.http.Host;
+import com.google.code.http.metrics.ThreadLocalMetricsRecorder;
 import com.google.code.http.utils.IOUtils;
 
 /**
@@ -65,11 +65,16 @@ public class SocketConnection extends AbstractConnection
 	}
 
 	@Override
-	protected int read(ByteBuffer buffer) throws IOException {
+	protected byte[] readRemaining() throws IOException {
 		InputStream in = socket.getInputStream();
-		int i = in.read(buffer.array());
-		buffer.position(i);
-		return i;
+		ByteBuffer buffer = ByteBuffer.allocate(socket.getReceiveBufferSize());
+		byte b;
+		while((b = (byte) in.read()) != -1) {
+			buffer = buffer.hasRemaining() ? buffer : IOUtils.extendBuffer(buffer);
+			buffer.put(b);
+		}
+		ThreadLocalMetricsRecorder.responseReceived(buffer.capacity());
+		return buffer.array();
 	}
 
 	@Override
@@ -95,10 +100,5 @@ public class SocketConnection extends AbstractConnection
 			throw new IOException("Socket ends while reading the first byte.");
 		}
 		return (byte) read;
-	}
-
-	@Override
-	protected int getReceiveBufferSize() throws SocketException {
-		return socket.getReceiveBufferSize();
 	}
 }

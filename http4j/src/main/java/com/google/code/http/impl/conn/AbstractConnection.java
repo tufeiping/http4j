@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
@@ -28,7 +27,6 @@ import com.google.code.http.Connection;
 import com.google.code.http.DnsCache;
 import com.google.code.http.Host;
 import com.google.code.http.metrics.ThreadLocalMetricsRecorder;
-import com.google.code.http.utils.IOUtils;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -49,8 +47,6 @@ public abstract class AbstractConnection implements Connection {
 		ThreadLocalMetricsRecorder.connectionCreated();
 	}
 
-	abstract protected int read(ByteBuffer buffer) throws IOException;
-
 	abstract protected byte readFirstByte() throws IOException;
 
 	// before sending start event
@@ -66,22 +62,14 @@ public abstract class AbstractConnection implements Connection {
 
 	@Override
 	public final byte[] read() throws IOException {
-		byte b = readFirstByte();
+		byte first = readFirstByte();
 		ThreadLocalMetricsRecorder.responseStarted();
-		ByteBuffer buffer = ByteBuffer.allocate(getReceiveBufferSize());
-		ByteBuffer extended = ByteBuffer.allocate(buffer.capacity() << 1);
-		while (read(buffer) == buffer.capacity()) {
-			extended = IOUtils.ensureSpace(buffer, extended);
-			IOUtils.transfer(buffer, extended);
-		}
-		byte[] data = IOUtils.extract(extended.position() == 0 ? buffer : extended);
-		extended = ByteBuffer.allocate(data.length + 1).put(b).put(data);
-		ThreadLocalMetricsRecorder.responseStopped(extended.capacity());
-		System.out.println(new String(extended.array()));
-		return extended.array();
+		byte[] remaining = readRemaining();
+		ByteBuffer response = ByteBuffer.allocate(remaining.length + 1).put(first).put(remaining);
+		return response.array();
 	}
 
-	abstract protected int getReceiveBufferSize() throws SocketException;
+	abstract protected byte[] readRemaining() throws IOException;
 
 	@Override
 	public final void write(byte[] m) throws IOException {
@@ -91,7 +79,7 @@ public abstract class AbstractConnection implements Connection {
 			write(m, 1, m.length - 1);
 		}
 		flush();
-		ThreadLocalMetricsRecorder.requestStopped(m.length);
+		ThreadLocalMetricsRecorder.requestSent(m.length);
 	}
 
 	@Override
