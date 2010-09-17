@@ -58,9 +58,8 @@ public final class CookieCacheTestCase {
 		headers.add(new CanonicalHeader(Headers.RESPONSE_COOKIE, "NID=38=g4PriUXNBibltyAS5Rko6b6ygubtZQs0s2FAy0zMYHOKOIY5rQyE1gAskYS0MU6g767OB24_xknddTgcBKuEMsShbEhZMH0ev9A_uMbWF9D61d8VcASWeksFx2kTSR_i; expires=Fri, 11-Mar-2011 12:20:54 GMT; path=/; domain=.google.com; HttpOnly"));
 		headers.add(new CanonicalHeader(Headers.CONTENT_LENGTH, "458"));
 		cache.set(uri, headers);
-		Header requestCookie = cache.get(uri);
-		Assert.assertNotNull(requestCookie);
-		Assert.assertEquals(requestCookie.getName(), Headers.REQUEST_COOKIE);
-		Assert.assertEquals(requestCookie.getValue(), "PREF=ID=2067d32f823de961:NW=1:TM=1284034854:LM=1284034854:S=eLKAQ-QOYpFKPwI3;NID=38=g4PriUXNBibltyAS5Rko6b6ygubtZQs0s2FAy0zMYHOKOIY5rQyE1gAskYS0MU6g767OB24_xknddTgcBKuEMsShbEhZMH0ev9A_uMbWF9D61d8VcASWeksFx2kTSR_i");
+		String cookie = cache.get(uri);
+		Assert.assertNotNull(cookie);
+		Assert.assertEquals(cookie, "PREF=ID=2067d32f823de961:NW=1:TM=1284034854:LM=1284034854:S=eLKAQ-QOYpFKPwI3;NID=38=g4PriUXNBibltyAS5Rko6b6ygubtZQs0s2FAy0zMYHOKOIY5rQyE1gAskYS0MU6g767OB24_xknddTgcBKuEMsShbEhZMH0ev9A_uMbWF9D61d8VcASWeksFx2kTSR_i");
 	}
 }
