@@ -71,7 +71,7 @@ public class BasicRequestExecutor implements RequestExecutor {
 	}
 
 	protected Response retrieveResponse(Connection connection) throws IOException {
-		byte[] reply = connection.read();
+		byte[] reply = connection.reads();
 		connectionCache.release(connection);
 		Response response = responseParser.parse(reply);
 		return response;

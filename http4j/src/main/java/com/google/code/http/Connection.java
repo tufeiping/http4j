@@ -31,7 +31,10 @@ public interface Connection extends Closeable {
 	
 	boolean isClosed();
 	
-	byte[] read() throws IOException;
+	@Deprecated
+	byte[] reads() throws IOException;
+	
+	Response read() throws IOException;
 	
 	void write(byte[] message) throws IOException;
 	

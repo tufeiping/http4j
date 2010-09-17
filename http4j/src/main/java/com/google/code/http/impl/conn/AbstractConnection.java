@@ -21,11 +21,11 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
 
 import com.google.code.http.Connection;
 import com.google.code.http.DnsCache;
 import com.google.code.http.Host;
+import com.google.code.http.Response;
 import com.google.code.http.metrics.ThreadLocalMetricsRecorder;
 
 /**
@@ -61,15 +61,28 @@ public abstract class AbstractConnection implements Connection {
 	abstract protected void doConnect() throws IOException;
 
 	@Override
-	public final byte[] read() throws IOException {
+	@Deprecated
+	public final byte[] reads() throws IOException {
 		byte first = readFirstByte();
 		ThreadLocalMetricsRecorder.responseStarted();
-		byte[] remaining = readRemaining();
-		ByteBuffer response = ByteBuffer.allocate(remaining.length + 1).put(first).put(remaining);
-		return response.array();
+		byte[] response = readRemaining(first);
+		ThreadLocalMetricsRecorder.responseReceived(response.length);
+		return response;
 	}
 
-	abstract protected byte[] readRemaining() throws IOException;
+	@Deprecated
+	abstract protected byte[] readRemaining(byte first) throws IOException;
+	
+	abstract protected Response readResponse(byte first);
+	
+	@Override
+	public Response read() throws IOException {
+		byte first = readFirstByte();
+		ThreadLocalMetricsRecorder.responseStarted();
+		Response response = readResponse(first);
+		//ThreadLocalMetricsRecorder.responseReceived(response.length);
+		return response;
+	}
 
 	@Override
 	public final void write(byte[] m) throws IOException {

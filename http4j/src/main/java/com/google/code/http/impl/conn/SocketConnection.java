@@ -24,7 +24,7 @@ import java.nio.ByteBuffer;
 
 import com.google.code.http.Connection;
 import com.google.code.http.Host;
-import com.google.code.http.metrics.ThreadLocalMetricsRecorder;
+import com.google.code.http.Response;
 import com.google.code.http.utils.IOUtils;
 
 /**
@@ -79,16 +79,15 @@ public class SocketConnection extends AbstractConnection
 		return (byte) read;
 	}
 	
-	@Override
-	protected byte[] readRemaining() throws IOException {
+	@Deprecated
+	protected byte[] readRemaining(byte first) throws IOException {
 		InputStream in = socket.getInputStream();
-		ByteBuffer buffer = ByteBuffer.allocate(socket.getReceiveBufferSize());
+		ByteBuffer buffer = ByteBuffer.allocate(socket.getReceiveBufferSize()).put(first);
 		byte b;
 		while((b = (byte) in.read()) != -1) {
 			buffer = buffer.hasRemaining() ? buffer : IOUtils.extendBuffer(buffer);
 			buffer.put(b);
 		}
-		ThreadLocalMetricsRecorder.responseReceived(buffer.capacity());
 		return buffer.array();
 	}
 
@@ -100,5 +99,11 @@ public class SocketConnection extends AbstractConnection
 	@Override
 	protected void writeFirstByte(byte b) throws IOException {
 		socket.getOutputStream().write(b);
+	}
+
+	@Override
+	protected Response readResponse(byte first) {
+		// extract by end input stream
+		return null;
 	}
 }
