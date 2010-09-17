@@ -33,8 +33,8 @@ public class InputStreamDecorator extends InputStream {
 	protected Counter<Long> counter;
 	
 	public InputStreamDecorator(InputStream in) {
-		counter = ThreadLocalMetricsRecorder.getInstance().getResponseTransportCounter();
 		this.in = in;
+		counter = ThreadLocalMetricsRecorder.getInstance().getResponseTransportCounter();
 	}
 
 	public int available() throws IOException {
@@ -43,14 +43,6 @@ public class InputStreamDecorator extends InputStream {
 
 	public void close() throws IOException {
 		in.close();
-	}
-
-	public boolean equals(Object obj) {
-		return in.equals(obj);
-	}
-
-	public int hashCode() {
-		return in.hashCode();
 	}
 
 	public void mark(int readlimit) {
@@ -81,20 +73,18 @@ public class InputStreamDecorator extends InputStream {
 		b[off++] = (byte) i;
 		if(--len > 0) { 
 			counter.addAndGet((long) len);
-			return in.read(b, off, len);
+			return in.read(b, off, len) + 1;
 		}
 		return 1;
 	}
 
 	public void reset() throws IOException {
 		in.reset();
+		counter.reset();
 	}
 
 	public long skip(long n) throws IOException {
+		counter.addAndGet(n);
 		return in.skip(n);
-	}
-
-	public String toString() {
-		return in.toString();
 	}
 }
