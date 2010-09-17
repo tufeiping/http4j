@@ -16,6 +16,7 @@
 
 package com.google.code.http.impl;
 
+import com.google.code.http.HTTP;
 import com.google.code.http.Parser;
 import com.google.code.http.StatusLine;
 
@@ -64,6 +65,11 @@ public class StatusLineParser implements Parser<StatusLine, byte[]> {
 				&& statusCode != 204 
 				&& statusCode != 205 
 				&& statusCode != 304;
+		}
+
+		@Override
+		public boolean keepAlive() {
+			return HTTP.HTTP_1_1.equalsIgnoreCase(version);
 		}
 	}
 }

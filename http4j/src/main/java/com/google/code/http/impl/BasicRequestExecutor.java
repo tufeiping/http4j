@@ -17,6 +17,7 @@
 package com.google.code.http.impl;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
 import com.google.code.http.Connection;
 import com.google.code.http.ConnectionCache;
@@ -59,11 +60,10 @@ public class BasicRequestExecutor implements RequestExecutor {
 	public Response execute(Request request) throws InterruptedException, IOException {
 		Connection connection = connectionCache.acquire(request.getHost());
 		try {
-			connection.write(prepareMessage(request));
+			send(connection, request);
 			Response response = retrieveResponse(connection);
 			cookieCache.set(request.getURI(), response.getHeaders());
 			return response;
-			// TODO: combine response parse into connection class to release blocked stream.
 		} catch (IOException e) {
 			connection.close();
 			throw e;
@@ -71,13 +71,21 @@ public class BasicRequestExecutor implements RequestExecutor {
 	}
 
 	protected Response retrieveResponse(Connection connection) throws IOException {
-		return null;
+		Response response = responseParser.parse(connection.getInputStream());
+		if(response.getStatusLine().keepAlive()) {
+			connectionCache.release(connection);
+		} else {
+			connection.close();
+		}
+		return response;
 	}
 
-	protected byte[] prepareMessage(Request request) {
+	protected void send(Connection connection, Request request) throws IOException {
 		addCookie(request);
-		String message = request.toMessage();
-		return message.getBytes();
+		byte[] message = request.toMessage().getBytes();
+		OutputStream out = connection.getOutputStream();
+		out.write(message);
+		out.flush();
 	}
 
 	protected void addCookie(Request request) {

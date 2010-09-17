@@ -18,26 +18,42 @@ package com.google.code.http.impl.conn;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.net.UnknownHostException;
 
+import com.google.code.http.Connection;
+import com.google.code.http.DnsCache;
 import com.google.code.http.Host;
+import com.google.code.http.metrics.ThreadLocalMetricsRecorder;
 import com.google.code.http.utils.IOUtils;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class SocketConnection extends AbstractConnection {
+public class SocketConnection implements Connection {
 
 	protected Socket socket;
+
+	protected Host host;
+
+	protected int timeout;
+
+	protected boolean reusable;
 
 	public SocketConnection(Host host) {
 		this(host, 0);
 	}
 
 	public SocketConnection(Host host, int timeout) {
-		super(host, timeout);
+		this.host = host;
+		this.timeout = timeout;
+		this.reusable = true;
 		socket = createSocket();
+		ThreadLocalMetricsRecorder.connectionCreated();
 	}
 
 	@Override
@@ -50,14 +66,22 @@ public class SocketConnection extends AbstractConnection {
 	}
 
 	@Override
-	public void doConnect() throws IOException {
+	public final void connect() throws IOException {
+		ThreadLocalMetricsRecorder.connectStarted();
+		doConnect();
+		ThreadLocalMetricsRecorder.connectStopped();
+	}
+
+	protected void doConnect() throws IOException {
 		SocketAddress address = getSocketAddress(host);
 		socket.connect(address, timeout);
 	}
 
-	@Override
-	protected void flush() throws IOException {
-		socket.getOutputStream().flush();
+	protected SocketAddress getSocketAddress(Host host)
+			throws UnknownHostException {
+		int port = (host.getPort() < 0) ? host.getDefaultPort() : host.getPort();
+		InetAddress address = DnsCache.getAddress(host.getName());
+		return new InetSocketAddress(address, port);
 	}
 
 	@Override
@@ -66,22 +90,32 @@ public class SocketConnection extends AbstractConnection {
 	}
 
 	@Override
-	protected void write(byte[] m, int i, int j) throws IOException {
-		socket.getOutputStream().write(m, i, j);
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
 	}
 
 	@Override
-	protected void writeFirstByte(byte b) throws IOException {
-		socket.getOutputStream().write(b);
+	public Host getHost() {
+		return host;
 	}
-
-	/**
-	 * This return value should be passed into
-	 * {@code ResponseParser#parse(InputStream)}, so that each time we have a
-	 * new decorator with count = 0
-	 */
+	
+	@Override
+	public void setReusable(boolean reusable) {
+		this.reusable = reusable;
+	}
+	
+	@Override
+	public boolean isReusable() {
+		return reusable && !isClosed();
+	}
+	
 	@Override
 	public InputStream getInputStream() throws IOException {
 		return new InputStreamDecorator(socket.getInputStream());
+	}
+
+	@Override
+	public OutputStream getOutputStream() throws IOException {
+		return new OutputStreamDecorator(socket.getOutputStream());
 	}
 }
