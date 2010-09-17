@@ -49,14 +49,19 @@ public class SocketConnection extends AbstractConnection
 		IOUtils.close(socket);
 	}
 
+	protected Socket createSocket() {
+		return new Socket();
+	}
+	
 	@Override
 	public void doConnect() throws IOException {
 		SocketAddress address = getSocketAddress(host);
 		socket.connect(address, timeout);
 	}
-	
-	protected Socket createSocket() {
-		return new Socket();
+
+	@Override
+	protected void flush() throws IOException {
+		socket.getOutputStream().flush();
 	}
 
 	@Override
@@ -64,6 +69,16 @@ public class SocketConnection extends AbstractConnection
 		return socket.isClosed();
 	}
 
+	@Override
+	protected byte readFirstByte() throws IOException {
+		int read = socket.getInputStream().read();
+		if(read == -1) {
+			IOUtils.close(socket);
+			throw new IOException("Socket ends while reading the first byte.");
+		}
+		return (byte) read;
+	}
+	
 	@Override
 	protected byte[] readRemaining() throws IOException {
 		InputStream in = socket.getInputStream();
@@ -78,27 +93,12 @@ public class SocketConnection extends AbstractConnection
 	}
 
 	@Override
-	protected void flush() throws IOException {
-		socket.getOutputStream().flush();
-	}
-	
-	@Override
-	protected void writeFirstByte(byte b) throws IOException {
-		socket.getOutputStream().write(b);
-	}
-
-	@Override
 	protected void write(byte[] m, int i, int j) throws IOException {
 		socket.getOutputStream().write(m, i, j);
 	}
 
 	@Override
-	protected byte readFirstByte() throws IOException {
-		int read = socket.getInputStream().read();
-		if(read == -1) {
-			IOUtils.close(socket);
-			throw new IOException("Socket ends while reading the first byte.");
-		}
-		return (byte) read;
+	protected void writeFirstByte(byte b) throws IOException {
+		socket.getOutputStream().write(b);
 	}
 }
