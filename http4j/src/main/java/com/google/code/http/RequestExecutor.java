@@ -16,10 +16,12 @@
 
 package com.google.code.http;
 
+import java.io.IOException;
+
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public interface RequestExecutor {
 	
-	Response execute(Request request) throws InterruptedException;
+	Response execute(Request request) throws InterruptedException, IOException;
 }
