@@ -63,6 +63,7 @@ public class BasicRequestExecutor implements RequestExecutor {
 			Response response = retrieveResponse(connection);
 			cookieCache.set(request.getURI(), response.getHeaders());
 			return response;
+			// TODO: combine response parse into connection class to release blocked stream.
 		} catch (IOException e) {
 			connection.close();
 			throw e;
