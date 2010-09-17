@@ -19,6 +19,7 @@ package com.google.code.http;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -34,7 +35,7 @@ public interface Connection extends Closeable {
 	
 	InputStream getInputStream() throws IOException;
 	
-	void write(byte[] message) throws IOException;
+	OutputStream getOutputStream() throws IOException;
 	
 	Host getHost();
 	

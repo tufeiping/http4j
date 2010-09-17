@@ -58,15 +58,14 @@ public final class ConnectionTestCase {
 		conn.connect();
 	}
 	
-	@Test(dependsOnMethods = "connect")
-	public void write() throws IOException {
-		String request = "HEAD / HTTP/1.1\r\nHost:www.google.com\r\n\r\n";
-		connection.write(request.getBytes());
-	}
-	
 	@Test
 	public void getInputStream() throws IOException {
 		Assert.assertNotNull(connection.getInputStream());
+	}
+	
+	@Test
+	public void getOutputStream() throws IOException {
+		Assert.assertNotNull(connection.getOutputStream());
 	}
 	
 	@Test
