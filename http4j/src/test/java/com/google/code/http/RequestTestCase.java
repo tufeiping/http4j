@@ -36,7 +36,11 @@ public abstract class RequestTestCase {
 	 */
 	protected void assertion(String url, String m) throws MalformedURLException, URISyntaxException {
 		Request r = createRequest(url);
-		Assert.assertEquals(r.toMessage(), m);
+		assertion(r, m);
+	}
+	
+	protected void assertion(Request r, String m) {
+		Assert.assertEquals(r.toMessage(), m.getBytes());
 	}
 	
 	protected String getDefaultHeaderString() {

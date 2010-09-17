@@ -20,7 +20,6 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.google.code.http.Headers;
@@ -55,25 +54,25 @@ public final class PostTestCase extends RequestTestCase {
 	public void addParameter_string_strings() throws MalformedURLException, URISyntaxException {
 		Post post = new Post("http://www.google.com/search");
 		post.addParameter("q", "http4j");
-		Assert.assertEquals( post.toMessage(), "POST /search HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Content-Length:8\r\n\r\nq=http4j");
+		assertion(post, "POST /search HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Content-Length:8\r\n\r\nq=http4j");
 		post.addParameter("m", "GET", "POST");
-		Assert.assertEquals( post.toMessage(), "POST /search HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Content-Length:21\r\n\r\nq=http4j&m=GET&m=POST");
+		assertion(post, "POST /search HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Content-Length:21\r\n\r\nq=http4j&m=GET&m=POST");
 	}
 
 	@Test(dependsOnMethods = "toMessage")
 	public void setHeader() throws MalformedURLException, URISyntaxException {
 		Post post = new Post("http://www.google.com/?u=http4j&p=http4j");
 		post.setHeader(Headers.ACCEPT_ENCODING, "ISO-8859-1");
-		Assert.assertEquals(post.toMessage(), "POST / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Encoding:ISO-8859-1\r\nContent-Length:17\r\n\r\nu=http4j&p=http4j");
+		assertion(post, "POST / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Encoding:ISO-8859-1\r\nContent-Length:17\r\n\r\nu=http4j&p=http4j");
 		post.setHeader(Headers.ACCEPT_ENCODING, "UTF-8");
-		Assert.assertEquals(post.toMessage(), "POST / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Encoding:UTF-8\r\nContent-Length:17\r\n\r\nu=http4j&p=http4j");
+		assertion(post, "POST / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Encoding:UTF-8\r\nContent-Length:17\r\n\r\nu=http4j&p=http4j");
 	}
 	
 	@Test(dependsOnMethods = "toMessage")
 	public void construct_url() throws MalformedURLException, URISyntaxException {
 		URL url = new URL("http://www.google.com/search?q=http4j");
 		Post post = new Post(url);
-		Assert.assertEquals(post.toMessage(), "POST /search HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Content-Length:8\r\n\r\nq=http4j");
+		assertion(post, "POST /search HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Content-Length:8\r\n\r\nq=http4j");
 	}
 	
 	@Override

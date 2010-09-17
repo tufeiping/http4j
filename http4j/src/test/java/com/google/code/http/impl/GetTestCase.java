@@ -20,7 +20,6 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.google.code.http.Headers;
@@ -50,25 +49,25 @@ public final class GetTestCase extends RequestTestCase {
 	public void addParameter_string_strings() throws MalformedURLException, URISyntaxException {
 		Get get = new Get("http://www.google.com/search");
 		get.addParameter("q", "http4j");
-		Assert.assertEquals(get.toMessage(), "GET /search?q=http4j HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "\r\n");
+		assertion(get, "GET /search?q=http4j HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "\r\n");
 		get.addParameter("m", "GET", "POST");
-		Assert.assertEquals(get.toMessage(), "GET /search?q=http4j&m=GET&m=POST HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "\r\n");
+		assertion(get, "GET /search?q=http4j&m=GET&m=POST HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "\r\n");
 	}
 	
 	@Test(dependsOnMethods = "toMessage")
 	public void setHeader() throws MalformedURLException, URISyntaxException {
 		Get get = new Get("http://www.google.com");
 		get.setHeader(Headers.ACCEPT_ENCODING, "ISO-8859-1");
-		Assert.assertEquals(get.toMessage(), "GET / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Encoding:ISO-8859-1\r\n\r\n");
+		assertion(get, "GET / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Encoding:ISO-8859-1\r\n\r\n");
 		get.setHeader(Headers.ACCEPT_ENCODING, "UTF-8");
-		Assert.assertEquals(get.toMessage(), "GET / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Encoding:UTF-8\r\n\r\n");
+		assertion(get, "GET / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Encoding:UTF-8\r\n\r\n");
 	}
 	
 	@Test(dependsOnMethods = "toMessage")
 	public void construct_url() throws MalformedURLException, URISyntaxException {
 		URL url = new URL("http://www.google.com/search?q=http4j");
 		Get get = new Get(url);
-		Assert.assertEquals(get.toMessage(), "GET /search?q=http4j HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "\r\n");
+		assertion(get, "GET /search?q=http4j HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "\r\n");
 	}
 	
 	@Override
