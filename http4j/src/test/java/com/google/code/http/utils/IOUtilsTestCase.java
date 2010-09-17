@@ -80,6 +80,22 @@ public class IOUtilsTestCase {
 		Assert.assertEquals(new String(chunk2), "Author:guilin.zhang@hotmail.com");
 	}
 	
+	@Test
+	public void ensureSpace() {
+		byte[] data = "http4j".getBytes();
+		ByteBuffer src = ByteBuffer.allocate(data.length + 5).put(data);
+		ByteBuffer dest = ByteBuffer.allocate(data.length);
+		ByteBuffer container = IOUtils.ensureSpace(src, dest);
+		Assert.assertTrue(container == dest);
+		dest = ByteBuffer.allocate(data.length - 1);
+		container = IOUtils.ensureSpace(src, dest);
+		Assert.assertFalse(container == dest);
+		byte[] oldData = "Hello ".getBytes();
+		dest = ByteBuffer.allocate(oldData.length + data.length - 3).put(oldData);
+		container = IOUtils.ensureSpace(src, dest);
+		Assert.assertEquals(container.position(), oldData.length);
+	}
+	
 	private void assertionExtractByEnd(String source, String dest, String end) {
 		ByteBuffer buffer = ByteBuffer.wrap(source.getBytes());
 		byte[] bytes = IOUtils.extractByEnd(buffer, end.getBytes());

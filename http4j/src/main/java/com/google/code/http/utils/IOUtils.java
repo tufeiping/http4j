@@ -50,11 +50,13 @@ public final class IOUtils {
 	}
 
 	/**
+	 * Ensure destination buffer has enough space to put remaining data of
+	 * source buffer. Create a new buffer if no enough space and put all
+	 * destination buffer data into the new buffer.
+	 * 
 	 * @param src
 	 * @param dest
-	 * @return destination buffer if there is enough space to put the data of
-	 *         the source buffer, else return an extended buffer that contains
-	 *         all data in destination buffer and has enough space to transfer
+	 * @return buffer
 	 */
 	public static ByteBuffer ensureSpace(ByteBuffer src, ByteBuffer dest) {
 		return dest.remaining() < src.position() ? extendBuffer(dest) : dest;
