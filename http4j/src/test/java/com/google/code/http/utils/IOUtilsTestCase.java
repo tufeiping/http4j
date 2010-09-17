@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.code.http.impl.utils;
+package com.google.code.http.utils;
 
 import java.nio.ByteBuffer;
 
