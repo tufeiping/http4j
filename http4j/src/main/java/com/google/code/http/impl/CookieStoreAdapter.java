@@ -44,14 +44,6 @@ public class CookieStoreAdapter implements CookieCache {
 		this.store = createCookieStore(policy);
 	}
 
-	protected Header convertToHeader(List<HttpCookie> cookies) {
-		StringBuilder buffer = new StringBuilder();
-		for (HttpCookie cookie : cookies) {
-			buffer.append(cookie).append(";");
-		}
-		return createHeader(Headers.REQUEST_COOKIE, buffer.substring(0, buffer.length() - 1));
-	}
-
 	protected CookieStore createCookieStore(CookiePolicy policy) {
 		CookieManager manager = new CookieManager();
 		manager.setCookiePolicy(policy);
@@ -59,14 +51,18 @@ public class CookieStoreAdapter implements CookieCache {
 		return manager.getCookieStore();
 	}
 
-	protected Header createHeader(String name, String value) {
-		return new CanonicalHeader(name, value);
+	@Override
+	public String get(URI uri) {
+		List<HttpCookie> cookies = store.get(uri);
+		return null == cookies || cookies.isEmpty()? null : convertToString(cookies);
 	}
 	
-	@Override
-	public Header get(URI uri) {
-		List<HttpCookie> cookies = store.get(uri);
-		return null == cookies || cookies.isEmpty()? null : convertToHeader(cookies);
+	protected String convertToString(List<HttpCookie> cookies) {
+		StringBuilder buffer = new StringBuilder();
+		for (HttpCookie cookie : cookies) {
+			buffer.append(cookie).append(";");
+		}
+		return buffer.substring(0, buffer.length() - 1);
 	}
 
 	protected void processHeader(URI uri, Header header) {

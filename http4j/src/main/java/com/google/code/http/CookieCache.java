@@ -26,5 +26,5 @@ public interface CookieCache {
 	
 	void set(URI uri, Collection<Header> headers);
 	
-	Header get(URI uri);
+	String get(URI uri);
 }

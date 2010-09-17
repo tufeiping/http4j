@@ -37,6 +37,8 @@ public interface Request {
 	 */
 	void addParameter(String name, String... values);
 
+	void setCookie(String value);
+	
 	/**
 	 * Set the header with specified name and value. Replace the header with same
 	 * name if it exists.

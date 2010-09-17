@@ -72,6 +72,11 @@ public abstract class AbstractRequest implements Request {
 	abstract protected String getName();
 	
 	@Override
+	public void setCookie(String value) {
+		setHeader(Headers.REQUEST_COOKIE, value);
+	}
+	
+	@Override
 	public void addParameter(String name, String... values) {
 		for (String value : values) {
 			query = query.length() == 0 ? query : query.append('&');
