@@ -16,6 +16,7 @@
 
 package com.google.code.http;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -36,7 +37,7 @@ import com.google.code.http.impl.conn.ConnectionPool;
  */
 public final class ConnectionCacheTestCase {
 
-	private ConnectionCache manager;
+	private ConnectionCache cache;
 
 	private Host host;
 
@@ -46,16 +47,16 @@ public final class ConnectionCacheTestCase {
 
 	@BeforeClass
 	public void beforeClass() {
-		manager = new ConnectionPool();
+		cache = new ConnectionPool();
 		host = new BasicHost("www.google.com");
 	}
 
 	@Test
-	public void acquire() throws InterruptedException {
-		connection1 = manager.acquire(host);
+	public void acquire() throws InterruptedException, IOException {
+		connection1 = cache.acquire(host);
 		Assert.assertNotNull(connection1);
 		Assert.assertEquals(connection1.getHost(), host);
-		connection2 = manager.acquire(host);
+		connection2 = cache.acquire(host);
 		Assert.assertNotNull(connection2);
 		Assert.assertEquals(connection2.getHost(), host);
 		Assert.assertFalse(connection1 == connection2);
@@ -63,36 +64,40 @@ public final class ConnectionCacheTestCase {
 
 	@Test(dependsOnMethods = "acquire")
 	public void release() {
-		boolean success1 = manager.release(connection1);
-		boolean success2 = manager.release(connection2);
+		boolean success1 = cache.release(connection1);
+		boolean success2 = cache.release(connection2);
 		Assert.assertTrue(success1 && success2);
 	}
 
 	@Test(dependsOnMethods = "release")
-	public void shutdown() throws InterruptedException {
-		manager.shutdown();
-		Connection connection = manager.acquire(host);
+	public void shutdown() throws InterruptedException, IOException {
+		cache.shutdown();
+		Connection connection = cache.acquire(host);
 		Assert.assertNull(connection);
-		boolean released = manager.release(connection1);
+		boolean released = cache.release(connection1);
 		Assert.assertFalse(released);
 	}
 
 	@Test(expectedExceptions = TimeoutException.class)
 	public void setMaxConnectionsPerHost() throws InterruptedException,
-			ExecutionException, TimeoutException {
+			ExecutionException, TimeoutException, IOException {
 		final ConnectionCache pool = new ConnectionPool();
 		pool.setMaxConnectionsPerHost(1);
-		Connection connection = pool.acquire(host);
-		Assert.assertNotNull(connection);
-		pool.release(connection);
-		connection = pool.acquire(host);
-		Assert.assertNotNull(connection);
-		ExecutorService service = Executors.newSingleThreadExecutor();
-		service.invokeAny(Collections.singleton(new Callable<Connection>() {
-			@Override
-			public Connection call() throws Exception {
-				return pool.acquire(host);
-			}
-		}), 2, TimeUnit.SECONDS);
+		try {
+			Connection connection = pool.acquire(host);
+			Assert.assertNotNull(connection);
+			pool.release(connection);
+			connection = pool.acquire(host);
+			Assert.assertNotNull(connection);
+			ExecutorService service = Executors.newSingleThreadExecutor();
+			service.invokeAny(Collections.singleton(new Callable<Connection>() {
+				@Override
+				public Connection call() throws Exception {
+					return pool.acquire(host);
+				}
+			}), 2, TimeUnit.SECONDS);
+		} finally {
+			pool.shutdown();
+		}
 	}
 }

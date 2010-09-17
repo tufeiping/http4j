@@ -17,31 +17,31 @@
 package com.google.code.http;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+
+import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+import com.google.code.http.impl.BasicRequestExecutor;
+import com.google.code.http.impl.Get;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public interface ConnectionCache {
-
-	/**
-	 * @see #setMaxConnectionsPerHost(int)
-	 * @param host
-	 * @return connection for {@code host}, blocked util connections for this
-	 *         host is less than max connections per host value.
-	 * @throws InterruptedException
-	 * @throws IOException 
-	 */
-	Connection acquire(Host host) throws InterruptedException, IOException;
-
-	/**
-	 * @param connection
-	 * @return <code>true</code> if the connection has been release,
-	 *         <code>false</code> if the manager has been shutdown or connection
-	 *         is closed.
-	 */
-	boolean release(Connection connection);
-
-	void setMaxConnectionsPerHost(int maxConnectionsPerHost);
-
-	void shutdown();
+public final class RequestExecutorTestCase {
+	
+	private RequestExecutor executor;
+	
+	@BeforeClass
+	public void beforeClass() {
+		executor = new BasicRequestExecutor();
+	}
+	
+	@Test
+	public void execute() throws URISyntaxException, InterruptedException, IOException {
+		Request request = new Get("http://code.google.com/p/http4j/");
+		Response response = executor.execute(request);
+		Assert.assertNotNull(response);
+	}
 }

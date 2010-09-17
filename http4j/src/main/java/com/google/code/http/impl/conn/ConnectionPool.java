@@ -16,6 +16,7 @@
 
 package com.google.code.http.impl.conn;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -53,7 +54,7 @@ public class ConnectionPool implements ConnectionCache {
 	}
 
 	@Override
-	public Connection acquire(Host host) throws InterruptedException {
+	public Connection acquire(Host host) throws InterruptedException, IOException {
 		return shutdown.get() ? null : getConnection(host);
 	}
 
@@ -78,11 +79,13 @@ public class ConnectionPool implements ConnectionCache {
 		}
 	}
 
-	protected Connection createConnection(Host host) {
-		return new SocketConnection(host);
+	protected Connection createConnection(Host host) throws IOException {
+		 SocketConnection connection = new SocketConnection(host);
+		 connection.connect();
+		 return connection;
 	}
 	
-	private Connection getConnection(Host host) throws InterruptedException {
+	private Connection getConnection(Host host) throws InterruptedException, IOException {
 		Queue<Connection> queue = getFreeQueue(host);
 		increaseUsed(host);
 		Connection connection = queue.poll();
