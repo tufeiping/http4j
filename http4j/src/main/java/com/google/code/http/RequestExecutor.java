@@ -21,5 +21,5 @@ package com.google.code.http;
  */
 public interface RequestExecutor {
 	
-	Response execute(Request request);
+	Response execute(Request request) throws InterruptedException;
 }
