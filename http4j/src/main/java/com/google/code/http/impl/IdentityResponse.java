@@ -38,12 +38,14 @@ public class IdentityResponse extends AbstractResponse {
 	@Override
 	protected byte[] readEntity(InputStream in) throws IOException {
 		int length = Headers.getContentLength(headers);
-		if(length > 0) {
-			byte[] result = new byte[length];
-			in.read(result);
-			return result;
+		return length > 0 ? readEntity(in, length) : new byte[0];
+	}
+	
+	protected byte[] readEntity(InputStream in, int length) throws IOException {
+		byte[] e = new byte[length];
+		if(in.read(e) == -1) {
+			throw new IOException("EOF at unexpected position.");
 		}
-		
-		return new byte[0];
+		return e;
 	}
 }
