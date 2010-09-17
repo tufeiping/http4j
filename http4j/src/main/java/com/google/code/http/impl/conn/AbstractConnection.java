@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
@@ -67,18 +68,20 @@ public abstract class AbstractConnection implements Connection {
 	public final byte[] read() throws IOException {
 		byte b = readFirstByte();
 		ThreadLocalMetricsRecorder.responseStarted();
-		ByteBuffer buffer = ByteBuffer.allocate(2 << 13);
+		ByteBuffer buffer = ByteBuffer.allocate(getReceiveBufferSize());
 		ByteBuffer extended = ByteBuffer.allocate(buffer.capacity() << 1);
 		while (read(buffer) == buffer.capacity()) {
-			// Increasing buffer's capacity reduces the chance to get here
 			extended = IOUtils.ensureSpace(buffer, extended);
 			IOUtils.transfer(buffer, extended);
 		}
 		byte[] data = IOUtils.extract(extended.position() == 0 ? buffer : extended);
 		extended = ByteBuffer.allocate(data.length + 1).put(b).put(data);
 		ThreadLocalMetricsRecorder.responseStopped(extended.capacity());
+		System.out.println(new String(extended.array()));
 		return extended.array();
 	}
+
+	abstract protected int getReceiveBufferSize() throws SocketException;
 
 	@Override
 	public final void write(byte[] m) throws IOException {

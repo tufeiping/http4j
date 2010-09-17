@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
 
 import com.google.code.http.Connection;
@@ -94,5 +95,10 @@ public class SocketConnection extends AbstractConnection
 			throw new IOException("Socket ends while reading the first byte.");
 		}
 		return (byte) read;
+	}
+
+	@Override
+	protected int getReceiveBufferSize() throws SocketException {
+		return socket.getReceiveBufferSize();
 	}
 }
