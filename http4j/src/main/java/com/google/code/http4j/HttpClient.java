@@ -23,6 +23,7 @@ import java.net.URISyntaxException;
  * Execute method only submit the request and get the message back without parsing.
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
+@Deprecated
 public interface HttpClient {
 	
 	HttpResponse head(String url) throws IOException, URISyntaxException;

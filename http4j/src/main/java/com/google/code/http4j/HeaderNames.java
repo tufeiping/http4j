@@ -19,6 +19,7 @@ package com.google.code.http4j;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
+@Deprecated
 public interface HeaderNames {
 	String ACCEPT = "Accept";
 	String ACCEPT_CHARSET = "Accept-Charset";

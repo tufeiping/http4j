@@ -23,6 +23,7 @@ import java.util.Collection;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  *
  */
+@Deprecated
 public interface CookieCache {
 	
 	int storeCookies(URI uri, Collection<HttpHeader> headers); 

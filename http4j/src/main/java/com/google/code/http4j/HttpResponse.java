@@ -20,6 +20,7 @@ package com.google.code.http4j;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
+@Deprecated
 public interface HttpResponse extends HttpMessage {
 	
 	StatusLine getStatusLine();

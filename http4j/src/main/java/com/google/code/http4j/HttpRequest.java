@@ -22,6 +22,7 @@ import java.net.URI;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
+@Deprecated
 public interface HttpRequest extends HttpMessage {
 	
 	URI getUri();

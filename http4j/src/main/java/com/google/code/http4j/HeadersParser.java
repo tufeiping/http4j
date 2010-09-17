@@ -22,6 +22,7 @@ import java.util.List;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
+@Deprecated
 public interface HeadersParser {
 	
 	List<HttpHeader> parse(byte[] source) throws IOException;

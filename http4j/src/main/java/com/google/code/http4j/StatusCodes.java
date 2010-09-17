@@ -18,6 +18,7 @@ package com.google.code.http4j;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
+@Deprecated
 public class StatusCodes {
 
 	public static final int OK = 200;

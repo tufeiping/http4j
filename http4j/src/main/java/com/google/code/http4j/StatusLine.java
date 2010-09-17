@@ -21,6 +21,7 @@ import java.io.Serializable;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
+@Deprecated
 public interface StatusLine extends Formattable, Serializable {
 
 	String getVersion();

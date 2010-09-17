@@ -16,6 +16,7 @@
 
 package com.google.code.http4j;
 
+@Deprecated
 public interface Http {
 	
 	String HEAD = "HEAD";

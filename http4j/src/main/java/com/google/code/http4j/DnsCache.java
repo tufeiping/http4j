@@ -23,6 +23,7 @@ import java.net.UnknownHostException;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
+@Deprecated
 public abstract class DnsCache implements Serializable {
 	
 	private static final long serialVersionUID = -2294441769086049537L;

@@ -23,6 +23,7 @@ import java.io.IOException;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
+@Deprecated
 public interface ConnectionPool {
 
 	Connection getConnection(HttpHost host) throws IOException;

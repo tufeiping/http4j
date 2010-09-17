@@ -23,6 +23,7 @@ import java.net.UnknownHostException;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
+@Deprecated
 public interface HttpHost {
 	
 	String getName();

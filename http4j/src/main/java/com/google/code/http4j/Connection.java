@@ -24,6 +24,7 @@ import java.io.IOException;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
+@Deprecated
 public interface Connection extends Closeable {
 	
 	HttpHost getHost();

@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
+@Deprecated
 public interface HttpMessage extends Formattable, Serializable {
 	
 	List<HttpHeader> getHeaders();
