@@ -38,8 +38,9 @@ public class IntCounter implements Counter<Integer> {
 	}
 
 	@Override
-	public void increase(Integer number) {
+	public Integer addAndGet(Integer number) {
 		total += number;
+		return total;
 	}
 
 	@Override

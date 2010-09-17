@@ -38,8 +38,9 @@ public class LongCounter implements Counter<Long> {
 	}
 
 	@Override
-	public void increase(Long number) {
+	public Long addAndGet(Long number) {
 		total += number;
+		return total;
 	}
 
 	@Override

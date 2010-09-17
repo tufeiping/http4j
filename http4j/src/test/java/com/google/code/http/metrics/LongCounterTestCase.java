@@ -39,13 +39,13 @@ public final class LongCounterTestCase {
 	
 	@Test(dependsOnMethods = "get")
 	public void increase() {
-		counter.increase(0l);
+		counter.addAndGet(0l);
 		long number = counter.get();
 		Assert.assertEquals(number, 0);
-		counter.increase(1048576l);
+		counter.addAndGet(1048576l);
 		number = counter.get();
 		Assert.assertEquals(number, 1048576l);
-		counter.increase(-13l);
+		counter.addAndGet(-13l);
 		number = counter.get();
 		Assert.assertEquals(number, 1048576l - 13);
 	}

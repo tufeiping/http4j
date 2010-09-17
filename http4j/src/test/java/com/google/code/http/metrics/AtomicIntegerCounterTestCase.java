@@ -47,13 +47,13 @@ public final class AtomicIntegerCounterTestCase {
 
 	@Test(dependsOnMethods = "get")
 	public void increase() {
-		counter.increase(0);
+		counter.addAndGet(0);
 		int number = counter.get();
 		Assert.assertEquals(number, 0);
-		counter.increase(1048576);
+		counter.addAndGet(1048576);
 		number = counter.get();
 		Assert.assertEquals(number, 1048576);
-		counter.increase(-13);
+		counter.addAndGet(-13);
 		number = counter.get();
 		Assert.assertEquals(number, 1048576 - 13);
 	}
@@ -76,7 +76,7 @@ public final class AtomicIntegerCounterTestCase {
 				@Override
 				public Integer call() {
 					Counter<Integer> c = new IntCounter();
-					c.increase(j);
+					c.addAndGet(j);
 					counter.aggregate(c);
 					return j;
 				}

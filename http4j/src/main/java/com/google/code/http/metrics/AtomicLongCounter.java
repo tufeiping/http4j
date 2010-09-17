@@ -40,8 +40,8 @@ public class AtomicLongCounter implements AggregatedCounter<Long> {
 	}
 
 	@Override
-	public void increase(Long number) {
-		total.addAndGet(number);
+	public Long addAndGet(Long number) {
+		return total.addAndGet(number);
 	}
 
 	@Override

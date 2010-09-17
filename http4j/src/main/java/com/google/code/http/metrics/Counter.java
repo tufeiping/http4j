@@ -29,7 +29,7 @@ public interface Counter<T extends Number> {
 	 * 
 	 * @param number
 	 */
-	void increase(T number);
+	T addAndGet(T number);
 
 	void reset();
 }

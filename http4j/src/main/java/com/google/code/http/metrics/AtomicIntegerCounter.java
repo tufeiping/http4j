@@ -40,8 +40,8 @@ public class AtomicIntegerCounter implements AggregatedCounter<Integer> {
 	}
 
 	@Override
-	public void increase(Integer number) {
-		total.addAndGet(number);
+	public Integer addAndGet(Integer number) {
+		return total.addAndGet(number);
 	}
 
 	@Override

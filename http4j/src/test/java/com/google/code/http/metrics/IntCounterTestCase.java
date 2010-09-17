@@ -40,13 +40,13 @@ public final class IntCounterTestCase {
 	
 	@Test(dependsOnMethods = "get")
 	public void increase() {
-		counter.increase(0);
+		counter.addAndGet(0);
 		int number = counter.get();
 		Assert.assertEquals(number, 0);
-		counter.increase(19);
+		counter.addAndGet(19);
 		number = counter.get();
 		Assert.assertEquals(number, 19);
-		counter.increase(-13);
+		counter.addAndGet(-13);
 		number = counter.get();
 		Assert.assertEquals(number, 6);
 	}
