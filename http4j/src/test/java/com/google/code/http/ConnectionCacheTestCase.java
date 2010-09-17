@@ -34,9 +34,9 @@ import com.google.code.http.impl.conn.ConnectionPool;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public final class ConnectionManagerTestCase {
+public final class ConnectionCacheTestCase {
 
-	private ConnectionManager manager;
+	private ConnectionCache manager;
 
 	private Host host;
 
@@ -80,7 +80,7 @@ public final class ConnectionManagerTestCase {
 	@Test(expectedExceptions = TimeoutException.class)
 	public void setMaxConnectionsPerHost() throws InterruptedException,
 			ExecutionException, TimeoutException {
-		final ConnectionManager pool = new ConnectionPool();
+		final ConnectionCache pool = new ConnectionPool();
 		pool.setMaxConnectionsPerHost(1);
 		Connection connection = pool.acquire(host);
 		Assert.assertNotNull(connection);
