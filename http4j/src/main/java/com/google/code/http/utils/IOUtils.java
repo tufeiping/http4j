@@ -18,7 +18,6 @@ package com.google.code.http.utils;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 
@@ -135,10 +134,5 @@ public final class IOUtils {
 			return Integer.parseInt(s.trim(), 16);
 		}
 		return 0;
-	}
-
-	public static byte[] convertBytes(byte[] entity, String charset)
-			throws UnsupportedEncodingException {
-		return new String(entity).getBytes(charset);
 	}
 }

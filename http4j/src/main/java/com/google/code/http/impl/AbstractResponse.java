@@ -19,12 +19,10 @@ package com.google.code.http.impl;
 import java.io.IOException;
 import java.util.List;
 
-import com.google.code.http.Charset;
 import com.google.code.http.Header;
 import com.google.code.http.Headers;
 import com.google.code.http.Response;
 import com.google.code.http.StatusLine;
-import com.google.code.http.utils.IOUtils;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -45,9 +43,6 @@ public abstract class AbstractResponse implements Response {
 		this.headers = headers;
 		entity = null == entitySource ? null : readEntity(entitySource);
 		charset = Headers.getCharset(headers);
-		if(!Charset.DEFAULT.equalsIgnoreCase(charset)) {
-			entity = null == entity ? null : IOUtils.convertBytes(entity, charset);
-		}
 	}
 	
 	abstract protected byte[] readEntity(byte[] entitySource) throws IOException;
