@@ -18,8 +18,8 @@
 
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
-<suite name="refactory" verbose="1">
-	<test name="http">
+<suite name="http4j" verbose="1">
+	<test name="regression">
 		<packages>
 			<package name="com.google.code.http" />
 			<package name="com.google.code.http.metrics" />
