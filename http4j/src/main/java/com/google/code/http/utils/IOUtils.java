@@ -52,8 +52,9 @@ public final class IOUtils {
 	/**
 	 * @param src
 	 * @param dest
-	 * @return ensure that destination buffer has enough remaining space to put
-	 *         the data in source
+	 * @return destination buffer if there is enough space to put the data of
+	 *         the source buffer, else return an extended buffer that contains
+	 *         all data in destination buffer and has enough space to transfer
 	 */
 	public static ByteBuffer ensureSpace(ByteBuffer src, ByteBuffer dest) {
 		return dest.remaining() < src.position() ? extendBuffer(dest) : dest;
@@ -82,12 +83,9 @@ public final class IOUtils {
 	}
 
 	/**
-	 * Extract data from buffer by given end expression.e.g. 
-	 * <li>http4j [4j] -&gt; http</li>
-	 * <li>http4j [4] -&gt; http</li>
-	 * <li>http4j [ttp4j] -&gt; h</li>
-	 * <li>http4j [http4j] -&gt; ""</li>
-	 * <li>http4j [4g] -&gt; "http4j"</li>
+	 * Extract data from buffer by given end expression.e.g. <li>http4j [4j]
+	 * -&gt; http</li> <li>http4j [4] -&gt; http</li> <li>http4j [ttp4j] -&gt; h
+	 * </li> <li>http4j [http4j] -&gt; ""</li> <li>http4j [4g] -&gt; "http4j"</li>
 	 * 
 	 * @param buffer
 	 * @param endExpression
@@ -99,7 +97,8 @@ public final class IOUtils {
 		byte b;
 		int count = 0;
 		while (buffer.hasRemaining() && count < endExpression.length) {
-			count = ((b = buffer.get()) == endExpression[count]) ? count + 1 : 0;
+			count = ((b = buffer.get()) == endExpression[count]) ? count + 1
+					: 0;
 			valueHolder.put(b);
 		}
 		valueHolder.position(valueHolder.position() - count);
@@ -130,11 +129,11 @@ public final class IOUtils {
 		int size = getNextChunkSize(buffer);
 		return size > 0 ? getNextChunk(buffer, size) : null;
 	}
-	
+
 	static byte[] getNextChunk(ByteBuffer buffer, int size) {
 		byte[] chunk = new byte[size];
 		buffer.get(chunk);
-		buffer.get(new byte[2]);//CRLF
+		buffer.get(new byte[2]);// CRLF
 		return chunk;
 	}
 
@@ -149,7 +148,8 @@ public final class IOUtils {
 		return 0;
 	}
 
-	public static byte[] convertBytes(byte[] entity, String charset) throws UnsupportedEncodingException {
+	public static byte[] convertBytes(byte[] entity, String charset)
+			throws UnsupportedEncodingException {
 		return new String(entity).getBytes(charset);
 	}
 }
