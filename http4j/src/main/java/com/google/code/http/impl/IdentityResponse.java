@@ -37,9 +37,12 @@ public class IdentityResponse extends AbstractResponse {
 	@Override
 	protected byte[] readEntity(byte[] entitySource) {
 		int length = Headers.getContentLength(headers);
-		length = length > 0 ? length : entitySource.length;
-		byte[] result = new byte[length];
-		System.arraycopy(entitySource, 0, result, 0, length);
-		return result;
+		if(length > 0 && length < entitySource.length) {
+			byte[] result = new byte[length];
+			System.arraycopy(entitySource, 0, result, 0, length);
+			return result;
+		}
+		
+		return entitySource;
 	}
 }
