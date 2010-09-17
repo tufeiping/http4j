@@ -34,7 +34,7 @@ public class SocketConnection extends AbstractConnection {
 	public SocketConnection(Host host) {
 		this(host, 0);
 	}
-	
+
 	public SocketConnection(Host host, int timeout) {
 		super(host, timeout);
 		socket = createSocket();
@@ -48,7 +48,7 @@ public class SocketConnection extends AbstractConnection {
 	protected Socket createSocket() {
 		return new Socket();
 	}
-	
+
 	@Override
 	public void doConnect() throws IOException {
 		SocketAddress address = getSocketAddress(host);
@@ -74,7 +74,12 @@ public class SocketConnection extends AbstractConnection {
 	protected void writeFirstByte(byte b) throws IOException {
 		socket.getOutputStream().write(b);
 	}
-	
+
+	/**
+	 * This return value should be passed into
+	 * {@code ResponseParser#parse(InputStream)}, so that each time we have a
+	 * new decorator with count = 0
+	 */
 	@Override
 	public InputStream getInputStream() throws IOException {
 		return new InputStreamDecorator(socket.getInputStream());
