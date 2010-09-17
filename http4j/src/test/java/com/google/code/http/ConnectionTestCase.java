@@ -65,7 +65,7 @@ public final class ConnectionTestCase {
 	
 	@Test(dependsOnMethods = "write")
 	public void read() throws IOException {
-		byte[] response = connection.read();
+		byte[] response = connection.reads();
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.length > 0);
 		String message = new String(response);
