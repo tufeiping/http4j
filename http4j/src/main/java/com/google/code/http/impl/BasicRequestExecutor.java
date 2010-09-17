@@ -30,7 +30,7 @@ import com.google.code.http.impl.conn.ConnectionPool;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public class BasicRequestExecutor implements RequestExecutor {
-
+	
 	protected ConnectionCache connectionCache;
 
 	protected CookieCache cookieCache;
@@ -72,12 +72,14 @@ public class BasicRequestExecutor implements RequestExecutor {
 	protected Response retrieveResponse(Connection connection) throws IOException {
 		byte[] reply = connection.read();
 		connectionCache.release(connection);
-		return responseParser.parse(reply);
+		Response response = responseParser.parse(reply);
+		return response;
 	}
 
 	protected byte[] prepareMessage(Request request) {
 		addCookie(request);
-		return request.toMessage().getBytes();
+		String message = request.toMessage();
+		return message.getBytes();
 	}
 
 	protected void addCookie(Request request) {
