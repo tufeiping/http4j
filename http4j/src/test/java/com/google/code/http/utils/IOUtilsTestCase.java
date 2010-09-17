@@ -16,12 +16,13 @@
 
 package com.google.code.http.utils;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import com.google.code.http.utils.IOUtils;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -72,11 +73,11 @@ public class IOUtilsTestCase {
 	}
 	
 	@Test
-	public void getNextChunk() {
-		ByteBuffer buffer = ByteBuffer.wrap("19\r\nHello World!-From http4j.\r\n1f\r\nAuthor:guilin.zhang@hotmail.com\r\n0\r\n\r\n".getBytes());
-		byte[] chunk1 = IOUtils.getNextChunk(buffer);
+	public void getNextChunk() throws IOException {
+		InputStream in = new ByteArrayInputStream("19\r\nHello World!-From http4j.\r\n1f\r\nAuthor:guilin.zhang@hotmail.com\r\n0\r\n\r\n".getBytes());
+		byte[] chunk1 = IOUtils.getNextChunk(in);
 		Assert.assertEquals(new String(chunk1), "Hello World!-From http4j.");
-		byte[] chunk2 = IOUtils.getNextChunk(buffer);
+		byte[] chunk2 = IOUtils.getNextChunk(in);
 		Assert.assertEquals(new String(chunk2), "Author:guilin.zhang@hotmail.com");
 	}
 	

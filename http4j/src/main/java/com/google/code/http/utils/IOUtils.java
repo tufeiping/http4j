@@ -18,6 +18,7 @@ package com.google.code.http.utils;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 
@@ -71,9 +72,12 @@ public final class IOUtils {
 	}
 
 	/**
-	 * Extract data from buffer by given end expression.e.g. <li>http4j [4j]
-	 * -&gt; http</li> <li>http4j [4] -&gt; http</li> <li>http4j [ttp4j] -&gt; h
-	 * </li> <li>http4j [http4j] -&gt; ""</li> <li>http4j [4g] -&gt; "http4j"</li>
+	 * Extract data from buffer by given end expression.e.g. 
+	 * <li>http4j [4j] -&gt; http</li>
+	 * <li>http4j [4] -&gt; http</li>
+	 * <li>http4j [ttp4j] -&gt; h</li>
+	 * <li>http4j [http4j] -&gt; ""</li>
+	 * <li>http4j [4g] -&gt; "http4j"</li>
 	 * 
 	 * @param buffer
 	 * @param endExpression
@@ -81,16 +85,28 @@ public final class IOUtils {
 	 * @return bytes
 	 */
 	public static byte[] extractByEnd(ByteBuffer buffer, byte... endExpression) {
-		ByteBuffer valueHolder = ByteBuffer.allocate(buffer.limit());
+		ByteBuffer bf = ByteBuffer.allocate(buffer.limit());
 		byte b;
 		int count = 0;
 		while (buffer.hasRemaining() && count < endExpression.length) {
-			count = ((b = buffer.get()) == endExpression[count]) ? count + 1
-					: 0;
-			valueHolder.put(b);
+			count = ((b = buffer.get()) == endExpression[count]) ? count + 1 : 0;
+			bf.put(b);
 		}
-		valueHolder.position(valueHolder.position() - count);
-		return extract(valueHolder);
+		bf.position(bf.position() - count);
+		return extract(bf);
+	}
+	
+	public static byte[] extractByEnd(InputStream in, byte... endExpression) throws IOException {
+		ByteBuffer bf = ByteBuffer.allocate(2 << 12);
+		int count = 0;
+		byte b;
+		while (count < endExpression.length && (b = (byte) in.read()) != -1) {
+			count = (b == endExpression[count]) ? count + 1 : 0;
+			bf = bf.hasRemaining() ? bf : extendBuffer(bf);
+			bf.put(b);
+		}
+		bf.position(bf.position() - count);
+		return extract(bf);
 	}
 
 	/**
@@ -110,23 +126,24 @@ public final class IOUtils {
 	}
 
 	/**
-	 * @param buffer
+	 * @param in
 	 * @return next chunk, <code>null</code> if reaches the end of chunk body.
+	 * @throws IOException 
 	 */
-	public static byte[] getNextChunk(ByteBuffer buffer) {
-		int size = getNextChunkSize(buffer);
-		return size > 0 ? getNextChunk(buffer, size) : null;
+	public static byte[] getNextChunk(InputStream in) throws IOException {
+		int size = getNextChunkSize(in);
+		return size > 0 ? getNextChunk(in, size) : null;
 	}
 
-	static byte[] getNextChunk(ByteBuffer buffer, int size) {
+	static byte[] getNextChunk(InputStream in, int size) throws IOException {
 		byte[] chunk = new byte[size];
-		buffer.get(chunk);
-		buffer.get(new byte[2]);// CRLF
+		in.read(chunk);
+		in.read(new byte[2]);// CRLF
 		return chunk;
 	}
 
-	static int getNextChunkSize(ByteBuffer buffer) {
-		byte[] chunkSize = extractByEnd(buffer, HTTP.CR, HTTP.LF);
+	static int getNextChunkSize(InputStream in) throws IOException {
+		byte[] chunkSize = extractByEnd(in, HTTP.CR, HTTP.LF);
 		if (chunkSize.length > 0) {
 			String s = new String(chunkSize);
 			int end = s.indexOf(';');

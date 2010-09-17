@@ -25,7 +25,6 @@ import java.net.UnknownHostException;
 import com.google.code.http.Connection;
 import com.google.code.http.DnsCache;
 import com.google.code.http.Host;
-import com.google.code.http.Response;
 import com.google.code.http.metrics.ThreadLocalMetricsRecorder;
 
 /**
@@ -47,8 +46,6 @@ public abstract class AbstractConnection implements Connection {
 		ThreadLocalMetricsRecorder.connectionCreated();
 	}
 
-	abstract protected byte readFirstByte() throws IOException;
-
 	// before sending start event
 	abstract protected void writeFirstByte(byte b) throws IOException;
 
@@ -59,30 +56,6 @@ public abstract class AbstractConnection implements Connection {
 	abstract protected void flush() throws IOException;
 
 	abstract protected void doConnect() throws IOException;
-
-	@Override
-	@Deprecated
-	public final byte[] reads() throws IOException {
-		byte first = readFirstByte();
-		ThreadLocalMetricsRecorder.responseStarted();
-		byte[] response = readRemaining(first);
-		ThreadLocalMetricsRecorder.responseReceived(response.length);
-		return response;
-	}
-
-	@Deprecated
-	abstract protected byte[] readRemaining(byte first) throws IOException;
-	
-	abstract protected Response readResponse(byte first);
-	
-	@Override
-	public Response read() throws IOException {
-		byte first = readFirstByte();
-		ThreadLocalMetricsRecorder.responseStarted();
-		Response response = readResponse(first);
-		//ThreadLocalMetricsRecorder.responseReceived(response.length);
-		return response;
-	}
 
 	@Override
 	public final void write(byte[] m) throws IOException {

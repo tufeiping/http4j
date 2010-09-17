@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -63,20 +64,9 @@ public final class ConnectionTestCase {
 		connection.write(request.getBytes());
 	}
 	
-	@Test(dependsOnMethods = "write")
-	public void read() throws IOException {
-		byte[] response = connection.reads();
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.length > 0);
-		String message = new String(response);
-		Assert.assertTrue(message.startsWith("HTTP/1.1"));
-	}
-	
-	@Test(dependsOnMethods = "read")
-	public void close() throws IOException {
-		Assert.assertFalse(connection.isClosed());
-		connection.close();
-		Assert.assertTrue(connection.isClosed());
+	@Test
+	public void getInputStream() throws IOException {
+		Assert.assertNotNull(connection.getInputStream());
 	}
 	
 	@Test
@@ -95,5 +85,12 @@ public final class ConnectionTestCase {
 		Assert.assertFalse(connection.isReusable());
 		connection.setReusable(true);
 		Assert.assertTrue(connection.isReusable());
+	}
+	
+	@AfterClass
+	public void close() throws IOException {
+		Assert.assertFalse(connection.isClosed());
+		connection.close();
+		Assert.assertTrue(connection.isClosed());
 	}
 }

@@ -17,6 +17,7 @@
 package com.google.code.http.impl;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import com.google.code.http.Header;
@@ -30,19 +31,19 @@ import com.google.code.http.StatusLine;
 public class IdentityResponse extends AbstractResponse {
 
 	public IdentityResponse(StatusLine statusLine, List<Header> headers,
-			byte[] entitySource) throws IOException {
-		super(statusLine, headers, entitySource);
+			InputStream in) throws IOException {
+		super(statusLine, headers, in);
 	}
 
 	@Override
-	protected byte[] readEntity(byte[] entitySource) {
+	protected byte[] readEntity(InputStream in) throws IOException {
 		int length = Headers.getContentLength(headers);
-		if(length > 0 && length < entitySource.length) {
+		if(length > 0) {
 			byte[] result = new byte[length];
-			System.arraycopy(entitySource, 0, result, 0, length);
+			in.read(result);
 			return result;
 		}
 		
-		return entitySource;
+		return new byte[0];
 	}
 }

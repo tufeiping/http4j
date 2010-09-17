@@ -20,18 +20,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.nio.ByteBuffer;
 
-import com.google.code.http.Connection;
 import com.google.code.http.Host;
-import com.google.code.http.Response;
 import com.google.code.http.utils.IOUtils;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class SocketConnection extends AbstractConnection
-		implements Connection {
+public class SocketConnection extends AbstractConnection {
 
 	protected Socket socket;
 
@@ -70,28 +66,6 @@ public class SocketConnection extends AbstractConnection
 	}
 
 	@Override
-	protected byte readFirstByte() throws IOException {
-		int read = socket.getInputStream().read();
-		if(read == -1) {
-			IOUtils.close(socket);
-			throw new IOException("Socket ends while reading the first byte.");
-		}
-		return (byte) read;
-	}
-	
-	@Deprecated
-	protected byte[] readRemaining(byte first) throws IOException {
-		InputStream in = socket.getInputStream();
-		ByteBuffer buffer = ByteBuffer.allocate(socket.getReceiveBufferSize()).put(first);
-		byte b;
-		while((b = (byte) in.read()) != -1) {
-			buffer = buffer.hasRemaining() ? buffer : IOUtils.extendBuffer(buffer);
-			buffer.put(b);
-		}
-		return buffer.array();
-	}
-
-	@Override
 	protected void write(byte[] m, int i, int j) throws IOException {
 		socket.getOutputStream().write(m, i, j);
 	}
@@ -100,10 +74,9 @@ public class SocketConnection extends AbstractConnection
 	protected void writeFirstByte(byte b) throws IOException {
 		socket.getOutputStream().write(b);
 	}
-
+	
 	@Override
-	protected Response readResponse(byte first) {
-		// extract by end input stream
-		return null;
+	public InputStream getInputStream() throws IOException {
+		return socket.getInputStream();
 	}
 }

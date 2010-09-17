@@ -16,6 +16,7 @@
 
 package com.google.code.http.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -51,12 +52,12 @@ public final class ResponseParserTestCase {
 		identity = "HTTP/1.1 200 OK\r\nContent-Type:text/html; charset=UTF-8\r\nContent-Length:12\r\n\r\nHello World!".getBytes();
 		chunked = "HTTP/1.1 200 OK\r\nContent-Type:text/html; charset=GBK\r\nTransfer-Encoding:chunked\r\n\r\n19\r\nHello World!-from http4j.\r\n1f\r\nauthor:guilin.zhang@hotmail.com\r\n0\r\n\r\n".getBytes();
 		chunkedWithTrailers = "HTTP/1.1 200 OK\r\nContent-Type:text/html; charset=GBK\r\nTransfer-Encoding:chunked\r\n\r\n19\r\nHello World!-from http4j.\r\n1f\r\nauthor:guilin.zhang@hotmail.com\r\n0\r\nContent-Encoding:gzip\r\n\r\n".getBytes();
-		noEntity = "HTTP/1.0 304 Not Modified\r\nContent-Type:text/html; charset=UTF-8\r\nContent-Length:12\r\n\r\nHello World!".getBytes();
+		noEntity = "HTTP/1.0 304 Not Modified\r\nContent-Type:text/html; charset=UTF-8\r\nContent-Length:12\r\n\r\n".getBytes();
 	}
 	
 	@Test
 	public void parseIdentity() throws IOException {
-		Response response = parser.parse(identity);
+		Response response = parser.parse(new ByteArrayInputStream(identity));
 		Assert.assertNotNull(response);
 		StatusLine statusLine = response.getStatusLine();
 		Assert.assertNotNull(statusLine);
@@ -75,7 +76,7 @@ public final class ResponseParserTestCase {
 	
 	@Test
 	public void parseChunked() throws IOException {
-		Response response = parser.parse(chunked);
+		Response response = parser.parse(new ByteArrayInputStream(chunked));
 		Assert.assertNotNull(response);
 		StatusLine statusLine = response.getStatusLine();
 		Assert.assertNotNull(statusLine);
@@ -93,7 +94,7 @@ public final class ResponseParserTestCase {
 	
 	@Test
 	public void parseChunkedWithTrailers() throws IOException {
-		Response response = parser.parse(chunkedWithTrailers);
+		Response response = parser.parse(new ByteArrayInputStream(chunkedWithTrailers));
 		Assert.assertNotNull(response);
 		StatusLine statusLine = response.getStatusLine();
 		Assert.assertNotNull(statusLine);
@@ -112,7 +113,7 @@ public final class ResponseParserTestCase {
 	
 	@Test
 	public void parseNoEntity() throws IOException {
-		Response response = parser.parse(noEntity);
+		Response response = parser.parse(new ByteArrayInputStream(noEntity));
 		Assert.assertNotNull(response);
 		StatusLine statusLine = response.getStatusLine();
 		Assert.assertNotNull(statusLine);

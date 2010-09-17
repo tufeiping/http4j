@@ -18,6 +18,7 @@ package com.google.code.http;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -31,10 +32,7 @@ public interface Connection extends Closeable {
 	
 	boolean isClosed();
 	
-	@Deprecated
-	byte[] reads() throws IOException;
-	
-	Response read() throws IOException;
+	InputStream getInputStream() throws IOException;
 	
 	void write(byte[] message) throws IOException;
 	

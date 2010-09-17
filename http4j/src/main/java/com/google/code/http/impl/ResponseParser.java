@@ -17,6 +17,7 @@
 package com.google.code.http.impl;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.List;
 
@@ -32,39 +33,31 @@ import com.google.code.http.utils.IOUtils;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  * 
  */
-public final class ResponseParser implements Parser<Response, byte[]> {
+public final class ResponseParser implements Parser<Response, InputStream> {
 
 	@Override
-	public Response parse(byte[] s) throws IOException {
-		ByteBuffer buffer = ByteBuffer.wrap(s);
-		StatusLine line = parseStatusLine(buffer);
-		List<Header> headers = parseHeaders(buffer);
-		byte[] entity = line.hasEntity() ? parseEntity(buffer) : null;
-		return createResponse(line, headers, entity);
+	public Response parse(InputStream in) throws IOException {
+		StatusLine line = parseStatusLine(in);
+		List<Header> headers = parseHeaders(in);
+		return createResponse(line, headers, in);
 	}
 
-	private Response createResponse(StatusLine line, List<Header> headers, byte[] entity) throws IOException {
-		return Headers.isChunked(headers) ? new ChunkedResponse(line, headers, entity) : new IdentityResponse(line, headers, entity);
+	private Response createResponse(StatusLine line, List<Header> headers, InputStream in) throws IOException {
+		return Headers.isChunked(headers) ? new ChunkedResponse(line, headers, in) : new IdentityResponse(line, headers, in);
 	}
 
-	private byte[] parseEntity(ByteBuffer buffer) {
-		int position = buffer.position();
-		int length = buffer.limit() - position;
-		byte[] result = new byte[length];
-		System.arraycopy(buffer.array(), position, result, 0, length);
-		return result;
-	}
-
-	private List<Header> parseHeaders(ByteBuffer buffer) throws IOException {
-		byte[] source = IOUtils.extractByEnd(buffer, HTTP.CR, HTTP.LF, HTTP.CR, HTTP.LF);
+	private List<Header> parseHeaders(InputStream in) throws IOException {
+		byte[] source = IOUtils.extractByEnd(in, HTTP.CR, HTTP.LF, HTTP.CR, HTTP.LF);
 		Parser<List<Header>, byte[]> parser = new HeadersParser();
 		return parser.parse(source);
 	}
 
-	private StatusLine parseStatusLine(ByteBuffer buffer) throws IOException {
-		byte[] source = IOUtils.extractByEnd(buffer, HTTP.CR, HTTP.LF);
+	private StatusLine parseStatusLine(InputStream in) throws IOException {
+		byte first = (byte) in.read();
+		byte[] remain = IOUtils.extractByEnd(in, HTTP.CR, HTTP.LF);
+		ByteBuffer bf = ByteBuffer.allocate(1 + remain.length).put(first).put(remain);
 		Parser<StatusLine, byte[]> parser = new StatusLineParser();
-		return parser.parse(source);
+		return parser.parse(bf.array());
 	}
 
 }

@@ -17,6 +17,7 @@
 package com.google.code.http.impl;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.List;
 
@@ -32,34 +33,32 @@ import com.google.code.http.utils.IOUtils;
 public class ChunkedResponse extends AbstractResponse {
 
 	public ChunkedResponse(StatusLine statusLine, List<Header> headers,
-			byte[] entitySource) throws IOException {
-		super(statusLine, headers, entitySource);
+			InputStream in) throws IOException {
+		super(statusLine, headers, in);
 	}
 
 	@Override
-	protected byte[] readEntity(byte[] entitySource) throws IOException {
-		ByteBuffer buffer = ByteBuffer.wrap(entitySource);
-		byte[] entityData = readEntity(buffer);
-		if(buffer.hasRemaining()) {
-			readTrailerHeaders(buffer);
-		}
+	protected byte[] readEntity(InputStream in) throws IOException {
+		byte[] entityData = readBody(in);
+		readTrailerHeaders(in);
 		return entityData;
 	}
 	
-	private byte[] readEntity(ByteBuffer buffer) {
-		ByteBuffer entityBuffer = ByteBuffer.allocate(buffer.capacity());
+	private byte[] readBody(InputStream in) throws IOException {
+		ByteBuffer bf = ByteBuffer.allocate(2 << 13);
 		byte[] data;
-		while((data = IOUtils.getNextChunk(buffer)) != null) {
-			entityBuffer.put(data);
+		while((data = IOUtils.getNextChunk(in)) != null) {
+			bf = bf.hasRemaining() ? bf : IOUtils.extendBuffer(bf);
+			bf.put(data);
 		}
-		entityBuffer.flip();
-		data = new byte[entityBuffer.limit()];
-		System.arraycopy(entityBuffer.array(), 0, data, 0, data.length);
+		bf.flip();
+		data = new byte[bf.limit()];
+		System.arraycopy(bf.array(), 0, data, 0, data.length);
 		return data;
 	}
 
-	private void readTrailerHeaders(ByteBuffer buffer) throws IOException {
-		byte[] headerBytes = IOUtils.extractByEnd(buffer, HTTP.CR, HTTP.LF, HTTP.CR, HTTP.LF);
+	private void readTrailerHeaders(InputStream in) throws IOException {
+		byte[] headerBytes = IOUtils.extractByEnd(in, HTTP.CR, HTTP.LF, HTTP.CR, HTTP.LF);
 		List<Header> trailers = new HeadersParser().parse(headerBytes);
 		headers.addAll(trailers);
 	}
