@@ -77,6 +77,6 @@ public class SocketConnection extends AbstractConnection {
 	
 	@Override
 	public InputStream getInputStream() throws IOException {
-		return socket.getInputStream();
+		return new InputStreamDecorator(socket.getInputStream());
 	}
 }
