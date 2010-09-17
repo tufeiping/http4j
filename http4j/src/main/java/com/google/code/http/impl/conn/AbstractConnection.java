@@ -41,10 +41,6 @@ public abstract class AbstractConnection implements Connection {
 	
 	protected boolean reusable;
 
-	public AbstractConnection(Host host) {
-		this(host, 0);
-	}
-
 	public AbstractConnection(Host host, int timeout) {
 		this.host = host;
 		this.timeout = timeout;
