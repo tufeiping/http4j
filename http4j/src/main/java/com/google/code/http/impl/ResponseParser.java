@@ -18,7 +18,6 @@ package com.google.code.http.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.util.List;
 
 import com.google.code.http.HTTP;
@@ -53,11 +52,9 @@ public final class ResponseParser implements Parser<Response, InputStream> {
 	}
 
 	private StatusLine parseStatusLine(InputStream in) throws IOException {
-		byte first = (byte) in.read();
-		byte[] remain = IOUtils.extractByEnd(in, HTTP.CR, HTTP.LF);
-		ByteBuffer bf = ByteBuffer.allocate(1 + remain.length).put(first).put(remain);
+		byte[] line = IOUtils.extractByEnd(in, HTTP.CR, HTTP.LF);
 		Parser<StatusLine, byte[]> parser = new StatusLineParser();
-		return parser.parse(bf.array());
+		return parser.parse(line);
 	}
 
 }
