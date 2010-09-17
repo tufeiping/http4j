@@ -123,11 +123,11 @@ public abstract class AbstractRequest implements Request {
 		headers.add(h);
 	}
 	@Override
-	public final String toMessage() {
+	public final byte[] toMessage() {
 		StringBuilder m = formatRequestLine();
 		m.append(formatHeaders());
 		m.append(HTTP.CRLF).append(HTTP.CRLF).append(formatBody());
-		return m.toString();
+		return m.toString().getBytes();
 	}
 	
 	@Override

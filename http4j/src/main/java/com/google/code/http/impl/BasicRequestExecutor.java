@@ -82,9 +82,8 @@ public class BasicRequestExecutor implements RequestExecutor {
 
 	protected void send(Connection connection, Request request) throws IOException {
 		addCookie(request);
-		byte[] message = request.toMessage().getBytes();
 		OutputStream out = connection.getOutputStream();
-		out.write(message);
+		out.write(request.toMessage());
 		out.flush();
 	}
 

@@ -48,5 +48,5 @@ public interface Request {
 	 */
 	void setHeader(String name, String value);
 	
-	String toMessage();
+	byte[] toMessage();
 }
