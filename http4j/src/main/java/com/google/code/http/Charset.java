@@ -23,5 +23,7 @@ public interface Charset {
 	String ISO_8859_1 = "ISO-8859-1";
 	String UTF_8 = "UTF-8";
 	String GBK = "GBK";
+	String GB2312 = "GB2312";
+	
 	String DEFAULT = ISO_8859_1;
 }
