@@ -18,6 +18,7 @@ package com.google.code.http;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -38,10 +39,22 @@ public final class RequestExecutorTestCase {
 		executor = new BasicRequestExecutor();
 	}
 	
-	@Test(enabled = false)
+	@Test
 	public void execute() throws URISyntaxException, InterruptedException, IOException {
 		Request request = new Get("http://www.baidu.com/");
 		Response response = executor.execute(request);
 		Assert.assertNotNull(response);
+		StatusLine statusLine = response.getStatusLine();
+		Assert.assertNotNull(statusLine);
+		Assert.assertTrue(statusLine.getStatusCode() > 199);
+		List<Header> headers = response.getHeaders();
+		Assert.assertNotNull(headers);
+		Assert.assertFalse(headers.size() == 0);
+		byte[] entity = response.getEntity();
+		Assert.assertNotNull(entity);
+		Assert.assertFalse(entity.length == 0);
+		String charset = response.getCharset();
+		Assert.assertNotNull(charset);
+		System.out.println(new String(entity, charset));
 	}
 }
