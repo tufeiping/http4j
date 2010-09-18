@@ -16,6 +16,7 @@
 
 package com.google.code.http.impl.conn;
 
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -28,14 +29,13 @@ import com.google.code.http.metrics.ThreadLocalMetricsRecorder;
  */
 public class InputStreamDecorator extends InputStream {
 
-	protected final InputStream in;
+	protected final DataInputStream in;
 
 	protected final Counter<Long> counter;
 
 	public InputStreamDecorator(InputStream in) {
-		this.in = in;
-		counter = ThreadLocalMetricsRecorder.getInstance()
-				.getResponseTransportCounter();
+		this.in = new DataInputStream(in);
+		counter = ThreadLocalMetricsRecorder.getInstance().getResponseTransportCounter();
 	}
 
 	public int available() throws IOException {
@@ -67,14 +67,16 @@ public class InputStreamDecorator extends InputStream {
 	}
 
 	public int read(byte[] b, int off, final int len) throws IOException {
-		// normal read(b, off, len) would lose some data while data is not ready
-		int d, i = len;
-		for (; i > 0; i--) {
-			if((d = read()) == -1) {
-				return -1;
-			} 
-			b[off++] = (byte) d;
+		int s = read(), c = len;// ensure metrics recorded.
+		if(s == -1) {
+			return -1;
 		}
+		b[off++] = (byte) s;
+		if(--c == 0) { 
+			return 1;
+		}
+		counter.addAndGet((long) c);
+		in.readFully(b, off, c);
 		return len;
 	}
 
