@@ -24,17 +24,18 @@ import com.google.code.http.metrics.ThreadLocalMetricsRecorder;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
- *
+ * 
  */
 public class InputStreamDecorator extends InputStream {
-	
+
 	protected final InputStream in;
-	
+
 	protected final Counter<Long> counter;
-	
+
 	public InputStreamDecorator(InputStream in) {
 		this.in = in;
-		counter = ThreadLocalMetricsRecorder.getInstance().getResponseTransportCounter();
+		counter = ThreadLocalMetricsRecorder.getInstance()
+				.getResponseTransportCounter();
 	}
 
 	public int available() throws IOException {
@@ -55,7 +56,7 @@ public class InputStreamDecorator extends InputStream {
 
 	public int read() throws IOException {
 		int i = in.read();
-		if(i != -1 && counter.addAndGet(1l) == 1) {// don't change logic order
+		if (i != -1 && counter.addAndGet(1l) == 1) {// don't change logic order
 			ThreadLocalMetricsRecorder.responseStarted();
 		}
 		return i;
@@ -65,17 +66,16 @@ public class InputStreamDecorator extends InputStream {
 		return read(b, 0, b.length);
 	}
 
-	public int read(byte[] b, int off, int len) throws IOException {
-		int i = read();
-		if(i == -1) {
-			return -1;
+	public int read(byte[] b, int off, final int len) throws IOException {
+		// normal read(b, off, len) would lose some data while data is not ready
+		int d, i = len;
+		for (; i > 0; i--) {
+			if((d = read()) == -1) {
+				return -1;
+			} 
+			b[off++] = (byte) d;
 		}
-		b[off++] = (byte) i;
-		if(--len > 0) { 
-			counter.addAndGet((long) len);
-			return in.read(b, off, len) + 1;
-		}
-		return 1;
+		return len;
 	}
 
 	public void reset() throws IOException {
