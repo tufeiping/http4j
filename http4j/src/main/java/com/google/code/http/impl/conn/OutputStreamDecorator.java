@@ -30,7 +30,7 @@ public class OutputStreamDecorator extends OutputStream {
 	
 	protected OutputStream out;
 	
-	protected Counter<Long> counter;
+	protected final Counter<Long> counter;
 	
 	public OutputStreamDecorator(OutputStream out) {
 		this.out = out;

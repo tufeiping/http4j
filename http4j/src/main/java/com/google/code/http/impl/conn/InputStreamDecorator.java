@@ -30,7 +30,7 @@ public class InputStreamDecorator extends InputStream {
 	
 	protected InputStream in;
 	
-	protected Counter<Long> counter;
+	protected final Counter<Long> counter;
 	
 	public InputStreamDecorator(InputStream in) {
 		this.in = in;
