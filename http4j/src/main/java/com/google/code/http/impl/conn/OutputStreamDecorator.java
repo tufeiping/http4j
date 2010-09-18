@@ -28,7 +28,7 @@ import com.google.code.http.metrics.ThreadLocalMetricsRecorder;
  */
 public class OutputStreamDecorator extends OutputStream {
 	
-	protected OutputStream out;
+	protected final OutputStream out;
 	
 	protected final Counter<Long> counter;
 	
