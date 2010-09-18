@@ -71,12 +71,9 @@ public class InputStreamDecorator extends InputStream {
 		if(s == -1) {
 			return -1;
 		}
-		b[off++] = (byte) s;
-		if(--c == 0) { 
-			return 1;
-		}
+		b[off] = (byte) s;
+		in.readFully(b, ++off, --c);
 		counter.addAndGet((long) c);
-		in.readFully(b, off, c);
 		return len;
 	}
 
