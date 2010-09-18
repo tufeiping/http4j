@@ -72,11 +72,8 @@ public class BasicRequestExecutor implements RequestExecutor {
 
 	protected Response retrieveResponse(Connection connection) throws IOException {
 		Response response = responseParser.parse(connection.getInputStream());
-		if(response.getStatusLine().keepAlive()) {
-			connectionCache.release(connection);
-		} else {
-			connection.close();
-		}
+		connection.setReusable(response.getStatusLine().keepAlive());
+		connectionCache.release(connection);
 		return response;
 	}
 
