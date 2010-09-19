@@ -25,7 +25,6 @@ import com.google.code.http.CookieCache;
 import com.google.code.http.Request;
 import com.google.code.http.RequestExecutor;
 import com.google.code.http.Response;
-import com.google.code.http.impl.conn.ConnectionPool;
 import com.google.code.http.metrics.ThreadLocalMetricsRecorder;
 
 /**
@@ -39,22 +38,10 @@ public class BasicRequestExecutor implements RequestExecutor {
 
 	protected final ResponseParser responseParser;
 
-	public BasicRequestExecutor() {
-		connectionCache = createConnectionCache();
-		cookieCache = createCookieCache();
-		responseParser = createResponseParser();
-	}
-
-	protected ResponseParser createResponseParser() {
-		return new ResponseParser();
-	}
-
-	protected CookieCache createCookieCache() {
-		return new CookieStoreAdapter();
-	}
-
-	protected ConnectionCache createConnectionCache() {
-		return new ConnectionPool();
+	public BasicRequestExecutor(ConnectionCache connectionCache, CookieCache cookieCache, ResponseParser responseParser) {
+		this.connectionCache = connectionCache;
+		this.cookieCache = cookieCache;
+		this.responseParser = responseParser;
 	}
 
 	@Override

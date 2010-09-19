@@ -26,7 +26,10 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.code.http.impl.BasicRequestExecutor;
+import com.google.code.http.impl.CookieStoreAdapter;
 import com.google.code.http.impl.Get;
+import com.google.code.http.impl.ResponseParser;
+import com.google.code.http.impl.conn.ConnectionPool;
 import com.google.code.http.metrics.Metrics;
 
 /**
@@ -36,9 +39,18 @@ public final class RequestExecutorTestCase {
 	
 	private RequestExecutor executor;
 	
+	private ConnectionCache connectionCache;
+	
+	private CookieCache cookieCache;
+	
+	private ResponseParser parser;
+	
 	@BeforeClass
 	public void beforeClass() {
-		executor = new BasicRequestExecutor();
+		connectionCache = new ConnectionPool();
+		cookieCache = new CookieStoreAdapter();
+		parser = new ResponseParser();
+		executor = new BasicRequestExecutor(connectionCache, cookieCache, parser);
 	}
 	
 	@Test
