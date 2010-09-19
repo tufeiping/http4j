@@ -65,7 +65,7 @@ public final class RequestExecutorTestCase {
 	}
 	
 	private void checkMetrics(Response response) {
-		Metrics metrics = response.getMetrics();
+		Metrics metrics = response.getMetricsRecorder().captureMetrics();
 		Assert.assertNotNull(metrics);
 		Assert.assertTrue(metrics.getBytesReceived() > 0);
 		Assert.assertTrue(metrics.getBytesSent() > 0);

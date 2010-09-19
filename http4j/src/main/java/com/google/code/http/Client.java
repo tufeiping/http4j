@@ -16,22 +16,16 @@
 
 package com.google.code.http;
 
-import java.util.List;
+import java.io.IOException;
 
-import com.google.code.http.metrics.MetricsRecorder;
+import com.google.code.http.metrics.Metrics;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public interface Response {
+public interface Client {
 	
-	StatusLine getStatusLine();
+	Response submit(Request request) throws InterruptedException, IOException;
 	
-	List<Header> getHeaders();
-	
-	byte[] getEntity();
-	
-	String getCharset();
-	
-	MetricsRecorder getMetricsRecorder();
+	Metrics getMetrics();
 }
