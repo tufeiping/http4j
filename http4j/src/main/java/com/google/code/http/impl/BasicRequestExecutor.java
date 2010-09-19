@@ -71,7 +71,7 @@ public class BasicRequestExecutor implements RequestExecutor {
 		OutputStream out = connection.getOutputStream();
 		out.write(request.toMessage());
 		out.flush();
-		ThreadLocalMetricsRecorder.requestSent();
+		ThreadLocalMetricsRecorder.getInstance().getRequestTimer().stop();
 	}
 
 	protected void addCookie(Request request) {

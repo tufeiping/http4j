@@ -30,20 +30,10 @@ public abstract class AbstractMetricsRecorder implements MetricsRecorder {
 	protected Counter<Integer> connectionCounter;
 
 	protected AbstractMetricsRecorder() {
-		dnsTimer = createTimer();
-		connectionTimer = createTimer();
-		requestTimer = createTimer();
-		responseTimer = createTimer();
-		requestTransportCounter = createLongCounter();
-		responseTransportCounter = createLongCounter();
-		connectionCounter = createIntegerCounter();
+		init();
 	}
-
-	abstract protected Counter<Long> createLongCounter();
-
-	abstract protected Counter<Integer> createIntegerCounter();
-
-	abstract protected Timer createTimer();
+	
+	abstract protected void init();
 
 	@Override
 	public Timer getDnsTimer() {
@@ -91,41 +81,43 @@ public abstract class AbstractMetricsRecorder implements MetricsRecorder {
 
 	@Override
 	public Metrics captureMetrics() {
-		return new Metrics() {
-			@Override
-			public long getDnsLookupCost() {
-				return dnsTimer.getDuration();
-			}
+		return new BasicMetrics();
+	}
+	
+	protected class BasicMetrics implements Metrics {
+		@Override
+		public long getDnsLookupCost() {
+			return dnsTimer.getDuration();
+		}
 
-			@Override
-			public long getConnectingCost() {
-				return connectionTimer.getDuration();
-			}
+		@Override
+		public long getConnectingCost() {
+			return connectionTimer.getDuration();
+		}
 
-			@Override
-			public long getSendingCost() {
-				return requestTimer.getDuration();
-			}
+		@Override
+		public long getSendingCost() {
+			return requestTimer.getDuration();
+		}
 
-			@Override
-			public long getWaitingCost() {
-				return responseTimer.getStart() - requestTimer.getStop();
-			}
+		@Override
+		public long getWaitingCost() {
+			return responseTimer.getStart() - requestTimer.getStop();
+		}
 
-			@Override
-			public long getReceivingCost() {
-				return responseTimer.getDuration();
-			}
+		@Override
+		public long getReceivingCost() {
+			return responseTimer.getDuration();
+		}
 
-			@Override
-			public long getBytesSent() {
-				return requestTransportCounter.get();
-			}
+		@Override
+		public long getBytesSent() {
+			return requestTransportCounter.get();
+		}
 
-			@Override
-			public long getBytesReceived() {
-				return responseTransportCounter.get();
-			}
-		};
+		@Override
+		public long getBytesReceived() {
+			return responseTransportCounter.get();
+		}
 	}
 }

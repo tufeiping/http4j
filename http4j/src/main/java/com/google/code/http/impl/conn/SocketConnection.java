@@ -67,9 +67,9 @@ public class SocketConnection implements Connection {
 
 	@Override
 	public final void connect() throws IOException {
-		ThreadLocalMetricsRecorder.connectStarted();
+		ThreadLocalMetricsRecorder.getInstance().getConnectionTimer().start();
 		doConnect();
-		ThreadLocalMetricsRecorder.connectStopped();
+		ThreadLocalMetricsRecorder.getInstance().getConnectionTimer().stop();
 	}
 
 	protected void doConnect() throws IOException {

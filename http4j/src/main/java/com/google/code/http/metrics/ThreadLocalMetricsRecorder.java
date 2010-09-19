@@ -34,28 +34,6 @@ public class ThreadLocalMetricsRecorder extends AbstractMetricsRecorder {
 		return recorder == null ? new ThreadLocalMetricsRecorder() : recorder;
 	}
 
-	public static void requestStarted() {
-		getInstance().getRequestTimer().start();
-	}
-
-	public static void requestSent() {
-		getInstance().getRequestTimer().stop();
-	}
-
-	public static void connectStarted() {
-		getInstance().getConnectionTimer().start();
-	}
-
-	public static void connectStopped() {
-		getInstance().getConnectionTimer().stop();
-	}
-
-	public static void responseStarted() {
-		Timer timer = getInstance().getResponseTimer();
-		timer.reset();
-		timer.start();
-	}
-
 	public static void responseStopped() {
 		getInstance().getResponseTimer().stop();
 	}
@@ -77,17 +55,13 @@ public class ThreadLocalMetricsRecorder extends AbstractMetricsRecorder {
 	}
 	
 	@Override
-	protected Counter<Integer> createIntegerCounter() {
-		return new IntCounter();
-	}
-
-	@Override
-	protected Counter<Long> createLongCounter() {
-		return new LongCounter();
-	}
-	
-	@Override
-	protected Timer createTimer() {
-		return new NanoSecondTimer();
+	protected void init() {
+		dnsTimer = new NanoSecondTimer();
+		connectionTimer = new NanoSecondTimer();
+		requestTimer = new NanoSecondTimer();
+		responseTimer = new NanoSecondTimer();
+		requestTransportCounter = new LongCounter();
+		responseTransportCounter = new LongCounter();
+		connectionCounter = new IntCounter();
 	}
 }

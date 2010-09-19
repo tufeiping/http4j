@@ -55,7 +55,7 @@ public class InputStreamDecorator extends InputStream {
 		int i = in.read();
 		Counter<Long> counter = ThreadLocalMetricsRecorder.getInstance().getResponseTransportCounter();
 		if (i != -1 && counter.addAndGet(1l) == 1) {// don't change logic order
-			ThreadLocalMetricsRecorder.responseStarted();
+			ThreadLocalMetricsRecorder.getInstance().getResponseTimer().start();
 		}
 		return i;
 	}

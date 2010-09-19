@@ -16,36 +16,50 @@
 
 package com.google.code.http.metrics;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public class AggregatedMetricsRecorder extends AbstractMetricsRecorder {
 
+	protected AtomicLong waitingCost;
+	
 	public AggregatedMetricsRecorder() {
 		super();
+		waitingCost = new AtomicLong(0);
 	}
 
-	public void aggregate(MetricsRecorder metrics) {
-		((AggregatedTimer) connectionTimer).aggregate(metrics.getConnectionTimer());
-		((AggregatedTimer) dnsTimer).aggregate(metrics.getDnsTimer());
-		((AggregatedTimer) requestTimer).aggregate(metrics.getRequestTimer());
-		((AggregatedTimer) responseTimer).aggregate(metrics.getResponseTimer());
-		((AggregatedCounter<Long>) requestTransportCounter).aggregate(metrics.getRequestTransportCounter());
-		((AggregatedCounter<Long>) responseTransportCounter).aggregate(metrics.getResponseTransportCounter());
+	public void aggregate(MetricsRecorder recorder) {
+		((AggregatedTimer) connectionTimer).aggregate(recorder.getConnectionTimer());
+		((AggregatedTimer) dnsTimer).aggregate(recorder.getDnsTimer());
+		((AggregatedTimer) requestTimer).aggregate(recorder.getRequestTimer());
+		((AggregatedTimer) responseTimer).aggregate(recorder.getResponseTimer());
+		((AggregatedCounter<Long>) requestTransportCounter).aggregate(recorder.getRequestTransportCounter());
+		((AggregatedCounter<Long>) responseTransportCounter).aggregate(recorder.getResponseTransportCounter());
+		waitingCost.addAndGet(recorder.captureMetrics().getWaitingCost());
 	}
 
 	@Override
-	protected Counter<Long> createLongCounter() {
-		return new AtomicLongCounter();
+	public Metrics captureMetrics() {
+		return new AggregatedMetrics();
 	}
 	
-	@Override
-	protected Counter<Integer> createIntegerCounter() {
-		return new AtomicIntegerCounter();
+	protected class AggregatedMetrics extends BasicMetrics {
+		@Override
+		public long getWaitingCost() {
+			return waitingCost.get();
+		}
 	}
 
 	@Override
-	protected Timer createTimer() {
-		return new SpanTimer();
+	protected void init() {
+		dnsTimer = new SumTimer();
+		connectionTimer = new SumTimer();
+		requestTimer = new SumTimer();
+		responseTimer = new SumTimer();
+		requestTransportCounter = new AtomicLongCounter();
+		responseTransportCounter = new AtomicLongCounter();
+		connectionCounter = new AtomicIntegerCounter();
 	}
 }

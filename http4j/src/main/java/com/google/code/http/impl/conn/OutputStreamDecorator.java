@@ -56,7 +56,7 @@ public class OutputStreamDecorator extends OutputStream {
 	public void write(int b) throws IOException {
 		out.write(b);
 		if(ThreadLocalMetricsRecorder.getInstance().getRequestTransportCounter().addAndGet(1l) == 1) {
-			ThreadLocalMetricsRecorder.requestStarted();
+			ThreadLocalMetricsRecorder.getInstance().getRequestTimer().start();
 		}
 	}
 }
