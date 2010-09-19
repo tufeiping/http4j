@@ -29,4 +29,6 @@ public interface Client {
 	Response get(String url) throws InterruptedException, IOException, URISyntaxException;
 
 	Response post(String url) throws InterruptedException, IOException, URISyntaxException;
+	
+	void shutdown();
 }

@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -57,6 +58,11 @@ public final class ClientTestCase {
 	public void post() throws InterruptedException, IOException, URISyntaxException {
 		Response response = client.post("http://www.javaeye.com/login?name=invalid&password=invalid");
 		checkResponse(response);
+	}
+	
+	@AfterClass
+	public void afterClass() {
+		client.shutdown();
 	}
 	
 	private void checkResponse(Response response) {

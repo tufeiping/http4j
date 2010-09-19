@@ -75,10 +75,9 @@ public class BasicClient implements Client {
 	}
 	
 	@Override
-	protected void finalize() throws Throwable {
+	public void shutdown() {
 		cookieCache.clear();
 		DnsCache.clear();
 		connectionCache.shutdown();
-		super.finalize();
 	}
 }
