@@ -19,16 +19,42 @@ package com.google.code.http.metrics;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class NanoSecondTimer extends AbstractTimer<Long> implements Timer {
+public class NanoSecondTimer implements Timer {
+	
+	protected long start;
+	
+	protected long stop;
 	
 	@Override
-	public void reset() {
-		start = 0L;
-		stop = 0L;
+	public long getDuration() {
+		return stop - start;
+	}
+	
+	@Override
+	public void start() {
+		start = getCurrentTime();
 	}
 
 	@Override
-	protected Long getCurrentTime() {
+	public void stop() {
+		stop = getCurrentTime();
+	}
+
+	public long getStart() {
+		return start;
+	}
+
+	public long getStop() {
+		return stop;
+	}
+	
+	@Override
+	public void reset() {
+		start = 0;
+		stop = 0;
+	}
+
+	protected long getCurrentTime() {
 		return System.nanoTime();
 	}
 }
