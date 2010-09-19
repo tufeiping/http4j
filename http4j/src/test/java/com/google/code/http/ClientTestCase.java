@@ -25,6 +25,7 @@ import org.testng.annotations.Test;
 
 import com.google.code.http.impl.BasicClient;
 import com.google.code.http.impl.Get;
+import com.google.code.http.metrics.Metrics;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -54,6 +55,19 @@ public final class ClientTestCase {
 	public void post() throws InterruptedException, IOException, URISyntaxException {
 		Response response = client.post("http://www.javaeye.com/login?name=invalid&password=invalid");
 		checkResponse(response);
+	}
+	
+	@Test(dependsOnMethods = {"submit", "get", "post"})
+	public void getMetrics() {
+		Metrics metrics = client.getMetrics();
+		Assert.assertNotNull(metrics);
+		Assert.assertTrue(metrics.getBytesReceived() > 0);
+		Assert.assertTrue(metrics.getBytesSent() > 0);
+		Assert.assertTrue(metrics.getConnectingCost() > 0);
+		Assert.assertTrue(metrics.getReceivingCost() > 0);
+		Assert.assertTrue(metrics.getSendingCost() > 0);
+		Assert.assertTrue(metrics.getWaitingCost() > 0);
+		Assert.assertTrue(metrics.getDnsLookupCost() >= 0);// cache
 	}
 	
 	private void checkResponse(Response response) {
