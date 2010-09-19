@@ -26,6 +26,7 @@ import com.google.code.http.Request;
 import com.google.code.http.RequestExecutor;
 import com.google.code.http.Response;
 import com.google.code.http.impl.conn.ConnectionPool;
+import com.google.code.http.metrics.ThreadLocalMetricsRecorder;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -72,6 +73,7 @@ public class BasicRequestExecutor implements RequestExecutor {
 
 	protected Response retrieveResponse(Connection connection) throws IOException {
 		Response response = responseParser.parse(connection.getInputStream());
+		ThreadLocalMetricsRecorder.responseStopped();
 		connection.setReusable(response.getStatusLine().keepAlive());
 		connectionCache.release(connection);
 		return response;
@@ -82,6 +84,7 @@ public class BasicRequestExecutor implements RequestExecutor {
 		OutputStream out = connection.getOutputStream();
 		out.write(request.toMessage());
 		out.flush();
+		ThreadLocalMetricsRecorder.requestSent();
 	}
 
 	protected void addCookie(Request request) {

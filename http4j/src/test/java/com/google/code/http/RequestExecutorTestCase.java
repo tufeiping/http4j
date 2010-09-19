@@ -55,6 +55,13 @@ public final class RequestExecutorTestCase {
 	private void checkMetrics(Response response) {
 		Metrics metrics = response.getMetrics();
 		Assert.assertNotNull(metrics);
+		Assert.assertTrue(metrics.getBytesReceived() > 0);
+		Assert.assertTrue(metrics.getBytesSent() > 0);
+		Assert.assertTrue(metrics.getConnectingCost() > 0);
+		Assert.assertTrue(metrics.getReceivingCost() > 0);
+		Assert.assertTrue(metrics.getSendingCost() > 0);
+		Assert.assertTrue(metrics.getWaitingCost() > 0);
+		Assert.assertTrue(metrics.getDnsLookupCost() >= 0);// cache
 	}
 	
 	private void checkCharsetAndEntity(Response response) throws UnsupportedEncodingException {

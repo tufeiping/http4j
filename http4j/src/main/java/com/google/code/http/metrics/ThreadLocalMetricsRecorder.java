@@ -34,29 +34,12 @@ public class ThreadLocalMetricsRecorder extends AbstractMetricsRecorder {
 		return recorder == null ? new ThreadLocalMetricsRecorder() : recorder;
 	}
 
-	@Override
-	protected Counter<Integer> createIntegerCounter() {
-		return new IntCounter();
-	}
-
-	@Override
-	protected Counter<Long> createLongCounter() {
-		return new LongCounter();
-	}
-	
-	@Override
-	protected Timer createTimer() {
-		return new NanoSecondTimer();
-	}
-	
 	public static void requestStarted() {
 		getInstance().getRequestTimer().start();
 	}
 
-	public static void requestSent(long sent) {
-		ThreadLocalMetricsRecorder recorder = getInstance();
-		recorder.getRequestTimer().stop();
-		recorder.getRequestTransportCounter().addAndGet(sent);
+	public static void requestSent() {
+		getInstance().getRequestTimer().stop();
 	}
 
 	public static void connectStarted() {
@@ -74,8 +57,7 @@ public class ThreadLocalMetricsRecorder extends AbstractMetricsRecorder {
 	}
 
 	public static void responseStopped() {
-		ThreadLocalMetricsRecorder recorder = getInstance();
-		recorder.getResponseTimer().stop();
+		getInstance().getResponseTimer().stop();
 	}
 	
 	public static void dnsLookupStarted() {
@@ -92,5 +74,20 @@ public class ThreadLocalMetricsRecorder extends AbstractMetricsRecorder {
 
 	public static void resetDnsTimer() {
 		getInstance().getDnsTimer().reset();
+	}
+	
+	@Override
+	protected Counter<Integer> createIntegerCounter() {
+		return new IntCounter();
+	}
+
+	@Override
+	protected Counter<Long> createLongCounter() {
+		return new LongCounter();
+	}
+	
+	@Override
+	protected Timer createTimer() {
+		return new NanoSecondTimer();
 	}
 }
