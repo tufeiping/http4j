@@ -16,36 +16,33 @@
 
 package com.google.code.http.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
 import com.google.code.http.Header;
-import com.google.code.http.Headers;
 import com.google.code.http.StatusLine;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
- *
  */
-public class IdentityResponse extends AbstractResponse {
-
-	public IdentityResponse(StatusLine statusLine, List<Header> headers,
-			InputStream in) throws IOException {
-		super(statusLine, headers, in);
-	}
-
-	@Override
-	protected byte[] readEntity(InputStream in) throws IOException {
-		int length = Headers.getContentLength(headers);
-		return length > 0 ? readEntity(in, length) : new byte[0];
+public final class IdentityResponseTestCase {
+	
+	private StatusLine statusLine;
+	
+	private List<Header> headers;
+	
+	@BeforeClass
+	public void beforeClass() throws IOException {
+		statusLine = new StatusLineParser.BasicStatusLine("HTTP/1.1", 200, "OK");
+		headers = new HeadersParser().parse("Content-Length:6\r\nContent-Type:text/html;charset=UTF-8\r\n".getBytes());
 	}
 	
-	protected byte[] readEntity(InputStream in, int length) throws IOException {
-		byte[] e = new byte[length];
-		if(in.read(e) < length) {
-			throw new IOException("EOF at unexpected position.");
-		}
-		return e;
+	@Test(expectedExceptions = IOException.class)
+	public void constructWithException() throws IOException {
+		new IdentityResponse(statusLine, headers, new ByteArrayInputStream("http".getBytes()));
 	}
 }
