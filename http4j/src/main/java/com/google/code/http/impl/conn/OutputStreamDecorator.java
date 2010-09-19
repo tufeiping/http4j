@@ -19,7 +19,6 @@ package com.google.code.http.impl.conn;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.google.code.http.metrics.Counter;
 import com.google.code.http.metrics.ThreadLocalMetricsRecorder;
 
 /**
@@ -30,11 +29,8 @@ public class OutputStreamDecorator extends OutputStream {
 	
 	protected final OutputStream out;
 	
-	protected final Counter<Long> counter;
-	
 	public OutputStreamDecorator(OutputStream out) {
 		this.out = out;
-		counter = ThreadLocalMetricsRecorder.getInstance().getRequestTransportCounter();
 	}
 
 	public void close() throws IOException {
@@ -52,14 +48,14 @@ public class OutputStreamDecorator extends OutputStream {
 	public void write(byte[] b, int off, int len) throws IOException {
 		write(b[off++]);
 		if(--len > 0) {
-			counter.addAndGet((long) len);
+			ThreadLocalMetricsRecorder.getInstance().getRequestTransportCounter().addAndGet((long) len);
 			out.write(b, off, len);
 		}
 	}
 
 	public void write(int b) throws IOException {
 		out.write(b);
-		if(counter.addAndGet(1l) == 1) {
+		if(ThreadLocalMetricsRecorder.getInstance().getRequestTransportCounter().addAndGet(1l) == 1) {
 			ThreadLocalMetricsRecorder.requestStarted();
 		}
 	}

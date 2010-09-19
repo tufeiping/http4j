@@ -31,11 +31,8 @@ public class InputStreamDecorator extends InputStream {
 
 	protected final DataInputStream in;
 
-	protected final Counter<Long> counter;
-
 	public InputStreamDecorator(InputStream in) {
 		this.in = new DataInputStream(in);
-		counter = ThreadLocalMetricsRecorder.getInstance().getResponseTransportCounter();
 	}
 
 	public int available() throws IOException {
@@ -56,6 +53,7 @@ public class InputStreamDecorator extends InputStream {
 
 	public int read() throws IOException {
 		int i = in.read();
+		Counter<Long> counter = ThreadLocalMetricsRecorder.getInstance().getResponseTransportCounter();
 		if (i != -1 && counter.addAndGet(1l) == 1) {// don't change logic order
 			ThreadLocalMetricsRecorder.responseStarted();
 		}
@@ -73,17 +71,16 @@ public class InputStreamDecorator extends InputStream {
 		}
 		b[off] = (byte) s;
 		in.readFully(b, ++off, --c);
-		counter.addAndGet((long) c);
+		ThreadLocalMetricsRecorder.getInstance().getResponseTransportCounter().addAndGet((long) c);
 		return len;
 	}
 
 	public void reset() throws IOException {
 		in.reset();
-		counter.reset();
 	}
 
 	public long skip(long n) throws IOException {
-		counter.addAndGet(n);
+		ThreadLocalMetricsRecorder.getInstance().getResponseTransportCounter().addAndGet(n);
 		return in.skip(n);
 	}
 }
