@@ -35,22 +35,6 @@ public class InputStreamDecorator extends InputStream {
 		this.in = new DataInputStream(in);
 	}
 
-	public int available() throws IOException {
-		return in.available();
-	}
-
-	public void close() throws IOException {
-		in.close();
-	}
-
-	public void mark(int readlimit) {
-		in.mark(readlimit);
-	}
-
-	public boolean markSupported() {
-		return in.markSupported();
-	}
-
 	public int read() throws IOException {
 		int i = in.read();
 		Counter<Long> counter = ThreadLocalMetricsRecorder.getInstance().getResponseTransportCounter();
@@ -73,14 +57,5 @@ public class InputStreamDecorator extends InputStream {
 		in.readFully(b, ++off, --c);
 		ThreadLocalMetricsRecorder.getInstance().getResponseTransportCounter().addAndGet((long) c);
 		return len;
-	}
-
-	public void reset() throws IOException {
-		in.reset();
-	}
-
-	public long skip(long n) throws IOException {
-		ThreadLocalMetricsRecorder.getInstance().getResponseTransportCounter().addAndGet(n);
-		return in.skip(n);
 	}
 }
