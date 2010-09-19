@@ -17,6 +17,7 @@
 package com.google.code.http;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -26,6 +27,7 @@ import org.testng.annotations.Test;
 
 import com.google.code.http.impl.BasicRequestExecutor;
 import com.google.code.http.impl.Get;
+import com.google.code.http.metrics.Metrics;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -44,17 +46,35 @@ public final class RequestExecutorTestCase {
 		Request request = new Get("http://www.baidu.com/");
 		Response response = executor.execute(request);
 		Assert.assertNotNull(response);
-		StatusLine statusLine = response.getStatusLine();
-		Assert.assertNotNull(statusLine);
-		Assert.assertTrue(statusLine.getStatusCode() > 199);
-		List<Header> headers = response.getHeaders();
-		Assert.assertNotNull(headers);
-		Assert.assertFalse(headers.size() == 0);
+		checkStatus(response);
+		checkHeaders(response);
+		checkCharsetAndEntity(response);
+		checkMetrics(response);
+	}
+	
+	private void checkMetrics(Response response) {
+		Metrics metrics = response.getMetrics();
+		Assert.assertNotNull(metrics);
+	}
+	
+	private void checkCharsetAndEntity(Response response) throws UnsupportedEncodingException {
+		String charset = response.getCharset();
+		Assert.assertNotNull(charset);
 		byte[] entity = response.getEntity();
 		Assert.assertNotNull(entity);
 		Assert.assertFalse(entity.length == 0);
-		String charset = response.getCharset();
-		Assert.assertNotNull(charset);
 		System.out.println(new String(entity, charset));
+	}
+	
+	private void checkHeaders(Response response) {
+		List<Header> headers = response.getHeaders();
+		Assert.assertNotNull(headers);
+		Assert.assertFalse(headers.size() == 0);
+	}
+
+	private void checkStatus(Response response) {
+		StatusLine statusLine = response.getStatusLine();
+		Assert.assertNotNull(statusLine);
+		Assert.assertTrue(statusLine.getStatusCode() > 199);
 	}
 }
