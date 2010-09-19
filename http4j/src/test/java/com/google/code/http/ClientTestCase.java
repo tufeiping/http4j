@@ -57,18 +57,13 @@ public final class ClientTestCase {
 		checkResponse(response);
 	}
 	
-	@Test(dependsOnMethods = {"submit", "get", "post"})
-	public void getMetrics() {
-		checkMetrics(client.getMetrics());
-	}
-	
 	private void checkResponse(Response response) {
 		Assert.assertNotNull(response);
 		StatusLine statusLine = response.getStatusLine();
 		Assert.assertNotNull(statusLine);
 		Assert.assertTrue(statusLine.getStatusCode() > 199);
 		Assert.assertTrue(statusLine.getStatusCode() < 400);
-		checkMetrics(response.getMetricsRecorder().captureMetrics());
+		checkMetrics(response.getMetrics());
 	}
 	
 	private void checkMetrics(Metrics metrics) {

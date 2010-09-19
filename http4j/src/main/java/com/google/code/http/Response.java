@@ -18,7 +18,7 @@ package com.google.code.http;
 
 import java.util.List;
 
-import com.google.code.http.metrics.MetricsRecorder;
+import com.google.code.http.metrics.Metrics;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -33,5 +33,5 @@ public interface Response {
 	
 	String getCharset();
 	
-	MetricsRecorder getMetricsRecorder();
+	Metrics getMetrics();
 }

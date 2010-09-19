@@ -26,8 +26,6 @@ import com.google.code.http.Request;
 import com.google.code.http.RequestExecutor;
 import com.google.code.http.Response;
 import com.google.code.http.impl.conn.ConnectionPool;
-import com.google.code.http.metrics.AggregatedMetricsRecorder;
-import com.google.code.http.metrics.Metrics;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -40,20 +38,13 @@ public class BasicClient implements Client {
 
 	protected final ResponseParser responseParser;
 
-	protected final AggregatedMetricsRecorder metricsRecorder;
-
 	public BasicClient() {
 		connectionCache = createConnectionCache();
 		cookieCache = createCookieCache();
 		responseParser = createResponseParser();
-		metricsRecorder = createMetricsRecorder();
 	}
 
-	private AggregatedMetricsRecorder createMetricsRecorder() {
-		return new AggregatedMetricsRecorder();
-	}
-
-	final ResponseParser createResponseParser() {
+	protected ResponseParser createResponseParser() {
 		return new ResponseParser();
 	}
 
@@ -69,14 +60,7 @@ public class BasicClient implements Client {
 	public Response submit(Request request) throws InterruptedException,
 			IOException {
 		RequestExecutor executor = new BasicRequestExecutor(connectionCache, cookieCache, responseParser);
-		Response response = executor.execute(request);
-		metricsRecorder.aggregate(response.getMetricsRecorder());
-		return response;
-	}
-
-	@Override
-	public Metrics getMetrics() {
-		return metricsRecorder.captureMetrics();
+		return executor.execute(request);
 	}
 	
 	@Override

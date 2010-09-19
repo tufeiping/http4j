@@ -24,7 +24,7 @@ import com.google.code.http.Header;
 import com.google.code.http.Headers;
 import com.google.code.http.Response;
 import com.google.code.http.StatusLine;
-import com.google.code.http.metrics.MetricsRecorder;
+import com.google.code.http.metrics.Metrics;
 import com.google.code.http.metrics.ThreadLocalMetricsRecorder;
 
 /**
@@ -33,19 +33,22 @@ import com.google.code.http.metrics.ThreadLocalMetricsRecorder;
  */
 public abstract class AbstractResponse implements Response {
 	
-	protected StatusLine statusLine;
+	protected final StatusLine statusLine;
 	
-	protected List<Header> headers;
+	protected final List<Header> headers;
 	
-	protected byte[] entity;
+	protected final byte[] entity;
 	
-	protected String charset;
+	protected final String charset;
+
+	protected final Metrics metrics;
 	
 	public AbstractResponse(StatusLine statusLine, List<Header> headers, InputStream in) throws IOException {
 		this.statusLine = statusLine;
 		this.headers = headers;
 		entity = statusLine.hasEntity() ? readEntity(in) : null;
 		charset = Headers.getCharset(headers);
+		metrics = ThreadLocalMetricsRecorder.getInstance().captureMetrics();
 	}
 	
 	abstract protected byte[] readEntity(InputStream in) throws IOException;
@@ -71,7 +74,7 @@ public abstract class AbstractResponse implements Response {
 	}
 	
 	@Override
-	public MetricsRecorder getMetricsRecorder() {
-		return ThreadLocalMetricsRecorder.getInstance();
+	public Metrics getMetrics() {
+		return metrics;
 	}
 }

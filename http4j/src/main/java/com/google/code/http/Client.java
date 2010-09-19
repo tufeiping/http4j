@@ -19,16 +19,12 @@ package com.google.code.http;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import com.google.code.http.metrics.Metrics;
-
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public interface Client {
 
 	Response submit(Request request) throws InterruptedException, IOException;
-
-	Metrics getMetrics();
 
 	Response get(String url) throws InterruptedException, IOException, URISyntaxException;
 
