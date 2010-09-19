@@ -46,6 +46,7 @@ public class BasicRequestExecutor implements RequestExecutor {
 
 	@Override
 	public Response execute(Request request) throws InterruptedException, IOException {
+		ThreadLocalMetricsRecorder.getInstance().reset();
 		Connection connection = connectionCache.acquire(request.getHost());
 		try {
 			send(connection, request);
