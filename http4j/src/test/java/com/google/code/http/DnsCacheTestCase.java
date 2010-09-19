@@ -20,6 +20,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -49,5 +50,10 @@ public final class DnsCacheTestCase {
 		DnsCache.cache(host, right);
 		address = DnsCache.getAddress(host);
 		Assert.assertEquals(address, right);
+	}
+	
+	@AfterClass
+	public void afterClass() {
+		DnsCache.clear();
 	}
 }

@@ -81,4 +81,9 @@ public class CookieStoreAdapter implements CookieCache {
 			processHeader(uri, header);
 		}
 	}
+	
+	@Override
+	public void clear() {
+		store.removeAll();
+	}
 }

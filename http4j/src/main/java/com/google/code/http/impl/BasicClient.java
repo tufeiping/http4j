@@ -22,6 +22,7 @@ import java.net.URISyntaxException;
 import com.google.code.http.Client;
 import com.google.code.http.ConnectionCache;
 import com.google.code.http.CookieCache;
+import com.google.code.http.DnsCache;
 import com.google.code.http.Request;
 import com.google.code.http.RequestExecutor;
 import com.google.code.http.Response;
@@ -71,5 +72,13 @@ public class BasicClient implements Client {
 	@Override
 	public Response post(String url) throws InterruptedException, IOException, URISyntaxException {
 		return submit(new Post(url));
+	}
+	
+	@Override
+	protected void finalize() throws Throwable {
+		cookieCache.clear();
+		DnsCache.clear();
+		connectionCache.shutdown();
+		super.finalize();
 	}
 }

@@ -58,6 +58,8 @@ public abstract class DnsCache {
 			throws UnknownHostException;
 
 	abstract protected void doCache(String host, InetAddress address);
+	
+	abstract protected void doClear();
 
 	public static class InMemoryDnsCache extends DnsCache {
 		protected static final ConcurrentHashMap<String, InetAddress> CACHE = new ConcurrentHashMap<String, InetAddress>();
@@ -87,5 +89,14 @@ public abstract class DnsCache {
 		protected void doCache(String host, InetAddress address) {
 			CACHE.put(host, address);
 		}
+
+		@Override
+		protected void doClear() {
+			CACHE.clear();
+		}
+	}
+
+	public static void clear() {
+		instance.doClear();
 	}
 }

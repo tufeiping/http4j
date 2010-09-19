@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -61,5 +62,10 @@ public final class CookieCacheTestCase {
 		String cookie = cache.get(uri);
 		Assert.assertNotNull(cookie);
 		Assert.assertEquals(cookie, "PREF=ID=2067d32f823de961:NW=1:TM=1284034854:LM=1284034854:S=eLKAQ-QOYpFKPwI3;NID=38=g4PriUXNBibltyAS5Rko6b6ygubtZQs0s2FAy0zMYHOKOIY5rQyE1gAskYS0MU6g767OB24_xknddTgcBKuEMsShbEhZMH0ev9A_uMbWF9D61d8VcASWeksFx2kTSR_i");
+	}
+	
+	@AfterClass
+	public void afterClass() {
+		cache.clear();
 	}
 }
