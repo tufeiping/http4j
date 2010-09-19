@@ -29,7 +29,7 @@ public class Get extends AbstractRequest {
 	private static final long serialVersionUID = -7662562240040943759L;
 
 	public Get(String url) throws MalformedURLException, URISyntaxException {
-		super(url);
+		this(new URL(url));
 	}
 	
 	public Get(URL url) throws URISyntaxException {

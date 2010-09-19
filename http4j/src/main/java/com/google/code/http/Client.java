@@ -17,6 +17,8 @@
 package com.google.code.http;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import com.google.code.http.metrics.Metrics;
 
@@ -28,4 +30,8 @@ public interface Client {
 	Response submit(Request request) throws InterruptedException, IOException;
 	
 	Metrics getMetrics();
+	
+	Response get(String url) throws InterruptedException, IOException, URISyntaxException;
+	
+	Response get(URL url) throws InterruptedException, IOException, URISyntaxException;
 }

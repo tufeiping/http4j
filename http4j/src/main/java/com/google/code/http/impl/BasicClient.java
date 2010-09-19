@@ -17,6 +17,8 @@
 package com.google.code.http.impl;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import com.google.code.http.Client;
 import com.google.code.http.ConnectionCache;
@@ -76,5 +78,15 @@ public class BasicClient implements Client {
 	@Override
 	public Metrics getMetrics() {
 		return metricsRecorder.captureMetrics();
+	}
+	
+	@Override
+	public Response get(String url) throws InterruptedException, IOException, URISyntaxException {
+		return get(new URL(url));
+	}
+	
+	@Override
+	public Response get(URL url) throws InterruptedException, IOException, URISyntaxException {
+		return submit(new Get(url));
 	}
 }

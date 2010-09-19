@@ -31,7 +31,7 @@ public class Post extends AbstractRequest {
 	private static final long serialVersionUID = -9103163070992426384L;
 
 	public Post(String url) throws MalformedURLException, URISyntaxException {
-		super(url);
+		this(new URL(url));
 	}
 	
 	public Post(URL url) throws URISyntaxException {

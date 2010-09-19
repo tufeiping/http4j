@@ -16,7 +16,6 @@
 
 package com.google.code.http.impl;
 
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -50,10 +49,6 @@ public abstract class AbstractRequest implements Request {
 	protected String path;
 	
 	protected URI uri;
-
-	public AbstractRequest(String url) throws MalformedURLException, URISyntaxException {
-		this(new URL(url));
-	}
 	
 	public AbstractRequest(URL url) throws URISyntaxException {
 		host = new BasicHost(url.getProtocol(), url.getHost(), url.getPort());
