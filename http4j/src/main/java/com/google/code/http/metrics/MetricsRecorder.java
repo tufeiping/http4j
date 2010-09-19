@@ -38,7 +38,7 @@ public interface MetricsRecorder {
 
 	Timer getResponseTimer();
 	
-	Counter<Integer> getConnectionCounter();
+	boolean isCachedConnection();
 	
 	Counter<Long> getRequestTransportCounter();
 

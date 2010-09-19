@@ -30,7 +30,7 @@ public class ThreadLocalMetricsRecorder implements MetricsRecorder {
 	protected Timer responseTimer;
 	protected Counter<Long> requestTransportCounter;
 	protected Counter<Long> responseTransportCounter;
-	protected Counter<Integer> connectionCounter;
+	protected boolean cachedConnection;
 	
 	protected ThreadLocalMetricsRecorder() {
 		init();
@@ -55,7 +55,7 @@ public class ThreadLocalMetricsRecorder implements MetricsRecorder {
 	}
 
 	public static void connectionCreated() {
-		getInstance().getConnectionCounter().addAndGet(1);
+		getInstance().cachedConnection = true;
 	}
 
 	public static void resetDnsTimer() {
@@ -69,7 +69,7 @@ public class ThreadLocalMetricsRecorder implements MetricsRecorder {
 		responseTimer = new NanoSecondTimer();
 		requestTransportCounter = new LongCounter();
 		responseTransportCounter = new LongCounter();
-		connectionCounter = new IntCounter();
+		cachedConnection = false;
 	}
 	
 	@Override
@@ -112,11 +112,6 @@ public class ThreadLocalMetricsRecorder implements MetricsRecorder {
 	}
 
 	@Override
-	public Counter<Integer> getConnectionCounter() {
-		return connectionCounter;
-	}
-	
-	@Override
 	public Metrics captureMetrics() {
 		return new BasicMetrics();
 	}
@@ -156,5 +151,15 @@ public class ThreadLocalMetricsRecorder implements MetricsRecorder {
 		public long getBytesReceived() {
 			return responseTransportCounter.get();
 		}
+
+		@Override
+		public boolean isCachedConnection() {
+			return cachedConnection;
+		}
+	}
+
+	@Override
+	public boolean isCachedConnection() {
+		return cachedConnection;
 	}
 }

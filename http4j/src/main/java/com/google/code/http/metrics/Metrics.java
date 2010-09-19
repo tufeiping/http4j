@@ -38,4 +38,6 @@ public interface Metrics {
 	long getBytesSent();
 	
 	long getBytesReceived();
+	
+	boolean isCachedConnection();
 }
