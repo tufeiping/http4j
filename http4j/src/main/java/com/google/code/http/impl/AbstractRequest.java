@@ -50,7 +50,7 @@ public abstract class AbstractRequest implements Request {
 	
 	protected URI uri;
 	
-	public AbstractRequest(URL url) throws URISyntaxException {
+	AbstractRequest(URL url) throws URISyntaxException {
 		host = new BasicHost(url.getProtocol(), url.getHost(), url.getPort());
 		uri = url.toURI();
 		path = url.getPath().length() == 0 ? "/" : url.getPath();

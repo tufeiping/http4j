@@ -18,7 +18,6 @@ package com.google.code.http.impl;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 import org.testng.annotations.Test;
 
@@ -61,13 +60,6 @@ public final class GetTestCase extends RequestTestCase {
 		assertion(get, "GET / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Encoding:ISO-8859-1\r\n\r\n");
 		get.setHeader(Headers.ACCEPT_ENCODING, "UTF-8");
 		assertion(get, "GET / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Encoding:UTF-8\r\n\r\n");
-	}
-	
-	@Test(dependsOnMethods = "toMessage")
-	public void construct_url() throws MalformedURLException, URISyntaxException {
-		URL url = new URL("http://www.google.com/search?q=http4j");
-		Get get = new Get(url);
-		assertion(get, "GET /search?q=http4j HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "\r\n");
 	}
 	
 	@Override
