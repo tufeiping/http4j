@@ -137,7 +137,7 @@ public final class IOUtils {
 
 	static byte[] getNextChunk(InputStream in, int size) throws IOException {
 		byte[] chunk = new byte[size];
-		if(in.read(chunk) == -1 || in.read(new byte[2]) == -1)// CRLF
+		if(in.read(chunk) < size || in.read(new byte[2]) < 2)// CRLF
 			throw new IOException("EOF at unexpected position.");
 		return chunk;
 	}
