@@ -43,12 +43,14 @@ public final class ClientTestCase {
 	public void submit() throws IOException, InterruptedException, URISyntaxException {
 		Response response = client.submit(new Get("http://www.baidu.com/"));
 		checkResponse(response);
+		Assert.assertFalse(response.getMetrics().isCachedConnection());
 	}
 	
-	@Test
+	@Test(dependsOnMethods = "submit")
 	public void get() throws InterruptedException, IOException, URISyntaxException {
-		Response response = client.get("http://www.baidu.com");
+		Response response = client.get("http://www.baidu.com/");
 		checkResponse(response);
+		Assert.assertTrue(response.getMetrics().isCachedConnection());
 	}
 	
 	@Test

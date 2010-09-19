@@ -41,14 +41,13 @@ public abstract class AbstractResponse implements Response {
 	
 	protected final String charset;
 
-	protected final Metrics metrics;
+	protected Metrics metrics;
 	
 	public AbstractResponse(StatusLine statusLine, List<Header> headers, InputStream in) throws IOException {
 		this.statusLine = statusLine;
 		this.headers = headers;
 		entity = statusLine.hasEntity() ? readEntity(in) : null;
 		charset = Headers.getCharset(headers);
-		metrics = ThreadLocalMetricsRecorder.getInstance().captureMetrics();
 	}
 	
 	abstract protected byte[] readEntity(InputStream in) throws IOException;
@@ -76,5 +75,10 @@ public abstract class AbstractResponse implements Response {
 	@Override
 	public Metrics getMetrics() {
 		return metrics;
+	}
+	
+	@Override
+	public void captureMetrics() {
+		metrics = ThreadLocalMetricsRecorder.getInstance().captureMetrics();
 	}
 }

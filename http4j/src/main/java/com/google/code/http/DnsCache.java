@@ -64,15 +64,15 @@ public abstract class DnsCache {
 
 		protected InetAddress lookupDns(String host)
 				throws UnknownHostException {
-			ThreadLocalMetricsRecorder.dnsLookupStarted();
+			ThreadLocalMetricsRecorder.getInstance().getDnsTimer().start();
 			InetAddress address = InetAddress.getByName(host);
-			ThreadLocalMetricsRecorder.dnsLookupStopped();
+			ThreadLocalMetricsRecorder.getInstance().getDnsTimer().stop();
 			return address;
 		}
 
 		protected InetAddress getInetAddress(String host)
 				throws UnknownHostException {
-			ThreadLocalMetricsRecorder.resetDnsTimer();
+			ThreadLocalMetricsRecorder.getInstance().getDnsTimer().reset();
 			InetAddress address = CACHE.get(host);
 			if (address == null) {
 				address = lookupDns(host);

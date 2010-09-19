@@ -61,9 +61,10 @@ public class BasicRequestExecutor implements RequestExecutor {
 
 	protected Response retrieveResponse(Connection connection) throws IOException {
 		Response response = responseParser.parse(connection.getInputStream());
-		ThreadLocalMetricsRecorder.responseStopped();
+		ThreadLocalMetricsRecorder.getInstance().getResponseTimer().stop();
 		connection.setReusable(response.getStatusLine().keepAlive());
 		connectionCache.release(connection);
+		response.captureMetrics();
 		return response;
 	}
 

@@ -53,7 +53,7 @@ public class SocketConnection implements Connection {
 		this.timeout = timeout;
 		this.reusable = true;
 		socket = createSocket();
-		ThreadLocalMetricsRecorder.connectionCreated();
+		ThreadLocalMetricsRecorder.getInstance().connectionCreated();
 	}
 
 	@Override

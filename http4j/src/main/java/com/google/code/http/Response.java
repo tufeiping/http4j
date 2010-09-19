@@ -34,4 +34,6 @@ public interface Response {
 	String getCharset();
 	
 	Metrics getMetrics();
+
+	void captureMetrics();
 }

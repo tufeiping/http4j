@@ -23,7 +23,7 @@ package com.google.code.http.metrics;
 public class ThreadLocalMetricsRecorder implements MetricsRecorder {
 
 	protected static final ThreadLocal<ThreadLocalMetricsRecorder> local = new ThreadLocal<ThreadLocalMetricsRecorder>();
-	
+
 	protected Timer dnsTimer;
 	protected Timer connectionTimer;
 	protected Timer requestTimer;
@@ -31,7 +31,7 @@ public class ThreadLocalMetricsRecorder implements MetricsRecorder {
 	protected Counter<Long> requestTransportCounter;
 	protected Counter<Long> responseTransportCounter;
 	protected boolean cachedConnection;
-	
+
 	protected ThreadLocalMetricsRecorder() {
 		init();
 		local.set(this);
@@ -42,26 +42,6 @@ public class ThreadLocalMetricsRecorder implements MetricsRecorder {
 		return recorder == null ? new ThreadLocalMetricsRecorder() : recorder;
 	}
 
-	public static void responseStopped() {
-		getInstance().getResponseTimer().stop();
-	}
-	
-	public static void dnsLookupStarted() {
-		getInstance().getDnsTimer().start();
-	}
-
-	public static void dnsLookupStopped() {
-		getInstance().getDnsTimer().stop();
-	}
-
-	public static void connectionCreated() {
-		getInstance().cachedConnection = true;
-	}
-
-	public static void resetDnsTimer() {
-		getInstance().getDnsTimer().reset();
-	}
-	
 	protected void init() {
 		dnsTimer = new NanoSecondTimer();
 		connectionTimer = new NanoSecondTimer();
@@ -69,9 +49,9 @@ public class ThreadLocalMetricsRecorder implements MetricsRecorder {
 		responseTimer = new NanoSecondTimer();
 		requestTransportCounter = new LongCounter();
 		responseTransportCounter = new LongCounter();
-		cachedConnection = false;
+		cachedConnection = true;
 	}
-	
+
 	@Override
 	public Timer getDnsTimer() {
 		return dnsTimer;
@@ -99,6 +79,7 @@ public class ThreadLocalMetricsRecorder implements MetricsRecorder {
 		responseTimer.reset();
 		requestTransportCounter.reset();
 		responseTransportCounter.reset();
+		cachedConnection = true;
 	}
 
 	@Override
@@ -113,53 +94,23 @@ public class ThreadLocalMetricsRecorder implements MetricsRecorder {
 
 	@Override
 	public Metrics captureMetrics() {
-		return new BasicMetrics();
-	}
-	
-	protected class BasicMetrics implements Metrics {
-		@Override
-		public long getDnsLookupCost() {
-			return dnsTimer.getDuration();
-		}
-
-		@Override
-		public long getConnectingCost() {
-			return connectionTimer.getDuration();
-		}
-
-		@Override
-		public long getSendingCost() {
-			return requestTimer.getDuration();
-		}
-
-		@Override
-		public long getWaitingCost() {
-			return responseTimer.getStart() - requestTimer.getStop();
-		}
-
-		@Override
-		public long getReceivingCost() {
-			return responseTimer.getDuration();
-		}
-
-		@Override
-		public long getBytesSent() {
-			return requestTransportCounter.get();
-		}
-
-		@Override
-		public long getBytesReceived() {
-			return responseTransportCounter.get();
-		}
-
-		@Override
-		public boolean isCachedConnection() {
-			return cachedConnection;
-		}
+		return new BasicMetrics(
+				dnsTimer.getDuration(),
+				connectionTimer.getDuration(), 
+				requestTimer.getDuration(),
+				responseTimer.getStart() - requestTimer.getStop(),
+				responseTimer.getDuration(), 
+				requestTransportCounter.get(),
+				responseTransportCounter.get(), 
+				cachedConnection);
 	}
 
 	@Override
 	public boolean isCachedConnection() {
 		return cachedConnection;
+	}
+	
+	public void connectionCreated() {
+		this.cachedConnection = false;
 	}
 }
