@@ -24,6 +24,8 @@ import com.google.code.http.Header;
 import com.google.code.http.Headers;
 import com.google.code.http.Response;
 import com.google.code.http.StatusLine;
+import com.google.code.http.metrics.Metrics;
+import com.google.code.http.metrics.ThreadLocalMetricsRecorder;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -66,5 +68,10 @@ public abstract class AbstractResponse implements Response {
 	@Override
 	public String getCharset() {
 		return charset;
+	}
+	
+	@Override
+	public Metrics getMetrics() {
+		return ThreadLocalMetricsRecorder.getInstance().captureMetrics();
 	}
 }

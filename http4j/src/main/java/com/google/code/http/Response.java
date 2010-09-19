@@ -18,6 +18,8 @@ package com.google.code.http;
 
 import java.util.List;
 
+import com.google.code.http.metrics.Metrics;
+
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
@@ -30,4 +32,6 @@ public interface Response {
 	byte[] getEntity();
 	
 	String getCharset();
+	
+	Metrics getMetrics();
 }
