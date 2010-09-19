@@ -28,8 +28,8 @@ import java.net.UnknownHostException;
 import com.google.code.http.Connection;
 import com.google.code.http.DnsCache;
 import com.google.code.http.Host;
+import com.google.code.http.impl.IOUtils;
 import com.google.code.http.metrics.ThreadLocalMetricsRecorder;
-import com.google.code.http.utils.IOUtils;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>

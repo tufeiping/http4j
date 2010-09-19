@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import com.google.code.http.Connection;
 import com.google.code.http.ConnectionCache;
 import com.google.code.http.Host;
-import com.google.code.http.utils.IOUtils;
+import com.google.code.http.impl.IOUtils;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
