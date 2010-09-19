@@ -59,15 +59,7 @@ public final class ClientTestCase {
 	
 	@Test(dependsOnMethods = {"submit", "get", "post"})
 	public void getMetrics() {
-		Metrics metrics = client.getMetrics();
-		Assert.assertNotNull(metrics);
-		Assert.assertTrue(metrics.getBytesReceived() > 0);
-		Assert.assertTrue(metrics.getBytesSent() > 0);
-		Assert.assertTrue(metrics.getConnectingCost() > 0);
-		Assert.assertTrue(metrics.getReceivingCost() > 0);
-		Assert.assertTrue(metrics.getSendingCost() > 0);
-		Assert.assertTrue(metrics.getWaitingCost() > 0);
-		Assert.assertTrue(metrics.getDnsLookupCost() >= 0);// cache
+		checkMetrics(client.getMetrics());
 	}
 	
 	private void checkResponse(Response response) {
@@ -76,5 +68,16 @@ public final class ClientTestCase {
 		Assert.assertNotNull(statusLine);
 		Assert.assertTrue(statusLine.getStatusCode() > 199);
 		Assert.assertTrue(statusLine.getStatusCode() < 400);
+		checkMetrics(response.getMetricsRecorder().captureMetrics());
+	}
+	
+	private void checkMetrics(Metrics metrics) {
+		Assert.assertTrue(metrics.getBytesReceived() > 0);
+		Assert.assertTrue(metrics.getBytesSent() > 0);
+		Assert.assertTrue(metrics.getConnectingCost() >= 0);// cache
+		Assert.assertTrue(metrics.getReceivingCost() > 0);
+		Assert.assertTrue(metrics.getSendingCost() > 0);
+		Assert.assertTrue(metrics.getWaitingCost() > 0);
+		Assert.assertTrue(metrics.getDnsLookupCost() >= 0);// cache
 	}
 }

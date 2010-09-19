@@ -28,6 +28,7 @@ import com.google.code.http.Response;
 import com.google.code.http.impl.conn.ConnectionPool;
 import com.google.code.http.metrics.AggregatedMetricsRecorder;
 import com.google.code.http.metrics.Metrics;
+import com.google.code.http.metrics.ThreadLocalMetricsRecorder;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -68,6 +69,7 @@ public class BasicClient implements Client {
 	@Override
 	public Response submit(Request request) throws InterruptedException,
 			IOException {
+		ThreadLocalMetricsRecorder.getInstance().reset();
 		RequestExecutor executor = new BasicRequestExecutor(connectionCache, cookieCache, responseParser);
 		Response response = executor.execute(request);
 		metricsRecorder.aggregate(response.getMetricsRecorder());
