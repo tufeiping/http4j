@@ -33,11 +33,11 @@ import com.google.code.http.metrics.ThreadLocalMetricsRecorder;
  */
 public class BasicRequestExecutor implements RequestExecutor {
 	
-	protected ConnectionCache connectionCache;
+	protected final ConnectionCache connectionCache;
 
-	protected CookieCache cookieCache;
+	protected final CookieCache cookieCache;
 
-	protected ResponseParser responseParser;
+	protected final ResponseParser responseParser;
 
 	public BasicRequestExecutor() {
 		connectionCache = createConnectionCache();
