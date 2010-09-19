@@ -32,6 +32,8 @@ public interface Client {
 	Metrics getMetrics();
 	
 	Response get(String url) throws InterruptedException, IOException, URISyntaxException;
-	
 	Response get(URL url) throws InterruptedException, IOException, URISyntaxException;
+	
+	Response post(String url) throws InterruptedException, IOException, URISyntaxException;
+	Response post(URL url) throws InterruptedException, IOException, URISyntaxException;
 }
