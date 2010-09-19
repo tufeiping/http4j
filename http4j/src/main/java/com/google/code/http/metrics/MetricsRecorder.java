@@ -40,11 +40,6 @@ public interface MetricsRecorder {
 	
 	Counter<Integer> getConnectionCounter();
 	
-	/**
-	 * @return the counter of request-response conversations
-	 */
-	Counter<Integer> getConversationCounter();
-	
 	Counter<Long> getRequestTransportCounter();
 
 	Counter<Long> getResponseTransportCounter();

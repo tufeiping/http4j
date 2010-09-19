@@ -28,7 +28,6 @@ public abstract class AbstractMetricsRecorder implements MetricsRecorder {
 	protected Counter<Long> requestTransportCounter;
 	protected Counter<Long> responseTransportCounter;
 	protected Counter<Integer> connectionCounter;
-	protected Counter<Integer> conversationCounter;
 
 	protected AbstractMetricsRecorder() {
 		dnsTimer = createTimer();
@@ -38,7 +37,6 @@ public abstract class AbstractMetricsRecorder implements MetricsRecorder {
 		requestTransportCounter = createLongCounter();
 		responseTransportCounter = createLongCounter();
 		connectionCounter = createIntegerCounter();
-		conversationCounter = createIntegerCounter();
 	}
 
 	abstract protected Counter<Long> createLongCounter();
@@ -89,11 +87,6 @@ public abstract class AbstractMetricsRecorder implements MetricsRecorder {
 	@Override
 	public Counter<Integer> getConnectionCounter() {
 		return connectionCounter;
-	}
-
-	@Override
-	public Counter<Integer> getConversationCounter() {
-		return conversationCounter;
 	}
 
 	@Override
