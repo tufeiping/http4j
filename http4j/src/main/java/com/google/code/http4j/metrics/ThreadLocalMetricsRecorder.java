@@ -105,11 +105,6 @@ public class ThreadLocalMetricsRecorder implements MetricsRecorder {
 				cachedConnection);
 	}
 
-	@Override
-	public boolean isCachedConnection() {
-		return cachedConnection;
-	}
-	
 	public void connectionCreated() {
 		this.cachedConnection = false;
 	}
