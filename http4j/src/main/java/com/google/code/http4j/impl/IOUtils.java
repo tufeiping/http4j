@@ -31,7 +31,9 @@ import com.google.code.http4j.HTTP;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public final class IOUtils {
-
+	
+	private IOUtils(){}
+	
 	public static void close(Closeable closeable) {
 		if (null != closeable) {
 			try {
