@@ -39,6 +39,8 @@ public abstract class AbstractRequest implements Request {
 	public static final String DEFAULT_USER_AGENT = "http4j v1.0";
 
 	public static final String DEFAULT_ACCEPT = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+	
+	public static final String DEFAULT_ACCEPT_ENCODING = "gzip,deflate";
 
 	protected List<Header> headers;
 
@@ -103,6 +105,7 @@ public abstract class AbstractRequest implements Request {
 	private void initDefaultHeaders() {
 		setHeader(Headers.USER_AGENT, DEFAULT_USER_AGENT);
 		setHeader(Headers.ACCEPT, DEFAULT_ACCEPT);
+		setHeader(Headers.ACCEPT_ENCODING, DEFAULT_ACCEPT_ENCODING);
 	}
 	
 	@Override

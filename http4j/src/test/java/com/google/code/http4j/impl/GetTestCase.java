@@ -57,10 +57,10 @@ public final class GetTestCase extends RequestTestCase {
 	@Test(dependsOnMethods = "toMessage")
 	public void setHeader() throws MalformedURLException, URISyntaxException {
 		Get get = new Get("http://www.google.com");
-		get.setHeader(Headers.ACCEPT_ENCODING, "ISO-8859-1");
-		assertion(get, "GET / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Encoding:ISO-8859-1\r\n\r\n");
-		get.setHeader(Headers.ACCEPT_ENCODING, "UTF-8");
-		assertion(get, "GET / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Encoding:UTF-8\r\n\r\n");
+		get.setHeader(Headers.ACCEPT_CHARSET, "ISO-8859-1");
+		assertion(get, "GET / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Charset:ISO-8859-1\r\n\r\n");
+		get.setHeader(Headers.ACCEPT_CHARSET, "UTF-8");
+		assertion(get, "GET / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Charset:UTF-8\r\n\r\n");
 	}
 	
 	@Override

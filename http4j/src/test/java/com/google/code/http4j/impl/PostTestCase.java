@@ -62,10 +62,10 @@ public final class PostTestCase extends RequestTestCase {
 	@Test(dependsOnMethods = "toMessage")
 	public void setHeader() throws MalformedURLException, URISyntaxException {
 		Post post = new Post("http://www.google.com/?u=http4j&p=http4j");
-		post.setHeader(Headers.ACCEPT_ENCODING, "ISO-8859-1");
-		assertion(post, "POST / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Encoding:ISO-8859-1\r\nContent-Length:17\r\n\r\nu=http4j&p=http4j");
-		post.setHeader(Headers.ACCEPT_ENCODING, "UTF-8");
-		assertion(post, "POST / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Encoding:UTF-8\r\nContent-Length:17\r\n\r\nu=http4j&p=http4j");
+		post.setHeader(Headers.ACCEPT_CHARSET, "ISO-8859-1");
+		assertion(post, "POST / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Charset:ISO-8859-1\r\nContent-Length:17\r\n\r\nu=http4j&p=http4j");
+		post.setHeader(Headers.ACCEPT_CHARSET, "UTF-8");
+		assertion(post, "POST / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Charset:UTF-8\r\nContent-Length:17\r\n\r\nu=http4j&p=http4j");
 	}
 	
 	@Override

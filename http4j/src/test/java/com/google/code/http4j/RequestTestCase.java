@@ -48,6 +48,7 @@ public abstract class RequestTestCase {
 		return "User-Agent:" 
 		+ AbstractRequest.DEFAULT_USER_AGENT
 		+ "\r\nAccept:" + AbstractRequest.DEFAULT_ACCEPT
+		+ "\r\nAccept-Encoding:" + AbstractRequest.DEFAULT_ACCEPT_ENCODING
 		+ "\r\n";
 	}
 	

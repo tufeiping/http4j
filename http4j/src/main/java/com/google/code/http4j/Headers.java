@@ -30,6 +30,7 @@ public class Headers {
 	public static final String USER_AGENT = "User-Agent";
 	public static final String ACCEPT = "Accept";
 	public static final String ACCEPT_ENCODING = "Accept-Encoding";
+	public static final String ACCEPT_CHARSET = "Accept-Charset";
 	public static final String REQUEST_COOKIE = "Cookie";
 	public static final String RESPONSE_COOKIE = "Set-Cookie";
 	public static final String TRANSFER_ENCODING = "Transfer-Encoding";
