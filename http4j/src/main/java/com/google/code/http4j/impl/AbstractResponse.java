@@ -52,6 +52,13 @@ public abstract class AbstractResponse implements Response {
 		charset = determinCharset();
 	}
 	
+	abstract protected byte[] readEntity(InputStream in) throws IOException;
+	
+	private byte[] downloadEntity(InputStream in) throws IOException {
+		byte[] original = readEntity(in);
+		return Headers.isGzipped(headers) ? IOUtils.unGzip(original) : original;
+	}
+	
 	private String determinCharset() {
 		String encoding = Headers.getCharset(headers);
 		return null == encoding ? guessCharset() : encoding;
@@ -69,13 +76,6 @@ public abstract class AbstractResponse implements Response {
 		}
 		return encoding;
 	}
-
-	private byte[] downloadEntity(InputStream in) throws IOException {
-		byte[] original = readEntity(in);
-		return Headers.isGzipped(headers) ? IOUtils.unGzip(original) : original;
-	}
-
-	abstract protected byte[] readEntity(InputStream in) throws IOException;
 	
 	@Override
 	public StatusLine getStatusLine() {
