@@ -21,7 +21,6 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import com.google.code.http4j.HTTP;
@@ -52,18 +51,6 @@ public final class IOUtils {
 	}
 
 	/**
-	 * Extract buffer data from 0 to the position after flip.
-	 * 
-	 * @param buffer
-	 * @return bytes
-	 */
-	public static byte[] extract(ByteBuffer buffer) {
-		byte[] data = new byte[buffer.position()];
-		System.arraycopy(buffer.array(), 0, data, 0, data.length);
-		return data;
-	}
-
-	/**
 	 * Extract data from stream by given end expression.e.g. 
 	 * <li>http4j [4j] -&gt; http</li>
 	 * <li>http4j [4] -&gt; http</li>
@@ -87,22 +74,6 @@ public final class IOUtils {
 		
 		byte[] bs = bf.toByteArray();
 		return count == 0 ? bs : Arrays.copyOf(bs, bs.length - count);
-	}
-
-	/**
-	 * Transfer data of src[0 - position] to dest buffer. And then clear the src
-	 * buffer.
-	 * 
-	 * @see ByteBuffer#flip()
-	 * @see ByteBuffer#put(ByteBuffer)
-	 * @see ByteBuffer#clear()
-	 * @param src
-	 * @param dest
-	 */
-	public static void transfer(ByteBuffer src, ByteBuffer dest) {
-		src.flip();
-		dest.put(src);
-		src.clear();
 	}
 
 	/**

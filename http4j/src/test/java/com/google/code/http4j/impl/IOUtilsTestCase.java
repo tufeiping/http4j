@@ -19,12 +19,9 @@ package com.google.code.http4j.impl;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import com.google.code.http4j.impl.IOUtils;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -32,31 +29,12 @@ import com.google.code.http4j.impl.IOUtils;
 public class IOUtilsTestCase {
 
 	@Test
-	public void extract() {
-		ByteBuffer buffer = ByteBuffer.allocate(10);
-		buffer.put("http4j".getBytes());
-		byte[] bytes = IOUtils.extract(buffer);
-		Assert.assertNotNull(bytes);
-		Assert.assertEquals(new String(bytes), "http4j");
-	}
-	
-	@Test
 	public void extractByEnd() throws IOException {
 		assertionExtractByEnd("http4j", "", "http4j");
 		assertionExtractByEnd("http4j", "h", "ttp4j");
 		assertionExtractByEnd("http4j", "http", "4");
 		assertionExtractByEnd("http4j", "http", "4j");
 		assertionExtractByEnd("http4j", "http4j", "4g");
-	}
-	
-	@Test
-	public void transfer() {
-		byte[] bytes = "http4j".getBytes();
-		ByteBuffer src = ByteBuffer.allocate(bytes.length);
-		src.put(bytes);
-		ByteBuffer dest = ByteBuffer.allocate(bytes.length);
-		IOUtils.transfer(src, dest);
-		Assert.assertEquals(dest.position(), bytes.length);
 	}
 	
 	@Test
