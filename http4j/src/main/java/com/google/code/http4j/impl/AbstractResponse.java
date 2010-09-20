@@ -63,9 +63,7 @@ public abstract class AbstractResponse implements Response {
 		try {
 			IOUtils.extractByEnd(in, "charset=".getBytes());//skip
 			byte[] charsets = IOUtils.extractByEnd(in, (byte)'"');
-			if(null != charsets && charsets.length > 0) {
-				encoding = new String(charsets);
-			}
+			encoding = charsets.length == 0 ? Charset.DEFAULT : new String(charsets);
 		} catch (IOException e) {
 			encoding = Charset.DEFAULT;
 		}
