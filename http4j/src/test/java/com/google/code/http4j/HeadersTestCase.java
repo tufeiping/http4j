@@ -19,9 +19,6 @@ package com.google.code.http4j;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.google.code.http4j.Charset;
-import com.google.code.http4j.Headers;
-
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
@@ -32,6 +29,6 @@ public class HeadersTestCase {
 		String contentType = "text/html; charset=UTF-8 ";
 		Assert.assertEquals(Headers.getCharset(contentType), "UTF-8");
 		contentType = "text/html";
-		Assert.assertEquals(Headers.getCharset(contentType), Charset.DEFAULT);
+		Assert.assertEquals(Headers.getCharset(contentType), null);
 	}
 }

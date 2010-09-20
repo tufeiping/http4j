@@ -89,6 +89,6 @@ public class Headers {
 	public static String getCharset(String contentType) {
 		String pattern = "charset=";
 		int index = contentType.indexOf(pattern);
-		return index < 0 ? Charset.DEFAULT : contentType.substring(index + pattern.length()).trim();
+		return index < 0 ? null : contentType.substring(index + pattern.length()).trim();
 	}
 }

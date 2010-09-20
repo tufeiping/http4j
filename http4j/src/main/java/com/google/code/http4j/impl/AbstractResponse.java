@@ -16,10 +16,12 @@
 
 package com.google.code.http4j.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import com.google.code.http4j.Charset;
 import com.google.code.http4j.Header;
 import com.google.code.http4j.Headers;
 import com.google.code.http4j.Response;
@@ -47,9 +49,29 @@ public abstract class AbstractResponse implements Response {
 		this.statusLine = statusLine;
 		this.headers = headers;
 		entity = statusLine.hasEntity() ? downloadEntity(in) : null;
-		charset = Headers.getCharset(headers);
+		charset = determinCharset();
 	}
 	
+	private String determinCharset() {
+		String encoding = Headers.getCharset(headers);
+		return null == encoding ? guessCharset() : encoding;
+	}
+
+	private String guessCharset() {
+		ByteArrayInputStream in = new ByteArrayInputStream(entity);
+		String encoding = null;
+		try {
+			IOUtils.extractByEnd(in, "charset=".getBytes());//skip
+			byte[] charsets = IOUtils.extractByEnd(in, (byte)'"');
+			if(null != charsets && charsets.length > 0) {
+				encoding = new String(charsets);
+			}
+		} catch (IOException e) {
+			encoding = Charset.DEFAULT;
+		}
+		return encoding;
+	}
+
 	private byte[] downloadEntity(InputStream in) throws IOException {
 		byte[] original = readEntity(in);
 		return Headers.isGzipped(headers) ? IOUtils.unGzip(original) : original;
