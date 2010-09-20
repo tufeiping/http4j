@@ -47,7 +47,7 @@ public class ChunkedResponse extends AbstractResponse {
 		ByteBuffer bf = ByteBuffer.allocate(2 << 13);
 		byte[] data;
 		while((data = IOUtils.getNextChunk(in)) != null) {
-			bf = bf.hasRemaining() ? bf : IOUtils.extendBuffer(bf);
+			bf = bf.remaining() > data.length ? bf : IOUtils.extendBuffer(bf);
 			bf.put(data);
 		}
 		bf.flip();
