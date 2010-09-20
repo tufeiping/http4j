@@ -33,7 +33,7 @@ import com.google.code.http4j.impl.Get;
 public final class GetTestCase extends RequestTestCase {
 	
 	@Test(expectedExceptions = MalformedURLException.class)
-	public void construct_cause_exception() throws MalformedURLException, URISyntaxException {
+	public void construct_cause_MalformedURLException() throws MalformedURLException, URISyntaxException {
 		new Get("code.google.com/p/http4j");
 	}
 	

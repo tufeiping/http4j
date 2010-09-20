@@ -18,34 +18,45 @@ package com.google.code.http4j.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.google.code.http4j.Charset;
 import com.google.code.http4j.Header;
 import com.google.code.http4j.StatusLine;
-import com.google.code.http4j.impl.HeadersParser;
-import com.google.code.http4j.impl.IdentityResponse;
-import com.google.code.http4j.impl.StatusLineParser;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
+ * 
  */
-public final class IdentityResponseTestCase {
-	
+public final class ChunkedResponseTestCase {
+
 	private StatusLine statusLine;
-	
+
 	private List<Header> headers;
-	
+
 	@BeforeClass
 	public void beforeClass() throws IOException {
 		statusLine = new StatusLineParser.BasicStatusLine("HTTP/1.1", 200, "OK");
-		headers = new HeadersParser().parse("Content-Length:6\r\nContent-Type:text/html;charset=UTF-8\r\n".getBytes());
+		byte[] hbs = "Content-Type:text/html\r\nTransfer-Encoding:chunked\r\n".getBytes();
+		headers = new HeadersParser().parse(hbs);
 	}
-	
+
 	@Test(expectedExceptions = IOException.class)
 	public void construct_cause_IOException() throws IOException {
-		new IdentityResponse(statusLine, headers, new ByteArrayInputStream("http".getBytes()));
+		new ChunkedResponse(statusLine, headers, new ByteArrayInputStream(
+				"10\r\nhttp4j\r\n0\r\n\r\n".getBytes()));
+	}
+
+	@Test
+	public void guessCharset() throws IOException {
+		InputStream in = new ByteArrayInputStream("29\r\n<meta content=\"text/html; charset=GBK\" />\r\n6\r\nhttp4j\r\n0\r\n\r\n".getBytes());
+		ChunkedResponse response = new ChunkedResponse(statusLine, headers, in);
+		Assert.assertEquals(response.getCharset(), Charset.GBK);
+		Assert.assertEquals(new String(response.getEntity(), response.getCharset()), "<meta content=\"text/html; charset=GBK\" />http4j");
 	}
 }

@@ -61,7 +61,8 @@ public abstract class AbstractResponse implements Response {
 	
 	private String determinCharset() {
 		String encoding = Headers.getCharset(headers);
-		return null == encoding ? guessCharset() : encoding;
+		encoding = null == encoding ? guessCharset() : encoding;
+		return encoding.toUpperCase();
 	}
 
 	private String guessCharset() {
