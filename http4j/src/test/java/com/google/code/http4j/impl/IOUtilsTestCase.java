@@ -32,7 +32,7 @@ import com.google.code.http4j.impl.IOUtils;
 public class IOUtilsTestCase {
 
 	@Test
-	public void testExtendBuffer() {
+	public void extendBuffer() {
 		ByteBuffer buffer = ByteBuffer.wrap("http4j".getBytes());
 		buffer.position(buffer.capacity());
 		ByteBuffer extended = IOUtils.extendBuffer(buffer);
@@ -47,7 +47,7 @@ public class IOUtilsTestCase {
 	}
 	
 	@Test
-	public void testExtract() {
+	public void extract() {
 		ByteBuffer buffer = ByteBuffer.allocate(10);
 		buffer.put("http4j".getBytes());
 		byte[] bytes = IOUtils.extract(buffer);
@@ -56,7 +56,7 @@ public class IOUtilsTestCase {
 	}
 	
 	@Test
-	public void testExtractByEnd() {
+	public void extractByEnd() throws IOException {
 		assertionExtractByEnd("http4j", "", "http4j");
 		assertionExtractByEnd("http4j", "h", "ttp4j");
 		assertionExtractByEnd("http4j", "http", "4");
@@ -65,7 +65,7 @@ public class IOUtilsTestCase {
 	}
 	
 	@Test
-	public void testTransfer() {
+	public void transfer() {
 		byte[] bytes = "http4j".getBytes();
 		ByteBuffer src = ByteBuffer.allocate(bytes.length);
 		src.put(bytes);
@@ -83,9 +83,8 @@ public class IOUtilsTestCase {
 		Assert.assertEquals(new String(chunk2), "Author:guilin.zhang@hotmail.com");
 	}
 	
-	private void assertionExtractByEnd(String source, String dest, String end) {
-		ByteBuffer buffer = ByteBuffer.wrap(source.getBytes());
-		byte[] bytes = IOUtils.extractByEnd(buffer, end.getBytes());
+	private void assertionExtractByEnd(String source, String dest, String end) throws IOException {
+		byte[] bytes = IOUtils.extractByEnd(new ByteArrayInputStream(source.getBytes()), end.getBytes());
 		Assert.assertNotNull(bytes);
 		Assert.assertEquals(new String(bytes), dest);
 	}

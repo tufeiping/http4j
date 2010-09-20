@@ -72,30 +72,18 @@ public final class IOUtils {
 	}
 
 	/**
-	 * Extract data from buffer by given end expression.e.g. 
+	 * Extract data from stream by given end expression.e.g. 
 	 * <li>http4j [4j] -&gt; http</li>
 	 * <li>http4j [4] -&gt; http</li>
 	 * <li>http4j [ttp4j] -&gt; h</li>
 	 * <li>http4j [http4j] -&gt; ""</li>
 	 * <li>http4j [4g] -&gt; "http4j"</li>
 	 * 
-	 * @param buffer
+	 * @param in
 	 * @param endExpression
 	 *            minimum length of 1
 	 * @return bytes
 	 */
-	public static byte[] extractByEnd(ByteBuffer buffer, byte... endExpression) {
-		ByteBuffer bf = ByteBuffer.allocate(buffer.limit());
-		byte b;
-		int count = 0;
-		while (buffer.hasRemaining() && count < endExpression.length) {
-			count = ((b = buffer.get()) == endExpression[count]) ? count + 1 : 0;
-			bf.put(b);
-		}
-		bf.position(bf.position() - count);
-		return extract(bf);
-	}
-	
 	public static byte[] extractByEnd(InputStream in, byte... endExpression) throws IOException {
 		ByteBuffer bf = ByteBuffer.allocate(2 << 12);
 		int count = 0;
