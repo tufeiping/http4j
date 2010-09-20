@@ -16,12 +16,14 @@
 
 package com.google.code.http4j.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.zip.GZIPInputStream;
 
 import com.google.code.http4j.HTTP;
 
@@ -102,5 +104,16 @@ public final class IOUtils {
 			return Integer.parseInt(s.trim(), 16);
 		}
 		return 0;
+	}
+
+	public static byte[] unGzip(byte[] original) throws IOException {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(original), original.length);
+		byte[] buffer = new byte[2 << 12];
+		int read;
+		while((read = in.read(buffer)) != -1) {
+			out.write(buffer, 0, read);
+		}
+		return out.toByteArray();
 	}
 }

@@ -35,6 +35,7 @@ public class Headers {
 	public static final String TRANSFER_ENCODING = "Transfer-Encoding";
 	public static final String CONTENT_TYPE = "Content-Type";
 	public static final String CONTENT_ENCODING = "Content-Encoding";
+	public static final String CONNECTION = "Connection";
 	
 	public static List<Header> filter(List<Header> headers, String name) {
 		List<Header> list = new LinkedList<Header>();
@@ -64,9 +65,15 @@ public class Headers {
 	}
 
 	public static boolean isChunked(List<Header> headers) {
-		String encoding = Headers.getValueByName(headers, Headers.TRANSFER_ENCODING);
+		String encoding = Headers.getValueByName(headers, TRANSFER_ENCODING);
 		encoding = null == encoding ? "" : encoding.toLowerCase();
 		return encoding.startsWith("chunked") ? true : false;
+	}
+	
+	public static boolean isGzipped(List<Header> headers) {
+		String encoding = Headers.getValueByName(headers, CONTENT_ENCODING);
+		encoding = null == encoding ? "" : encoding.toLowerCase();
+		return encoding.startsWith("gzip") ? true : false;
 	}
 
 	public static int getContentLength(List<Header> headers) {

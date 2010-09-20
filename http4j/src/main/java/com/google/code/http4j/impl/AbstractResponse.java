@@ -46,10 +46,15 @@ public abstract class AbstractResponse implements Response {
 	public AbstractResponse(StatusLine statusLine, List<Header> headers, InputStream in) throws IOException {
 		this.statusLine = statusLine;
 		this.headers = headers;
-		entity = statusLine.hasEntity() ? readEntity(in) : null;
+		entity = statusLine.hasEntity() ? downloadEntity(in) : null;
 		charset = Headers.getCharset(headers);
 	}
 	
+	private byte[] downloadEntity(InputStream in) throws IOException {
+		byte[] original = readEntity(in);
+		return Headers.isGzipped(headers) ? IOUtils.unGzip(original) : original;
+	}
+
 	abstract protected byte[] readEntity(InputStream in) throws IOException;
 	
 	@Override
