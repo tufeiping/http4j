@@ -32,21 +32,6 @@ import com.google.code.http4j.impl.IOUtils;
 public class IOUtilsTestCase {
 
 	@Test
-	public void extendBuffer() {
-		ByteBuffer buffer = ByteBuffer.wrap("http4j".getBytes());
-		buffer.position(buffer.capacity());
-		ByteBuffer extended = IOUtils.extendBuffer(buffer);
-		Assert.assertNotNull(extended);
-		Assert.assertTrue(extended.capacity() > buffer.capacity());
-		Assert.assertEquals(extended.position(), buffer.limit());
-		byte[] src = buffer.array();
-		byte[] dest = extended.array();
-		for (int i = 0; i < buffer.limit(); i++) {
-			Assert.assertEquals(src[i], dest[i]);
-		}
-	}
-	
-	@Test
 	public void extract() {
 		ByteBuffer buffer = ByteBuffer.allocate(10);
 		buffer.put("http4j".getBytes());

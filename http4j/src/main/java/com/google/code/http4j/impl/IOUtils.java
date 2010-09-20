@@ -16,11 +16,13 @@
 
 package com.google.code.http4j.impl;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 import com.google.code.http4j.HTTP;
 
@@ -50,16 +52,6 @@ public final class IOUtils {
 	}
 
 	/**
-	 * @param buffer
-	 * @return extended buffer, the capacity becomes double of original
-	 */
-	public static ByteBuffer extendBuffer(ByteBuffer buffer) {
-		ByteBuffer newBuffer = ByteBuffer.allocate(buffer.capacity() << 1);
-		transfer(buffer, newBuffer);
-		return newBuffer;
-	}
-
-	/**
 	 * Extract buffer data from 0 to the position after flip.
 	 * 
 	 * @param buffer
@@ -85,16 +77,16 @@ public final class IOUtils {
 	 * @return bytes
 	 */
 	public static byte[] extractByEnd(InputStream in, byte... endExpression) throws IOException {
-		ByteBuffer bf = ByteBuffer.allocate(2 << 12);
+		ByteArrayOutputStream bf = new ByteArrayOutputStream();
 		int count = 0;
-		byte b;
-		while (count < endExpression.length && (b = (byte) in.read()) != -1) {
+		int b;
+		while (count < endExpression.length && (b = in.read()) != -1) {
 			count = (b == endExpression[count]) ? count + 1 : 0;
-			bf = bf.hasRemaining() ? bf : extendBuffer(bf);
-			bf.put(b);
+			bf.write(b);
 		}
-		bf.position(bf.position() - count);
-		return extract(bf);
+		
+		byte[] bs = bf.toByteArray();
+		return count == 0 ? bs : Arrays.copyOf(bs, bs.length - count);
 	}
 
 	/**

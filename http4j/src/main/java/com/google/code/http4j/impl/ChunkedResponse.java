@@ -16,9 +16,9 @@
 
 package com.google.code.http4j.impl;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.util.List;
 
 import com.google.code.http4j.HTTP;
@@ -44,16 +44,12 @@ public class ChunkedResponse extends AbstractResponse {
 	}
 	
 	private byte[] readBody(InputStream in) throws IOException {
-		ByteBuffer bf = ByteBuffer.allocate(2 << 13);
+		ByteArrayOutputStream bf = new ByteArrayOutputStream();
 		byte[] data;
 		while((data = IOUtils.getNextChunk(in)) != null) {
-			bf = bf.remaining() > data.length ? bf : IOUtils.extendBuffer(bf);
-			bf.put(data);
+			bf.write(data);
 		}
-		bf.flip();
-		data = new byte[bf.limit()];
-		System.arraycopy(bf.array(), 0, data, 0, data.length);
-		return data;
+		return bf.toByteArray();
 	}
 
 	private void readTrailerHeaders(InputStream in) throws IOException {
