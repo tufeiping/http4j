@@ -38,7 +38,7 @@ public class IdentityResponse extends AbstractResponse {
 	@Override
 	protected byte[] readEntity(InputStream in) throws IOException {
 		int length = Headers.getContentLength(headers);
-		return length > 0 ? readEntity(in, length) : new byte[0];
+		return readEntity(in, length);
 	}
 	
 	protected byte[] readEntity(InputStream in, int length) throws IOException {

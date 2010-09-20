@@ -79,7 +79,7 @@ public class Headers {
 
 	public static int getContentLength(List<Header> headers) {
 		String length = getValueByName(headers, CONTENT_LENGTH);
-		return null == length ? 0 : Integer.parseInt(length);
+		return Integer.parseInt(length);
 	}
 	
 	public static String getCharset(List<Header> headers) {
