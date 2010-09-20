@@ -84,7 +84,7 @@ public class Headers {
 	
 	public static String getCharset(List<Header> headers) {
 		String contentType = getValueByName(headers, CONTENT_TYPE);
-		return null == contentType ? null : getCharset(contentType);
+		return getCharset(contentType);
 	}
 	
 	public static String getCharset(String contentType) {
