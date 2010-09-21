@@ -24,10 +24,11 @@ import com.google.code.http4j.metrics.Counter;
 import com.google.code.http4j.metrics.ThreadLocalMetricsRecorder;
 
 /**
+ * This class does not totally matched the decorator, because only some of methods are delegated.
+ * So it is used within this package.
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
- * 
  */
-public class InputStreamDecorator extends InputStream {
+class InputStreamDecorator extends InputStream {
 
 	protected final DataInputStream in;
 

@@ -22,10 +22,11 @@ import java.io.OutputStream;
 import com.google.code.http4j.metrics.ThreadLocalMetricsRecorder;
 
 /**
+ * This class does not totally matched the decorator, because only some of methods are delegated.
+ * So it is used within this package.
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
- *
  */
-public class OutputStreamDecorator extends OutputStream {
+class OutputStreamDecorator extends OutputStream {
 	
 	protected final OutputStream out;
 	

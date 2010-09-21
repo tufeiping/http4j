@@ -44,7 +44,7 @@ public class ChunkedResponse extends AbstractResponse {
 	}
 	
 	private byte[] readBody(InputStream in) throws IOException {
-		ByteArrayOutputStream bf = new ByteArrayOutputStream();
+		ByteArrayOutputStream bf = new ByteArrayOutputStream(2 << 13);
 		byte[] data;
 		while((data = IOUtils.getNextChunk(in)) != null) {
 			bf.write(data);
