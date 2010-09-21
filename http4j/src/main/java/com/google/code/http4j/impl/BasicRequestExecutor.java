@@ -64,7 +64,7 @@ public class BasicRequestExecutor implements RequestExecutor {
 		ThreadLocalMetricsRecorder.getInstance().getResponseTimer().stop();
 		connection.setReusable(response.getStatusLine().keepAlive());
 		connectionCache.release(connection);
-		response.captureMetrics();
+		response.setMetrics(ThreadLocalMetricsRecorder.getInstance().captureMetrics());
 		return response;
 	}
 

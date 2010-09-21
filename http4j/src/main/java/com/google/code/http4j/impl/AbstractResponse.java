@@ -27,7 +27,6 @@ import com.google.code.http4j.Headers;
 import com.google.code.http4j.Response;
 import com.google.code.http4j.StatusLine;
 import com.google.code.http4j.metrics.Metrics;
-import com.google.code.http4j.metrics.ThreadLocalMetricsRecorder;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -104,7 +103,7 @@ public abstract class AbstractResponse implements Response {
 	}
 	
 	@Override
-	public void captureMetrics() {
-		metrics = ThreadLocalMetricsRecorder.getInstance().captureMetrics();
+	public void setMetrics(Metrics metrics) {
+		this.metrics = metrics;
 	}
 }
