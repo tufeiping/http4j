@@ -55,6 +55,8 @@ public final class ClientTestCase {
 		Response response = client.get("http://www.baidu.com/");
 		checkResponse(response);
 		Assert.assertTrue(response.getMetrics().isCachedConnection());
+		Assert.assertEquals(response.getMetrics().getConnectingCost(), 0);
+		Assert.assertEquals(response.getMetrics().getDnsLookupCost(), 0);
 	}
 	
 	@Test
