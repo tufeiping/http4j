@@ -35,5 +35,5 @@ public interface Response {
 	
 	Metrics getMetrics();
 
-	void captureMetrics();
+	void setMetrics(Metrics metrics);
 }
