@@ -25,7 +25,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.google.code.http4j.ConnectionCache;
+import com.google.code.http4j.ConnectionManager;
 import com.google.code.http4j.CookieCache;
 import com.google.code.http4j.Header;
 import com.google.code.http4j.Request;
@@ -46,7 +46,7 @@ public final class RequestExecutorTestCase {
 	
 	private RequestExecutor executor;
 	
-	private ConnectionCache connectionCache;
+	private ConnectionManager manager;
 	
 	private CookieCache cookieCache;
 	
@@ -54,10 +54,10 @@ public final class RequestExecutorTestCase {
 	
 	@BeforeClass
 	public void beforeClass() {
-		connectionCache = new ConnectionPool();
+		manager = new ConnectionPool();
 		cookieCache = new CookieStoreAdapter();
 		parser = new ResponseParser();
-		executor = new BasicRequestExecutor(connectionCache, cookieCache, parser);
+		executor = new BasicRequestExecutor(manager, cookieCache, parser);
 	}
 	
 	@Test

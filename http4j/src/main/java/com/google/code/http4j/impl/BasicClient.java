@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import com.google.code.http4j.Client;
-import com.google.code.http4j.ConnectionCache;
+import com.google.code.http4j.ConnectionManager;
 import com.google.code.http4j.CookieCache;
 import com.google.code.http4j.DnsCache;
 import com.google.code.http4j.Request;
@@ -33,14 +33,14 @@ import com.google.code.http4j.impl.conn.ConnectionPool;
  */
 public class BasicClient implements Client {
 
-	protected final ConnectionCache connectionCache;
+	protected final ConnectionManager connectionManager;
 
 	protected final CookieCache cookieCache;
 
 	protected final ResponseParser responseParser;
 
 	public BasicClient() {
-		connectionCache = createConnectionCache();
+		connectionManager = createConnectionManager();
 		cookieCache = createCookieCache();
 		responseParser = createResponseParser();
 	}
@@ -53,14 +53,14 @@ public class BasicClient implements Client {
 		return new CookieStoreAdapter();
 	}
 
-	protected ConnectionCache createConnectionCache() {
+	protected ConnectionManager createConnectionManager() {
 		return new ConnectionPool();
 	}
 
 	@Override
 	public Response submit(Request request) throws InterruptedException,
 			IOException {
-		RequestExecutor executor = new BasicRequestExecutor(connectionCache, cookieCache, responseParser);
+		RequestExecutor executor = new BasicRequestExecutor(connectionManager, cookieCache, responseParser);
 		return executor.execute(request);
 	}
 	
@@ -78,6 +78,6 @@ public class BasicClient implements Client {
 	public void shutdown() {
 		cookieCache.clear();
 		DnsCache.clear();
-		connectionCache.shutdown();
+		connectionManager.shutdown();
 	}
 }

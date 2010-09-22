@@ -25,14 +25,14 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.google.code.http4j.Connection;
-import com.google.code.http4j.ConnectionCache;
+import com.google.code.http4j.ConnectionManager;
 import com.google.code.http4j.Host;
 import com.google.code.http4j.impl.IOUtils;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class ConnectionPool implements ConnectionCache {
+public class ConnectionPool implements ConnectionManager {
 
 	protected ConcurrentHashMap<Host, ConcurrentLinkedQueue<Connection>> free;
 

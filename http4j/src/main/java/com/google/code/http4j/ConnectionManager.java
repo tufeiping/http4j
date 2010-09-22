@@ -21,7 +21,7 @@ import java.io.IOException;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public interface ConnectionCache {
+public interface ConnectionManager {
 
 	/**
 	 * @see #setMaxConnectionsPerHost(int)

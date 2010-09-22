@@ -30,7 +30,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.code.http4j.Connection;
-import com.google.code.http4j.ConnectionCache;
+import com.google.code.http4j.ConnectionManager;
 import com.google.code.http4j.Host;
 import com.google.code.http4j.impl.BasicHost;
 import com.google.code.http4j.impl.conn.ConnectionPool;
@@ -38,9 +38,9 @@ import com.google.code.http4j.impl.conn.ConnectionPool;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public final class ConnectionCacheTestCase {
+public final class ConnectionManagerTestCase {
 
-	private ConnectionCache cache;
+	private ConnectionManager manager;
 
 	private Host host;
 
@@ -50,16 +50,16 @@ public final class ConnectionCacheTestCase {
 
 	@BeforeClass
 	public void beforeClass() {
-		cache = new ConnectionPool();
+		manager = new ConnectionPool();
 		host = new BasicHost("www.google.com");
 	}
 
 	@Test
 	public void acquire() throws InterruptedException, IOException {
-		connection1 = cache.acquire(host);
+		connection1 = manager.acquire(host);
 		Assert.assertNotNull(connection1);
 		Assert.assertEquals(connection1.getHost(), host);
-		connection2 = cache.acquire(host);
+		connection2 = manager.acquire(host);
 		Assert.assertNotNull(connection2);
 		Assert.assertEquals(connection2.getHost(), host);
 		Assert.assertFalse(connection1 == connection2);
@@ -67,24 +67,24 @@ public final class ConnectionCacheTestCase {
 
 	@Test(dependsOnMethods = "acquire")
 	public void release() {
-		boolean success1 = cache.release(connection1);
-		boolean success2 = cache.release(connection2);
+		boolean success1 = manager.release(connection1);
+		boolean success2 = manager.release(connection2);
 		Assert.assertTrue(success1 && success2);
 	}
 
 	@Test(dependsOnMethods = "release")
 	public void shutdown() throws InterruptedException, IOException {
-		cache.shutdown();
-		Connection connection = cache.acquire(host);
+		manager.shutdown();
+		Connection connection = manager.acquire(host);
 		Assert.assertNull(connection);
-		boolean released = cache.release(connection1);
+		boolean released = manager.release(connection1);
 		Assert.assertFalse(released);
 	}
 
 	@Test(expectedExceptions = TimeoutException.class)
 	public void setMaxConnectionsPerHost() throws InterruptedException,
 			ExecutionException, TimeoutException, IOException {
-		final ConnectionCache pool = new ConnectionPool();
+		final ConnectionManager pool = new ConnectionPool();
 		pool.setMaxConnectionsPerHost(1);
 		try {
 			Connection connection = pool.acquire(host);

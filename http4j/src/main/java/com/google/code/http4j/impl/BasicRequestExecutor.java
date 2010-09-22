@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import com.google.code.http4j.Connection;
-import com.google.code.http4j.ConnectionCache;
+import com.google.code.http4j.ConnectionManager;
 import com.google.code.http4j.CookieCache;
 import com.google.code.http4j.Request;
 import com.google.code.http4j.RequestExecutor;
@@ -32,14 +32,14 @@ import com.google.code.http4j.metrics.ThreadLocalMetricsRecorder;
  */
 public class BasicRequestExecutor implements RequestExecutor {
 	
-	protected final ConnectionCache connectionCache;
+	protected final ConnectionManager connectionManager;
 
 	protected final CookieCache cookieCache;
 
 	protected final ResponseParser responseParser;
 
-	public BasicRequestExecutor(ConnectionCache connectionCache, CookieCache cookieCache, ResponseParser responseParser) {
-		this.connectionCache = connectionCache;
+	public BasicRequestExecutor(ConnectionManager connectionCache, CookieCache cookieCache, ResponseParser responseParser) {
+		this.connectionManager = connectionCache;
 		this.cookieCache = cookieCache;
 		this.responseParser = responseParser;
 	}
@@ -47,7 +47,7 @@ public class BasicRequestExecutor implements RequestExecutor {
 	@Override
 	public Response execute(Request request) throws InterruptedException, IOException {
 		ThreadLocalMetricsRecorder.getInstance().reset();
-		Connection connection = connectionCache.acquire(request.getHost());
+		Connection connection = connectionManager.acquire(request.getHost());
 		try {
 			send(connection, request);
 			Response response = retrieveResponse(connection);
@@ -63,7 +63,7 @@ public class BasicRequestExecutor implements RequestExecutor {
 		Response response = responseParser.parse(connection.getInputStream());
 		ThreadLocalMetricsRecorder.getInstance().getResponseTimer().stop();
 		connection.setReusable(response.getStatusLine().keepAlive());
-		connectionCache.release(connection);
+		connectionManager.release(connection);
 		response.setMetrics(ThreadLocalMetricsRecorder.getInstance().captureMetrics());
 		return response;
 	}
