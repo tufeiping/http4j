@@ -34,17 +34,7 @@ public class CanonicalHeader implements Header {
 		this.name = toCanonical(name);
 		this.value = value;
 	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public String getValue() {
-		return value;
-	}
-
+	
 	protected static String toCanonical(String headerName) {
 		StringBuilder buffer = new StringBuilder(headerName.toLowerCase());
 		toUpperCase(buffer, 0);
@@ -58,5 +48,20 @@ public class CanonicalHeader implements Header {
 	protected static void toUpperCase(StringBuilder builder, int i) {
 		char c = builder.charAt(i);
 		builder.replace(i, i + 1, String.valueOf(Character.toUpperCase(c)));
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public String getValue() {
+		return value;
+	}
+	
+	@Override
+	public String toString() {
+		return new StringBuilder(name).append(':').append(value).toString();
 	}
 }

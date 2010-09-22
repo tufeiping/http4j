@@ -16,8 +16,13 @@
 
 package com.google.code.http4j;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import com.google.code.http4j.impl.CanonicalHeader;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -30,5 +35,14 @@ public class HeadersTestCase {
 		Assert.assertEquals(Headers.getCharset(contentType), "UTF-8");
 		contentType = "text/html";
 		Assert.assertEquals(Headers.getCharset(contentType), null);
+	}
+	
+	@Test
+	public void toString_Headers() {
+		List<Header> headers = new LinkedList<Header>();
+		headers.add(new CanonicalHeader("Content-Type","text/html"));
+		headers.add(new CanonicalHeader("Content-Length","2012"));
+		String string = Headers.toString(headers);
+		Assert.assertEquals(string, "Content-Type:text/html\r\nContent-Length:2012\r\n");
 	}
 }
