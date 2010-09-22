@@ -99,6 +99,6 @@ public class Headers {
 		for(Header header : headers) {
 			buffer.append(header.toString()).append(HTTP.CRLF);
 		}
-		return null;
+		return buffer.toString();
 	}
 }
