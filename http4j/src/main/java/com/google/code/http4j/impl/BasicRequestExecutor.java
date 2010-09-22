@@ -25,7 +25,7 @@ import com.google.code.http4j.CookieCache;
 import com.google.code.http4j.Request;
 import com.google.code.http4j.RequestExecutor;
 import com.google.code.http4j.Response;
-import com.google.code.http4j.metrics.ThreadLocalMetricsRecorder;
+import com.google.code.http4j.utils.ThreadLocalMetricsRecorder;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>

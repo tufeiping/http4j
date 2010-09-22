@@ -18,7 +18,7 @@ package com.google.code.http4j;
 
 import java.util.List;
 
-import com.google.code.http4j.metrics.Metrics;
+import com.google.code.http4j.utils.Metrics;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>

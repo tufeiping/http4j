@@ -20,8 +20,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.google.code.http4j.metrics.Counter;
-import com.google.code.http4j.metrics.ThreadLocalMetricsRecorder;
+import com.google.code.http4j.utils.Counter;
+import com.google.code.http4j.utils.ThreadLocalMetricsRecorder;
 
 /**
  * This class does not totally matched the decorator, because only some of methods are delegated.

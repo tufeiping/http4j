@@ -29,7 +29,7 @@ import com.google.code.http4j.Connection;
 import com.google.code.http4j.DnsCache;
 import com.google.code.http4j.Host;
 import com.google.code.http4j.impl.IOUtils;
-import com.google.code.http4j.metrics.ThreadLocalMetricsRecorder;
+import com.google.code.http4j.utils.ThreadLocalMetricsRecorder;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>

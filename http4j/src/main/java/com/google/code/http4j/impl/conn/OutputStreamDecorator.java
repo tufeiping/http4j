@@ -19,7 +19,7 @@ package com.google.code.http4j.impl.conn;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.google.code.http4j.metrics.ThreadLocalMetricsRecorder;
+import com.google.code.http4j.utils.ThreadLocalMetricsRecorder;
 
 /**
  * This class does not totally matched the decorator, because only some of methods are delegated.
