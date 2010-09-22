@@ -42,7 +42,7 @@ public abstract class AbstractRequest implements Request {
 	
 	public static final String DEFAULT_ACCEPT_ENCODING = "gzip,deflate";
 
-	private static final String DEFAULT_CONNECTION_STRATEGY = "keep-alive";
+	public static final String DEFAULT_CONNECTION_STRATEGY = "keep-alive";
 
 	protected List<Header> headers;
 
