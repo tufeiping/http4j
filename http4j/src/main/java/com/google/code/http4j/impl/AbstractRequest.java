@@ -42,6 +42,8 @@ public abstract class AbstractRequest implements Request {
 	
 	public static final String DEFAULT_ACCEPT_ENCODING = "gzip,deflate";
 
+	private static final String DEFAULT_CONNECTION_STRATEGY = "keep-alive";
+
 	protected List<Header> headers;
 
 	protected Host host;
@@ -106,6 +108,7 @@ public abstract class AbstractRequest implements Request {
 		setHeader(Headers.USER_AGENT, DEFAULT_USER_AGENT);
 		setHeader(Headers.ACCEPT, DEFAULT_ACCEPT);
 		setHeader(Headers.ACCEPT_ENCODING, DEFAULT_ACCEPT_ENCODING);
+		setHeader(Headers.CONNECTION, DEFAULT_CONNECTION_STRATEGY);
 	}
 	
 	@Override
