@@ -18,7 +18,6 @@ package com.google.code.http4j.impl;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
-import java.net.CookiePolicy;
 import java.net.CookieStore;
 import java.net.HttpCookie;
 import java.net.URI;
@@ -37,16 +36,11 @@ public class CookieStoreAdapter implements CookieCache {
 	protected CookieStore store;
 
 	public CookieStoreAdapter() {
-		this(CookiePolicy.ACCEPT_ALL);
+		this.store = createCookieStore();
 	}
 
-	public CookieStoreAdapter(CookiePolicy policy) {
-		this.store = createCookieStore(policy);
-	}
-
-	protected CookieStore createCookieStore(CookiePolicy policy) {
+	protected CookieStore createCookieStore() {
 		CookieManager manager = new CookieManager();
-		manager.setCookiePolicy(policy);
 		CookieHandler.setDefault(manager);
 		return manager.getCookieStore();
 	}
