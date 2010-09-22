@@ -24,6 +24,7 @@ import java.util.List;
 import com.google.code.http4j.HTTP;
 import com.google.code.http4j.Header;
 import com.google.code.http4j.StatusLine;
+import com.google.code.http4j.utils.IOUtils;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>

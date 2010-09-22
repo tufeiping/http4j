@@ -26,6 +26,7 @@ import com.google.code.http4j.Header;
 import com.google.code.http4j.Headers;
 import com.google.code.http4j.Response;
 import com.google.code.http4j.StatusLine;
+import com.google.code.http4j.utils.IOUtils;
 import com.google.code.http4j.utils.Metrics;
 
 /**
