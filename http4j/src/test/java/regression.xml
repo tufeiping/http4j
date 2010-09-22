@@ -22,7 +22,7 @@
 	<test name="regression">
 		<packages>
 			<package name="com.google.code.http4j" />
-			<package name="com.google.code.http4j.metrics" />
+			<package name="com.google.code.http4j.utils" />
 			<package name="com.google.code.http4j.impl" />
 		</packages>
 	</test>
