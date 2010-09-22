@@ -24,12 +24,9 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.google.code.http4j.Client;
-import com.google.code.http4j.Response;
-import com.google.code.http4j.StatusLine;
 import com.google.code.http4j.impl.BasicClient;
 import com.google.code.http4j.impl.Get;
-import com.google.code.http4j.metrics.Metrics;
+import com.google.code.http4j.utils.Metrics;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>

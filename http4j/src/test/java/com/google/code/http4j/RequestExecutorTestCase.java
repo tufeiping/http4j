@@ -25,19 +25,12 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.google.code.http4j.ConnectionManager;
-import com.google.code.http4j.CookieCache;
-import com.google.code.http4j.Header;
-import com.google.code.http4j.Request;
-import com.google.code.http4j.RequestExecutor;
-import com.google.code.http4j.Response;
-import com.google.code.http4j.StatusLine;
 import com.google.code.http4j.impl.BasicRequestExecutor;
 import com.google.code.http4j.impl.CookieStoreAdapter;
 import com.google.code.http4j.impl.Get;
 import com.google.code.http4j.impl.ResponseParser;
 import com.google.code.http4j.impl.conn.ConnectionPool;
-import com.google.code.http4j.metrics.Metrics;
+import com.google.code.http4j.utils.Metrics;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
