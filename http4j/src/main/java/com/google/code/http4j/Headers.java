@@ -16,6 +16,7 @@
 
 package com.google.code.http4j;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -91,5 +92,13 @@ public class Headers {
 		String pattern = "charset=";
 		int index = contentType.indexOf(pattern);
 		return index < 0 ? null : contentType.substring(index + pattern.length()).trim();
+	}
+	
+	public static String toString(Collection<Header> headers) {
+		StringBuilder buffer = new StringBuilder();
+		for(Header header : headers) {
+			buffer.append(header.toString()).append(HTTP.CRLF);
+		}
+		return null;
 	}
 }
