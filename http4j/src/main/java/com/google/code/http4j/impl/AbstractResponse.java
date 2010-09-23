@@ -100,8 +100,7 @@ public abstract class AbstractResponse implements Response {
 	
 	@Override
 	public boolean isConnectionReusable() {
-		// TODO : also determined by headers
-		return statusLine.keepAlive();
+		return statusLine.keepAlive() && Headers.isConnectionReusable(headers);
 	}
 	
 	@Override
