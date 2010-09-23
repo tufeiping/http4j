@@ -16,7 +16,6 @@
 
 package com.google.code.http4j;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,6 +24,8 @@ import java.util.List;
  * 
  */
 public class Headers {
+	
+	protected Headers(){}
 
 	public static final String HOST = "Host";
 	public static final String CONTENT_LENGTH = "Content-Length";
@@ -94,11 +95,16 @@ public class Headers {
 		return index < 0 ? null : contentType.substring(index + pattern.length()).trim();
 	}
 	
-	public static String toString(Collection<Header> headers) {
+	public static String toString(List<Header> headers) {
 		StringBuilder buffer = new StringBuilder();
 		for(Header header : headers) {
 			buffer.append(header.toString()).append(HTTP.CRLF);
 		}
 		return buffer.toString();
+	}
+	
+	public static boolean isConnectionReusable(List<Header> headers) {
+		String connection = getValueByName(headers, CONNECTION);
+		return "keep-alive".equalsIgnoreCase(connection);
 	}
 }
