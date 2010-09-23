@@ -17,6 +17,7 @@
 package com.google.code.http4j.impl;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import com.google.code.http4j.Connection;
@@ -49,9 +50,9 @@ public class BasicRequestExecutor implements RequestExecutor {
 		ThreadLocalMetricsRecorder.getInstance().reset();
 		Connection connection = connectionManager.acquire(request.getHost());
 		try {
-			send(connection, request);
-			Response response = retrieveResponse(connection);
-			cookieCache.set(request.getURI(), response.getHeaders());
+			send(connection.getOutputStream(), request);
+			Response response = receive(connection.getInputStream());
+			afterResponse(request, response, connection);
 			return response;
 		} catch (IOException e) {
 			connection.close();
@@ -59,18 +60,22 @@ public class BasicRequestExecutor implements RequestExecutor {
 		}
 	}
 
-	protected Response retrieveResponse(Connection connection) throws IOException {
-		Response response = responseParser.parse(connection.getInputStream());
-		ThreadLocalMetricsRecorder.getInstance().getResponseTimer().stop();
+	protected void afterResponse(Request request, Response response,
+			Connection connection) {
 		connection.setReusable(response.getStatusLine().keepAlive());
 		connectionManager.release(connection);
 		response.setMetrics(ThreadLocalMetricsRecorder.getInstance().captureMetrics());
+		cookieCache.set(request.getURI(), response.getHeaders());
+	}
+
+	protected Response receive(InputStream in) throws IOException {
+		Response response = responseParser.parse(in);
+		ThreadLocalMetricsRecorder.getInstance().getResponseTimer().stop();
 		return response;
 	}
 
-	protected void send(Connection connection, Request request) throws IOException {
+	protected void send(OutputStream out, Request request) throws IOException {
 		addCookie(request);
-		OutputStream out = connection.getOutputStream();
 		out.write(request.toMessage());
 		out.flush();
 		ThreadLocalMetricsRecorder.getInstance().getRequestTimer().stop();
