@@ -33,6 +33,8 @@ public interface Response {
 	
 	String getCharset();
 	
+	boolean isConnectionReusable();
+	
 	Metrics getMetrics();
 
 	void setMetrics(Metrics metrics);

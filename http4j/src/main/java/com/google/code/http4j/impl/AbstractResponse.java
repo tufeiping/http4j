@@ -99,6 +99,12 @@ public abstract class AbstractResponse implements Response {
 	}
 	
 	@Override
+	public boolean isConnectionReusable() {
+		// TODO : also determined by headers
+		return statusLine.keepAlive();
+	}
+	
+	@Override
 	public Metrics getMetrics() {
 		return metrics;
 	}

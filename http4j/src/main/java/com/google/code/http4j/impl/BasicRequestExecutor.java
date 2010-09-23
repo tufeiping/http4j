@@ -62,7 +62,7 @@ public class BasicRequestExecutor implements RequestExecutor {
 
 	protected void afterResponse(Request request, Response response,
 			Connection connection) {
-		connection.setReusable(response.getStatusLine().keepAlive());
+		connection.setReusable(response.isConnectionReusable());
 		connectionManager.release(connection);
 		response.setMetrics(ThreadLocalMetricsRecorder.getInstance().captureMetrics());
 		cookieCache.set(request.getURI(), response.getHeaders());
