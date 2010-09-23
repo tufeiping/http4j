@@ -19,32 +19,17 @@ package com.google.code.http4j.impl;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.code.http4j.Charset;
-import com.google.code.http4j.Header;
-import com.google.code.http4j.StatusLine;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  * 
  */
-public final class ChunkedResponseTestCase {
-
-	private StatusLine statusLine;
-
-	private List<Header> headers;
-
-	@BeforeClass
-	public void beforeClass() throws IOException {
-		statusLine = new StatusLineParser.BasicStatusLine("HTTP/1.1", 200, "OK");
-		byte[] hbs = "Content-Type:text/html\r\nTransfer-Encoding:chunked\r\n".getBytes();
-		headers = new HeadersParser().parse(hbs);
-	}
+public final class ChunkedResponseTestCase extends AbstractResponseTestCase {
 
 	@Test(expectedExceptions = IOException.class)
 	public void construct_cause_IOException() throws IOException {
@@ -58,5 +43,15 @@ public final class ChunkedResponseTestCase {
 		ChunkedResponse response = new ChunkedResponse(statusLine, headers, in);
 		Assert.assertEquals(response.getCharset(), Charset.GBK);
 		Assert.assertEquals(new String(response.getEntity(), response.getCharset()), "<meta content=\"text/html; charset=GBK\" />http4j");
+	}
+
+	@Override
+	protected byte[] getHeadersBytes() {
+		return "Content-Type:text/html\r\nTransfer-Encoding:chunked\r\n".getBytes();
+	}
+
+	@Override
+	protected byte[] getStatusLineBytes() {
+		return "HTTP/1.1 200 OK".getBytes();
 	}
 }

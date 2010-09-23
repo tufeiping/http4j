@@ -16,28 +16,31 @@
 
 package com.google.code.http4j.impl;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.List;
 
-import org.testng.annotations.Test;
+import org.testng.annotations.BeforeClass;
+
+import com.google.code.http4j.Header;
+import com.google.code.http4j.StatusLine;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
+ *
  */
-public final class IdentityResponseTestCase extends AbstractResponseTestCase {
+public abstract class AbstractResponseTestCase {
 	
-	@Test(expectedExceptions = IOException.class)
-	public void construct_cause_IOException() throws IOException {
-		new IdentityResponse(statusLine, headers, new ByteArrayInputStream("http".getBytes()));
+	protected StatusLine statusLine;
+
+	protected List<Header> headers;
+	
+	@BeforeClass
+	public void beforeClass() throws IOException {
+		statusLine = new StatusLineParser().parse(getStatusLineBytes());
+		headers = new HeadersParser().parse(getHeadersBytes());
 	}
 
-	@Override
-	protected byte[] getHeadersBytes() {
-		return "Content-Length:6\r\nContent-Type:text/html;charset=UTF-8\r\n".getBytes();
-	}
+	abstract protected byte[] getHeadersBytes();
 
-	@Override
-	protected byte[] getStatusLineBytes() {
-		return "HTTP/1.1 200 OK".getBytes();
-	}
+	abstract protected byte[] getStatusLineBytes();
 }
