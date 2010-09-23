@@ -32,12 +32,12 @@ public final class IdentityResponseTestCase extends AbstractResponseTestCase {
 	}
 
 	@Override
-	protected byte[] getHeadersBytes() {
-		return "Content-Length:6\r\nContent-Type:text/html;charset=UTF-8\r\n".getBytes();
+	protected String getHeaders() {
+		return "Content-Length:6\r\nContent-Type:text/html;charset=UTF-8\r\n";
 	}
 
 	@Override
-	protected byte[] getStatusLineBytes() {
-		return "HTTP/1.1 200 OK".getBytes();
+	protected String getStatusLine() {
+		return "HTTP/1.1 200 OK";
 	}
 }

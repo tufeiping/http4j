@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import com.google.code.http4j.Header;
 import com.google.code.http4j.StatusLine;
@@ -36,11 +37,16 @@ public abstract class AbstractResponseTestCase {
 	
 	@BeforeClass
 	public void beforeClass() throws IOException {
-		statusLine = new StatusLineParser().parse(getStatusLineBytes());
-		headers = new HeadersParser().parse(getHeadersBytes());
+		statusLine = new StatusLineParser().parse(getStatusLine().getBytes());
+		headers = new HeadersParser().parse(getHeaders().getBytes());
+	}
+	
+	@Test
+	public void isConnectionReusable() {
+		
 	}
 
-	abstract protected byte[] getHeadersBytes();
+	abstract protected String getHeaders();
 
-	abstract protected byte[] getStatusLineBytes();
+	abstract protected String getStatusLine();
 }

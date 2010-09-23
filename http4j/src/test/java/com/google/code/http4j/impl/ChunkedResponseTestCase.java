@@ -46,12 +46,12 @@ public final class ChunkedResponseTestCase extends AbstractResponseTestCase {
 	}
 
 	@Override
-	protected byte[] getHeadersBytes() {
-		return "Content-Type:text/html\r\nTransfer-Encoding:chunked\r\n".getBytes();
+	protected String getHeaders() {
+		return "Content-Type:text/html\r\nTransfer-Encoding:chunked\r\n";
 	}
 
 	@Override
-	protected byte[] getStatusLineBytes() {
-		return "HTTP/1.1 200 OK".getBytes();
+	protected String getStatusLine() {
+		return "HTTP/1.1 200 OK";
 	}
 }
