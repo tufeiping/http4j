@@ -26,7 +26,7 @@ import java.net.SocketAddress;
 import java.net.UnknownHostException;
 
 import com.google.code.http4j.Connection;
-import com.google.code.http4j.DnsCache;
+import com.google.code.http4j.DNS;
 import com.google.code.http4j.Host;
 import com.google.code.http4j.utils.IOUtils;
 import com.google.code.http4j.utils.ThreadLocalMetricsRecorder;
@@ -81,7 +81,7 @@ public class SocketConnection implements Connection {
 	protected SocketAddress getSocketAddress(Host host)
 			throws UnknownHostException {
 		int port = (host.getPort() < 0) ? host.getDefaultPort() : host.getPort();
-		InetAddress address = DnsCache.getAddress(host.getName());
+		InetAddress address = DNS.getDefault().getInetAddress(host.getName());
 		return new InetSocketAddress(address, port);
 	}
 

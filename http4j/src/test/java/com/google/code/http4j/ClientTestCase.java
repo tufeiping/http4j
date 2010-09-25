@@ -42,14 +42,14 @@ public final class ClientTestCase {
 	
 	@Test
 	public void submit() throws IOException, InterruptedException, URISyntaxException {
-		Response response = client.submit(new Get("http://t.sina.com.cn/"));
+		Response response = client.submit(new Get("http://www.baidu.com/"));
 		checkResponse(response);
 		Assert.assertFalse(response.getMetrics().isCachedConnection());
 	}
 	
 	@Test(dependsOnMethods = "submit")
 	public void get() throws InterruptedException, IOException, URISyntaxException {
-		Response response = client.get("http://t.sina.com.cn/http4j/");
+		Response response = client.get("http://www.baidu.com/img/baidu_logo.gif");
 		checkResponse(response);
 		Assert.assertTrue(response.getMetrics().isCachedConnection());
 		Assert.assertEquals(response.getMetrics().getConnectingCost(), 0);

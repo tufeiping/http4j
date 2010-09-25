@@ -20,16 +20,13 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import com.google.code.http4j.DnsCache;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public final class DnsCacheTestCase {
+public final class DNSTestCase {
 	
 	private InetAddress address;
 	
@@ -41,21 +38,18 @@ public final class DnsCacheTestCase {
 	}
 	
 	@Test
-	public void getAddress() throws UnknownHostException {
-		address = DnsCache.getAddress("www.baidu.com");
+	public void getInetAddress() throws UnknownHostException {
+		address = DNS.getDefault().getInetAddress("www.baidu.com");
 		Assert.assertNotNull(address);
 	}
 	
-	@Test(dependsOnMethods = "getAddress")
+	@Test(dependsOnMethods = "getInetAddress")
 	public void cache() throws UnknownHostException {
 		InetAddress right = InetAddress.getByName(host);
-		DnsCache.cache(host, right);
-		address = DnsCache.getAddress(host);
+		DNS.CachedDNS cached = new DNS.CachedDNS();
+		cached.cache(host, right);
+		DNS.setDefault(cached);
+		address = DNS.getDefault().getInetAddress(host);
 		Assert.assertEquals(address, right);
-	}
-	
-	@AfterClass
-	public void afterClass() {
-		DnsCache.clear();
 	}
 }

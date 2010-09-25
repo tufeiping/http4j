@@ -22,7 +22,7 @@ import java.net.URISyntaxException;
 import com.google.code.http4j.Client;
 import com.google.code.http4j.ConnectionManager;
 import com.google.code.http4j.CookieCache;
-import com.google.code.http4j.DnsCache;
+import com.google.code.http4j.DNS;
 import com.google.code.http4j.Request;
 import com.google.code.http4j.RequestExecutor;
 import com.google.code.http4j.Response;
@@ -43,6 +43,7 @@ public class BasicClient implements Client {
 		connectionManager = createConnectionManager();
 		cookieCache = createCookieCache();
 		responseParser = createResponseParser();
+		DNS.setDefault(new DNS.CachedDNS());
 	}
 
 	protected ResponseParser createResponseParser() {
@@ -77,7 +78,6 @@ public class BasicClient implements Client {
 	@Override
 	public void shutdown() {
 		cookieCache.clear();
-		DnsCache.clear();
 		connectionManager.shutdown();
 	}
 }

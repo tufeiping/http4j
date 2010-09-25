@@ -25,59 +25,41 @@ import com.google.code.http4j.utils.ThreadLocalMetricsRecorder;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public abstract class DnsCache {
-	private static volatile DnsCache instance = new InMemoryDnsCache();
+public class DNS {
+	private static volatile DNS instance = new DNS();
 
 	/**
 	 * This method would be used if the application need to extends
-	 * {@link InMemoryDnsCache}. For example, use database to store address,
+	 * {@link CachedDNS}. For example, use database to store address,
 	 * etc.
 	 * 
 	 * @param dnsCache
 	 */
-	public static void setDefault(DnsCache dnsCache) {
+	public static void setDefault(DNS dnsCache) {
 		instance = dnsCache;
 	}
 
-	/**
-	 * @param host
-	 * @return get address by host, create one if no one in cache and put it
-	 *         into the cache.
-	 * @throws UnknownHostException
-	 */
-	public static InetAddress getAddress(String host)
-			throws UnknownHostException {
-		return instance.getInetAddress(host);
+	public static DNS getDefault() {
+		return instance;
 	}
-
-	public static void cache(String host, InetAddress address) {
-		instance.doCache(host, address);
-	}
-
-	abstract protected InetAddress getInetAddress(String host)
-			throws UnknownHostException;
-
-	abstract protected void doCache(String host, InetAddress address);
 	
-	abstract protected void doClear();
+	public InetAddress getInetAddress(String host)
+			throws UnknownHostException {
+		ThreadLocalMetricsRecorder.getInstance().getDnsTimer().start();
+		InetAddress address = InetAddress.getByName(host);
+		ThreadLocalMetricsRecorder.getInstance().getDnsTimer().stop();
+		return address;
+	}
 
-	public static class InMemoryDnsCache extends DnsCache {
+	public static class CachedDNS extends DNS {
 		protected static final ConcurrentHashMap<String, InetAddress> CACHE = new ConcurrentHashMap<String, InetAddress>();
 
-		protected InetAddress lookupDns(String host)
-				throws UnknownHostException {
-			ThreadLocalMetricsRecorder.getInstance().getDnsTimer().start();
-			InetAddress address = InetAddress.getByName(host);
-			ThreadLocalMetricsRecorder.getInstance().getDnsTimer().stop();
-			return address;
-		}
-
-		protected InetAddress getInetAddress(String host)
+		public InetAddress getInetAddress(String host)
 				throws UnknownHostException {
 			ThreadLocalMetricsRecorder.getInstance().getDnsTimer().reset();
 			InetAddress address = CACHE.get(host);
 			if (address == null) {
-				address = lookupDns(host);
+				address = super.getInetAddress(host);
 				InetAddress exist = CACHE.putIfAbsent(host, address);
 				if (null != exist) {
 					address = exist;
@@ -86,17 +68,14 @@ public abstract class DnsCache {
 			return address;
 		}
 
-		protected void doCache(String host, InetAddress address) {
+		public void cache(String host, InetAddress address) {
 			CACHE.put(host, address);
 		}
-
+		
 		@Override
-		protected void doClear() {
+		protected void finalize() throws Throwable {
 			CACHE.clear();
+			super.finalize();
 		}
-	}
-
-	public static void clear() {
-		instance.doClear();
 	}
 }
