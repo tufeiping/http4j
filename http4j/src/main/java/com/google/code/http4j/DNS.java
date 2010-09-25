@@ -26,7 +26,10 @@ import com.google.code.http4j.utils.ThreadLocalMetricsRecorder;
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public class DNS {
-	private static volatile DNS instance = new DNS();
+	
+	private static final DNS singleton = new DNS();
+	
+	private static volatile DNS instance = singleton;
 
 	/**
 	 * This method would be used if the application need to extends
@@ -41,6 +44,10 @@ public class DNS {
 
 	public static DNS getDefault() {
 		return instance;
+	}
+	
+	public static void restoreDefault() {
+		instance = singleton;
 	}
 	
 	public InetAddress getInetAddress(String host)
