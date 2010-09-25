@@ -42,6 +42,7 @@ public class IdentityResponse extends AbstractResponse {
 	}
 	
 	protected byte[] readEntity(InputStream in, int length) throws IOException {
+		length = length < 0 ? Integer.MAX_VALUE : length;
 		byte[] e = new byte[length];
 		if(in.read(e) < length) {
 			throw new IOException("EOF at unexpected position.");

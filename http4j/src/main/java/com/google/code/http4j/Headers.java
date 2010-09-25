@@ -24,8 +24,9 @@ import java.util.List;
  * 
  */
 public class Headers {
-	
-	protected Headers(){}
+
+	protected Headers() {
+	}
 
 	public static final String HOST = "Host";
 	public static final String CONTENT_LENGTH = "Content-Length";
@@ -39,7 +40,8 @@ public class Headers {
 	public static final String CONTENT_TYPE = "Content-Type";
 	public static final String CONTENT_ENCODING = "Content-Encoding";
 	public static final String CONNECTION = "Connection";
-	
+	public static final String PROXY_CONNECTION = "Proxy-Connection";
+
 	public static List<Header> filter(List<Header> headers, String name) {
 		List<Header> list = new LinkedList<Header>();
 		for (Header header : headers) {
@@ -61,7 +63,7 @@ public class Headers {
 		}
 		return values;
 	}
-	
+
 	public static String getValueByName(List<Header> headers, String name) {
 		String[] values = getValuesByName(headers, name);
 		return null == values ? null : values[0];
@@ -72,7 +74,7 @@ public class Headers {
 		encoding = null == encoding ? "" : encoding.toLowerCase();
 		return encoding.startsWith("chunked") ? true : false;
 	}
-	
+
 	public static boolean isGzipped(List<Header> headers) {
 		String encoding = Headers.getValueByName(headers, CONTENT_ENCODING);
 		encoding = null == encoding ? "" : encoding.toLowerCase();
@@ -81,29 +83,32 @@ public class Headers {
 
 	public static int getContentLength(List<Header> headers) {
 		String length = getValueByName(headers, CONTENT_LENGTH);
-		return Integer.parseInt(length);
+		return null == length ? -1 : Integer.parseInt(length);
 	}
-	
+
 	public static String getCharset(List<Header> headers) {
 		String contentType = getValueByName(headers, CONTENT_TYPE);
 		return getCharset(contentType);
 	}
-	
+
 	public static String getCharset(String contentType) {
 		String pattern = "charset=";
 		int index = contentType.indexOf(pattern);
-		return index < 0 ? null : contentType.substring(index + pattern.length()).trim();
+		return index < 0 ? null : contentType.substring(
+				index + pattern.length()).trim();
 	}
-	
+
 	public static String toString(List<Header> headers) {
 		StringBuilder buffer = new StringBuilder();
-		for(Header header : headers) {
+		for (Header header : headers) {
 			buffer.append(header.toString()).append(HTTP.CRLF);
 		}
 		return buffer.toString();
 	}
 
 	public static String getConnectionHeaderValue(List<Header> headers) {
-		return getValueByName(headers, CONNECTION);
+		String connection = getValueByName(headers, CONNECTION);
+		connection = connection == null ? getValueByName(headers, PROXY_CONNECTION) : connection;
+		return connection;
 	}
 }

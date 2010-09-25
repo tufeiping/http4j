@@ -102,13 +102,23 @@ public abstract class AbstractResponse implements Response {
 	}
 
 	@Override
-	public boolean isConnectionReusable() {// TODO not finished:
-
+	public boolean isConnectionReusable() {
 		String version = statusLine.getVersion();
-		String connection = Headers.getConnectionHeaderValue(headers);
-		return !(HTTP.HTTP_1_1.equalsIgnoreCase(version) ? ("close"
-				.equalsIgnoreCase(connection)) : "keep-alive"
-				.equalsIgnoreCase(connection));
+		if(HTTP.HTTP_1_1.equalsIgnoreCase(version)) {
+			if(!Headers.isChunked(headers) && Headers.getContentLength(headers) < 0) {
+				return false;
+			}
+			String connection = Headers.getConnectionHeaderValue(headers);
+			if(null != connection) {
+				if("keep-alive".equalsIgnoreCase(connection)) {
+					return true;
+				}
+				if("close".equalsIgnoreCase(connection)) {
+					return false;
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override
