@@ -16,7 +16,6 @@
 
 package com.google.code.http4j.impl;
 
-import com.google.code.http4j.HTTP;
 import com.google.code.http4j.Parser;
 import com.google.code.http4j.StatusLine;
 
@@ -65,11 +64,6 @@ public class StatusLineParser implements Parser<StatusLine, byte[]> {
 				&& statusCode != 204 
 				&& statusCode != 205 
 				&& statusCode != 304;
-		}
-
-		@Override
-		public boolean keepAlive() {
-			return HTTP.HTTP_1_1.equalsIgnoreCase(version);
 		}
 	}
 }
