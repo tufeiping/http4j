@@ -43,7 +43,17 @@ public class BasicClient implements Client {
 		connectionManager = createConnectionManager();
 		cookieCache = createCookieCache();
 		responseParser = createResponseParser();
+		useDNSCache();
+	}
+	
+	public BasicClient noDNSCache() {
+		DNS.restoreDefault();
+		return this;
+	}
+	
+	public BasicClient useDNSCache() {
 		DNS.setDefault(new DNS.CachedDNS());
+		return this;
 	}
 
 	protected ResponseParser createResponseParser() {

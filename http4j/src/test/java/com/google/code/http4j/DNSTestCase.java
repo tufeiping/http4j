@@ -23,6 +23,9 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.google.code.http4j.utils.Metrics;
+import com.google.code.http4j.utils.ThreadLocalMetricsRecorder;
+
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
@@ -39,17 +42,22 @@ public final class DNSTestCase {
 	
 	@Test
 	public void getInetAddress() throws UnknownHostException {
-		address = DNS.getDefault().getInetAddress("www.baidu.com");
+		DNS dns = DNS.getDefault();
+		address = dns.getInetAddress(host);
 		Assert.assertNotNull(address);
+		Metrics metrics = ThreadLocalMetricsRecorder.getInstance().captureMetrics();
+		Assert.assertTrue(metrics.getDnsLookupCost() > 0);
 	}
 	
 	@Test(dependsOnMethods = "getInetAddress")
 	public void cache() throws UnknownHostException {
-		InetAddress right = InetAddress.getByName(host);
+		InetAddress original = InetAddress.getByName(host);
 		DNS.CachedDNS cached = new DNS.CachedDNS();
-		cached.cache(host, right);
+		cached.cache(host, original);
 		DNS.setDefault(cached);
 		address = DNS.getDefault().getInetAddress(host);
-		Assert.assertEquals(address, right);
+		Assert.assertNotNull(address);
+		Metrics metrics = ThreadLocalMetricsRecorder.getInstance().captureMetrics();
+		Assert.assertEquals(metrics.getDnsLookupCost(), 0);
 	}
 }
