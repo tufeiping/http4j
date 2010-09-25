@@ -102,9 +102,8 @@ public class Headers {
 		}
 		return buffer.toString();
 	}
-	
-	public static boolean isConnectionReusable(List<Header> headers) {
-		String connection = getValueByName(headers, CONNECTION);
-		return "keep-alive".equalsIgnoreCase(connection);
+
+	public static String getConnectionHeaderValue(List<Header> headers) {
+		return getValueByName(headers, CONNECTION);
 	}
 }

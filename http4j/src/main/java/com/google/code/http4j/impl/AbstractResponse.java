@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import com.google.code.http4j.Charset;
+import com.google.code.http4j.HTTP;
 import com.google.code.http4j.Header;
 import com.google.code.http4j.Headers;
 import com.google.code.http4j.Response;
@@ -100,7 +101,9 @@ public abstract class AbstractResponse implements Response {
 	
 	@Override
 	public boolean isConnectionReusable() {
-		return statusLine.keepAlive() && Headers.isConnectionReusable(headers);
+		String version = statusLine.getVersion();
+		String connection = Headers.getConnectionHeaderValue(headers);
+		return !(HTTP.HTTP_1_1.equalsIgnoreCase(version) ? ("close".equalsIgnoreCase(connection)) : "keep-alive".equalsIgnoreCase(connection));
 	}
 	
 	@Override
