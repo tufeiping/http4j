@@ -32,34 +32,35 @@ import com.google.code.http4j.utils.Metrics;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
- *
+ * 
  */
 public abstract class AbstractResponse implements Response {
-	
+
 	protected final StatusLine statusLine;
-	
+
 	protected final List<Header> headers;
-	
+
 	protected final byte[] entity;
-	
+
 	protected final String charset;
 
 	protected Metrics metrics;
-	
-	public AbstractResponse(StatusLine statusLine, List<Header> headers, InputStream in) throws IOException {
+
+	public AbstractResponse(StatusLine statusLine, List<Header> headers,
+			InputStream in) throws IOException {
 		this.statusLine = statusLine;
 		this.headers = headers;
 		entity = statusLine.hasEntity() ? downloadEntity(in) : null;
 		charset = determinCharset();
 	}
-	
+
 	abstract protected byte[] readEntity(InputStream in) throws IOException;
-	
+
 	private byte[] downloadEntity(InputStream in) throws IOException {
 		byte[] original = readEntity(in);
 		return Headers.isGzipped(headers) ? IOUtils.unGzip(original) : original;
 	}
-	
+
 	private String determinCharset() {
 		String encoding = Headers.getCharset(headers);
 		encoding = null == encoding ? guessCharset() : encoding;
@@ -67,18 +68,19 @@ public abstract class AbstractResponse implements Response {
 	}
 
 	private String guessCharset() {
-		ByteArrayInputStream in = new ByteArrayInputStream(entity);
-		String encoding = null;
-		try {
-			IOUtils.extractByEnd(in, "charset=".getBytes());//skip
-			byte[] charsets = IOUtils.extractByEnd(in, (byte)'"');
-			encoding = charsets.length == 0 ? Charset.DEFAULT : new String(charsets);
-		} catch (IOException e) {
-			encoding = Charset.DEFAULT;
+		if(null == entity) {
+			return Charset.DEFAULT;
 		}
-		return encoding;
+		ByteArrayInputStream in = new ByteArrayInputStream(entity);
+		try {
+			IOUtils.extractByEnd(in, "charset=".getBytes());// skip
+			byte[] charsets = IOUtils.extractByEnd(in, (byte) '"');
+			return charsets.length == 0 ? Charset.DEFAULT : new String(charsets);
+		} catch (IOException e) {
+			return Charset.DEFAULT;
+		}
 	}
-	
+
 	@Override
 	public StatusLine getStatusLine() {
 		return statusLine;
@@ -93,24 +95,27 @@ public abstract class AbstractResponse implements Response {
 	public byte[] getEntity() {
 		return entity;
 	}
-	
+
 	@Override
 	public String getCharset() {
 		return charset;
 	}
-	
+
 	@Override
-	public boolean isConnectionReusable() {
+	public boolean isConnectionReusable() {// TODO not finished:
+
 		String version = statusLine.getVersion();
 		String connection = Headers.getConnectionHeaderValue(headers);
-		return !(HTTP.HTTP_1_1.equalsIgnoreCase(version) ? ("close".equalsIgnoreCase(connection)) : "keep-alive".equalsIgnoreCase(connection));
+		return !(HTTP.HTTP_1_1.equalsIgnoreCase(version) ? ("close"
+				.equalsIgnoreCase(connection)) : "keep-alive"
+				.equalsIgnoreCase(connection));
 	}
-	
+
 	@Override
 	public Metrics getMetrics() {
 		return metrics;
 	}
-	
+
 	@Override
 	public void setMetrics(Metrics metrics) {
 		this.metrics = metrics;
