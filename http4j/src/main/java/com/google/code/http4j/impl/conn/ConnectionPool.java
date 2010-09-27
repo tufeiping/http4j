@@ -71,12 +71,6 @@ public class ConnectionPool extends AbstractConnectionManager {
 		free.clear();
 		used.clear();
 	}
-
-	protected Connection createConnection(Host host) throws IOException {
-		 SocketConnection connection = new SocketConnection(host);
-		 connection.connect();
-		 return connection;
-	}
 	
 	private Connection getConnection(Host host) throws InterruptedException, IOException {
 		Queue<Connection> queue = getFreeQueue(host);

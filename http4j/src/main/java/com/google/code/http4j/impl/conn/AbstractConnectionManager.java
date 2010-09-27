@@ -16,9 +16,12 @@
 
 package com.google.code.http4j.impl.conn;
 
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.google.code.http4j.Connection;
 import com.google.code.http4j.ConnectionManager;
+import com.google.code.http4j.Host;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -45,6 +48,12 @@ public abstract class AbstractConnectionManager implements ConnectionManager {
 		if (shutdown.compareAndSet(false, true)) {
 			doShutdown();
 		}
+	}
+	
+	protected Connection createConnection(Host host) throws IOException {
+		 SocketConnection connection = new SocketConnection(host);
+		 connection.connect();
+		 return connection;
 	}
 
 	abstract protected void doShutdown();
