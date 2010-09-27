@@ -17,6 +17,8 @@
 package com.google.code.http4j.impl.conn;
 
 import java.io.IOException;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.google.code.http4j.Connection;
@@ -34,8 +36,12 @@ public abstract class AbstractConnectionManager implements ConnectionManager {
 	
 	protected int maxConnectionsPerHost;
 	
+	protected ConcurrentHashMap<Host, Semaphore> used;
+	
 	protected AbstractConnectionManager(int maxConnectionPerHost) {
 		this.maxConnectionsPerHost = maxConnectionPerHost;
+		shutdown = new AtomicBoolean(false);
+		used = new ConcurrentHashMap<Host, Semaphore>();
 	}
 	
 	@Override
@@ -50,12 +56,36 @@ public abstract class AbstractConnectionManager implements ConnectionManager {
 		}
 	}
 	
+	@Override
+	public final Connection acquire(Host host) throws InterruptedException, IOException {
+		return shutdown.get() ? null : getConnection(host);
+	}
+	
+	abstract protected Connection getConnection(Host host) throws InterruptedException, IOException;
+	
+	abstract protected void doShutdown();
+
 	protected Connection createConnection(Host host) throws IOException {
 		 SocketConnection connection = new SocketConnection(host);
 		 connection.connect();
 		 return connection;
 	}
+	
+	protected void increaseUsed(Host host) throws InterruptedException {
+		getSemaphore(host).acquire();
+	}
 
-	abstract protected void doShutdown();
-
+	protected void decreaseUsed(Host host) {
+		getSemaphore(host).release();
+	}
+	
+	protected Semaphore getSemaphore(Host host) {
+		Semaphore semaphore = used.get(host);
+		if (semaphore == null) {
+			semaphore = new Semaphore(maxConnectionsPerHost);
+			Semaphore exist = used.putIfAbsent(host, semaphore);
+			semaphore = exist == null ? semaphore : exist;
+		}
+		return semaphore;
+	}
 }

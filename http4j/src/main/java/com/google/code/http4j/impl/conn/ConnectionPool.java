@@ -21,8 +21,6 @@ import java.util.Collection;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.google.code.http4j.Connection;
 import com.google.code.http4j.Host;
@@ -35,8 +33,6 @@ public class ConnectionPool extends AbstractConnectionManager {
 
 	protected ConcurrentHashMap<Host, ConcurrentLinkedQueue<Connection>> free;
 
-	protected ConcurrentHashMap<Host, Semaphore> used;
-
 	public ConnectionPool() {
 		this(MAX_CONNECTION_PER_HOST);
 	}
@@ -44,13 +40,6 @@ public class ConnectionPool extends AbstractConnectionManager {
 	public ConnectionPool(int maxConnectionsPerHost) {
 		super(maxConnectionsPerHost);
 		free = new ConcurrentHashMap<Host, ConcurrentLinkedQueue<Connection>>();
-		used = new ConcurrentHashMap<Host, Semaphore>();
-		shutdown = new AtomicBoolean(false);
-	}
-
-	@Override
-	public Connection acquire(Host host) throws InterruptedException, IOException {
-		return shutdown.get() ? null : getConnection(host);
 	}
 
 	@Override
@@ -72,9 +61,9 @@ public class ConnectionPool extends AbstractConnectionManager {
 		used.clear();
 	}
 	
-	private Connection getConnection(Host host) throws InterruptedException, IOException {
-		Queue<Connection> queue = getFreeQueue(host);
+	protected Connection getConnection(Host host) throws InterruptedException, IOException {
 		increaseUsed(host);
+		Queue<Connection> queue = getFreeQueue(host);
 		Connection connection = queue.poll();
 		connection = connection == null || connection.isClosed() ? createConnection(host) : connection;
 		return connection;
@@ -89,14 +78,6 @@ public class ConnectionPool extends AbstractConnectionManager {
 		}
 	}
 
-	private void increaseUsed(Host host) throws InterruptedException {
-		getSemaphore(host).acquire();
-	}
-
-	private void decreaseUsed(Host host) {
-		getSemaphore(host).release();
-	}
-
 	private ConcurrentLinkedQueue<Connection> getFreeQueue(Host host) {
 		ConcurrentLinkedQueue<Connection> queue = free.get(host);
 		if (queue == null) {
@@ -106,15 +87,5 @@ public class ConnectionPool extends AbstractConnectionManager {
 			queue = exist == null ? queue : exist;
 		}
 		return queue;
-	}
-
-	private Semaphore getSemaphore(Host host) {
-		Semaphore semaphore = used.get(host);
-		if (semaphore == null) {
-			semaphore = new Semaphore(maxConnectionsPerHost);
-			Semaphore exist = used.putIfAbsent(host, semaphore);
-			semaphore = exist == null ? semaphore : exist;
-		}
-		return semaphore;
 	}
 }
