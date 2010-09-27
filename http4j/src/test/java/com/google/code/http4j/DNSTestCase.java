@@ -41,21 +41,20 @@ public final class DNSTestCase {
 	}
 	
 	@Test
-	public void getInetAddress() throws UnknownHostException {
-		DNS dns = DNS.getDefault();
-		address = dns.getInetAddress(host);
+	public void getAddress() throws UnknownHostException {
+		address = DNS.getAddress(host);
 		Assert.assertNotNull(address);
 		Metrics metrics = ThreadLocalMetricsRecorder.getInstance().captureMetrics();
 		Assert.assertTrue(metrics.getDnsLookupCost() > 0);
 	}
 	
-	@Test(dependsOnMethods = "getInetAddress")
+	@Test(dependsOnMethods = "getAddress")
 	public void cache() throws UnknownHostException {
 		InetAddress original = InetAddress.getByName(host);
 		DNS.CachedDNS cached = new DNS.CachedDNS();
 		cached.cache(host, original);
-		DNS.setDefault(cached);
-		address = DNS.getDefault().getInetAddress(host);
+		DNS.useCache();
+		address = DNS.getAddress(host);
 		Assert.assertNotNull(address);
 		Metrics metrics = ThreadLocalMetricsRecorder.getInstance().captureMetrics();
 		Assert.assertEquals(metrics.getDnsLookupCost(), 0);

@@ -27,30 +27,28 @@ import com.google.code.http4j.utils.ThreadLocalMetricsRecorder;
  */
 public class DNS {
 	
-	private static final DNS singleton = new DNS();
+	private static final DNS NORMAL = new DNS();
 	
-	private static volatile DNS instance = singleton;
+	private static final DNS CACHED = new CachedDNS();
+	
+	private static volatile DNS instance = NORMAL;
 
-	/**
-	 * This method would be used if the application need to extends
-	 * {@link CachedDNS}. For example, use database to store address,
-	 * etc.
-	 * 
-	 * @param dnsCache
-	 */
-	public static void setDefault(DNS dnsCache) {
-		instance = dnsCache;
-	}
-
-	public static DNS getDefault() {
-		return instance;
+	public static InetAddress getAddress(String host) throws UnknownHostException {
+		return instance.getInetAddress(host);
 	}
 	
-	public static void restoreDefault() {
-		instance = singleton;
+	public static void useCache() {
+		instance = CACHED;
 	}
 	
-	public InetAddress getInetAddress(String host)
+	public static void noCache() {
+		if(instance instanceof CachedDNS) {
+			((CachedDNS)instance).CACHE.clear();
+		}
+		instance = NORMAL;
+	}
+	
+	protected InetAddress getInetAddress(String host)
 			throws UnknownHostException {
 		ThreadLocalMetricsRecorder.getInstance().getDnsTimer().start();
 		InetAddress address = InetAddress.getByName(host);
@@ -58,8 +56,8 @@ public class DNS {
 		return address;
 	}
 
-	public static class CachedDNS extends DNS {
-		protected static final ConcurrentHashMap<String, InetAddress> CACHE = new ConcurrentHashMap<String, InetAddress>();
+	protected static class CachedDNS extends DNS {
+		protected final ConcurrentHashMap<String, InetAddress> CACHE = new ConcurrentHashMap<String, InetAddress>();
 
 		public InetAddress getInetAddress(String host)
 				throws UnknownHostException {

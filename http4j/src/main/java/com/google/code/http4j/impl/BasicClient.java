@@ -47,25 +47,13 @@ public class BasicClient implements Client {
 	}
 	
 	public BasicClient noDNSCache() {
-		DNS.restoreDefault();
+		DNS.noCache();
 		return this;
 	}
 	
 	public BasicClient useDNSCache() {
-		DNS.setDefault(new DNS.CachedDNS());
+		DNS.useCache();
 		return this;
-	}
-
-	protected ResponseParser createResponseParser() {
-		return new ResponseParser();
-	}
-
-	protected CookieCache createCookieCache() {
-		return new CookieStoreAdapter();
-	}
-
-	protected ConnectionManager createConnectionManager() {
-		return new ConnectionPool();
 	}
 
 	@Override
@@ -89,5 +77,17 @@ public class BasicClient implements Client {
 	public void shutdown() {
 		cookieCache.clear();
 		connectionManager.shutdown();
+	}
+	
+	protected ResponseParser createResponseParser() {
+		return new ResponseParser();
+	}
+
+	protected CookieCache createCookieCache() {
+		return new CookieStoreAdapter();
+	}
+
+	protected ConnectionManager createConnectionManager() {
+		return new ConnectionPool();
 	}
 }

@@ -81,7 +81,7 @@ public class SocketConnection implements Connection {
 	protected SocketAddress getSocketAddress(Host host)
 			throws UnknownHostException {
 		int port = (host.getPort() < 0) ? host.getDefaultPort() : host.getPort();
-		InetAddress address = DNS.getDefault().getInetAddress(host.getName());
+		InetAddress address = DNS.getAddress(host.getName());
 		return new InetSocketAddress(address, port);
 	}
 
