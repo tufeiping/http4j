@@ -54,7 +54,7 @@ public class ChunkedResponse extends AbstractResponse {
 	}
 
 	private void readTrailerHeaders(InputStream in) throws IOException {
-		byte[] headerBytes = IOUtils.extractByEnd(in, HTTP.CR, HTTP.LF, HTTP.CR, HTTP.LF);
+		byte[] headerBytes = IOUtils.extractByEnd(in, HTTP.CR, HTTP.LF);
 		List<Header> trailers = new HeadersParser().parse(headerBytes);
 		headers.addAll(trailers);
 	}
