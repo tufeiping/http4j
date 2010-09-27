@@ -31,7 +31,7 @@ public class DNS {
 	
 	private static final DNS CACHED = new CachedDNS();
 	
-	private static volatile DNS instance = NORMAL;
+	private static volatile DNS instance = CACHED;
 
 	public static InetAddress getAddress(String host) throws UnknownHostException {
 		return instance.getInetAddress(host);
