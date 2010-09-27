@@ -52,7 +52,7 @@ public final class ResponseParserTestCase {
 		parser = new ResponseParser();
 		identity = "HTTP/1.1 200 OK\r\nContent-Type:text/html; charset=UTF-8\r\nContent-Length:12\r\n\r\nHello World!".getBytes();
 		chunked = "HTTP/1.1 200 OK\r\nContent-Type:text/html; charset=GBK\r\nTransfer-Encoding:chunked\r\n\r\n19\r\nHello World!-from http4j.\r\n1f\r\nauthor:guilin.zhang@hotmail.com\r\n0\r\n\r\n".getBytes();
-		chunkedWithTrailers = "HTTP/1.1 200 OK\r\nContent-Type:text/html; charset=GBK\r\nTransfer-Encoding:chunked\r\n\r\n19\r\nHello World!-from http4j.\r\n1f\r\nauthor:guilin.zhang@hotmail.com\r\n0\r\nConnection:Keep-Alive\r\n\r\n".getBytes();
+		chunkedWithTrailers = "HTTP/1.1 200 OK\r\nContent-Type:text/html; charset=GBK\r\nTransfer-Encoding:chunked\r\n\r\n19\r\nHello World!-from http4j.\r\n1f\r\nauthor:guilin.zhang@hotmail.com\r\n0\r\nConnection:Keep-Alive\r\n".getBytes();
 		noEntity = "HTTP/1.0 304 Not Modified\r\nContent-Type:text/html; charset=UTF-8\r\nContent-Length:12\r\n\r\n".getBytes();
 	}
 	
