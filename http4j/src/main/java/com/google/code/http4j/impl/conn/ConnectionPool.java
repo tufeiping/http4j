@@ -25,32 +25,27 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.google.code.http4j.Connection;
-import com.google.code.http4j.ConnectionManager;
 import com.google.code.http4j.Host;
 import com.google.code.http4j.utils.IOUtils;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public class ConnectionPool implements ConnectionManager {
+public class ConnectionPool extends AbstractConnectionManager {
 
 	protected ConcurrentHashMap<Host, ConcurrentLinkedQueue<Connection>> free;
 
 	protected ConcurrentHashMap<Host, Semaphore> used;
 
-	protected AtomicBoolean shutdown;
-	
-	protected int maxConnectionsPerHost;
-
 	public ConnectionPool() {
-		this(15);
+		this(MAX_CONNECTION_PER_HOST);
 	}
 	
 	public ConnectionPool(int maxConnectionsPerHost) {
+		super(maxConnectionsPerHost);
 		free = new ConcurrentHashMap<Host, ConcurrentLinkedQueue<Connection>>();
 		used = new ConcurrentHashMap<Host, Semaphore>();
 		shutdown = new AtomicBoolean(false);
-		this.maxConnectionsPerHost = maxConnectionsPerHost;
 	}
 
 	@Override
@@ -71,12 +66,10 @@ public class ConnectionPool implements ConnectionManager {
 	}
 
 	@Override
-	public void shutdown() {
-		if (shutdown.compareAndSet(false, true)) {
-			closeAllConnections();
-			free.clear();
-			used.clear();
-		}
+	public void doShutdown() {
+		closeAllConnections();
+		free.clear();
+		used.clear();
 	}
 
 	protected Connection createConnection(Host host) throws IOException {
@@ -129,10 +122,5 @@ public class ConnectionPool implements ConnectionManager {
 			semaphore = exist == null ? semaphore : exist;
 		}
 		return semaphore;
-	}
-	
-	@Override
-	public void setMaxConnectionsPerHost(int maxConnectionsPerHost) {
-		this.maxConnectionsPerHost = maxConnectionsPerHost;
 	}
 }
