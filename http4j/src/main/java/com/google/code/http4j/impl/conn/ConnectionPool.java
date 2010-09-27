@@ -43,22 +43,22 @@ public class ConnectionPool extends AbstractConnectionManager {
 	}
 
 	@Override
-	public boolean release(Connection connection) {
-		boolean reuse = !shutdown.get() && connection.isReusable();
-		if (reuse) {
-			Host host = connection.getHost();
-			Queue<Connection> queue = getFreeQueue(host);
-			reuse = queue.offer(connection);
-		}
-		decreaseUsed(connection.getHost());
-		return reuse;
-	}
-
-	@Override
 	public void doShutdown() {
 		closeAllConnections();
 		free.clear();
 		used.clear();
+	}
+	
+	@Override
+	public boolean doRelease(Connection connection) {
+		boolean reuse = !shutdown.get() && connection.isReusable();
+		if (reuse) {
+			reuse = getFreeQueue(connection.getHost()).offer(connection);
+		}
+		if(!reuse) {
+			IOUtils.close(connection);
+		}
+		return reuse;
 	}
 	
 	protected Connection getConnection(Host host) throws InterruptedException, IOException {

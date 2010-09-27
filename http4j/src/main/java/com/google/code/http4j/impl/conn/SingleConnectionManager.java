@@ -35,7 +35,7 @@ public class SingleConnectionManager extends AbstractConnectionManager {
 	protected void doShutdown() {}
 
 	@Override
-	public boolean release(Connection connection) {
+	public boolean doRelease(Connection connection) {
 		IOUtils.close(connection);
 		return false;
 	}

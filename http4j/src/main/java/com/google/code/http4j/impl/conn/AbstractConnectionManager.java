@@ -45,7 +45,7 @@ public abstract class AbstractConnectionManager implements ConnectionManager {
 	}
 	
 	@Override
-	public void setMaxConnectionsPerHost(int maxConnectionsPerHost) {
+	public final void setMaxConnectionsPerHost(int maxConnectionsPerHost) {
 		this.maxConnectionsPerHost = maxConnectionsPerHost;
 	}
 
@@ -56,6 +56,15 @@ public abstract class AbstractConnectionManager implements ConnectionManager {
 		}
 	}
 	
+	@Override
+	public final boolean release(Connection connection) {
+		boolean reuse = doRelease(connection);
+		decreaseUsed(connection.getHost());
+		return reuse;
+	}
+	
+	abstract protected boolean doRelease(Connection connection);
+
 	@Override
 	public final Connection acquire(Host host) throws InterruptedException, IOException {
 		return shutdown.get() ? null : getConnection(host);
