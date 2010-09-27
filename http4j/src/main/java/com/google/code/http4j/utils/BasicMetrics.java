@@ -36,11 +36,10 @@ public class BasicMetrics implements Metrics {
 
 	protected final long bytesReceived;
 
-	protected final boolean cachedConnection;
 
 	public BasicMetrics(long dnsLookupCost, long connectingCost,
 			long sendingCost, long waitingCost, long receivingCost,
-			long bytesSent, long bytesReceived, boolean cachedConnection) {
+			long bytesSent, long bytesReceived) {
 		this.dnsLookupCost = dnsLookupCost;
 		this.connectingCost = connectingCost;
 		this.sendingCost = sendingCost;
@@ -48,7 +47,6 @@ public class BasicMetrics implements Metrics {
 		this.receivingCost = receivingCost;
 		this.bytesSent = bytesSent;
 		this.bytesReceived = bytesReceived;
-		this.cachedConnection = cachedConnection;
 	}
 
 	public long getDnsLookupCost() {
@@ -80,6 +78,6 @@ public class BasicMetrics implements Metrics {
 	}
 
 	public boolean isCachedConnection() {
-		return cachedConnection;
+		return connectingCost == 0;
 	}
 }

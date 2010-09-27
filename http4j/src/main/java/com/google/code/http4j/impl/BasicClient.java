@@ -58,6 +58,10 @@ public class BasicClient implements Client {
 		return this;
 	}
 	
+	/**
+	 * DNS lookup cost is normally greater than 0 except the connection is cached.
+	 * @return this
+	 */
 	public BasicClient noDNSCache() {
 		DNS.noCache();
 		return this;

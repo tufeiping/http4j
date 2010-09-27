@@ -30,7 +30,6 @@ public class ThreadLocalMetricsRecorder implements MetricsRecorder {
 	protected Timer responseTimer;
 	protected Counter<Long> requestTransportCounter;
 	protected Counter<Long> responseTransportCounter;
-	protected boolean cachedConnection;
 
 	protected ThreadLocalMetricsRecorder() {
 		init();
@@ -49,7 +48,6 @@ public class ThreadLocalMetricsRecorder implements MetricsRecorder {
 		responseTimer = new NanoSecondTimer();
 		requestTransportCounter = new LongCounter();
 		responseTransportCounter = new LongCounter();
-		cachedConnection = true;
 	}
 
 	@Override
@@ -79,7 +77,6 @@ public class ThreadLocalMetricsRecorder implements MetricsRecorder {
 		responseTimer.reset();
 		requestTransportCounter.reset();
 		responseTransportCounter.reset();
-		cachedConnection = true;
 	}
 
 	@Override
@@ -101,11 +98,6 @@ public class ThreadLocalMetricsRecorder implements MetricsRecorder {
 				responseTimer.getStart() - requestTimer.getStop(),
 				responseTimer.getDuration(), 
 				requestTransportCounter.get(),
-				responseTransportCounter.get(), 
-				cachedConnection);
-	}
-
-	public void connectionCreated() {
-		this.cachedConnection = false;
+				responseTransportCounter.get());
 	}
 }

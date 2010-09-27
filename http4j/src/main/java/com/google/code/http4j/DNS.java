@@ -34,6 +34,7 @@ public class DNS {
 	private static volatile DNS instance = CACHED;
 
 	public static InetAddress getAddress(String host) throws UnknownHostException {
+		ThreadLocalMetricsRecorder.getInstance().getDnsTimer().reset();
 		return instance.getInetAddress(host);
 	}
 	
@@ -61,7 +62,6 @@ public class DNS {
 
 		public InetAddress getInetAddress(String host)
 				throws UnknownHostException {
-			ThreadLocalMetricsRecorder.getInstance().getDnsTimer().reset();
 			InetAddress address = CACHE.get(host);
 			if (address == null) {
 				address = super.getInetAddress(host);

@@ -40,14 +40,22 @@ public final class BasicClientTestCase {
 	}
 	
 	@Test
+	public void noConnectionPool() throws InterruptedException, IOException, URISyntaxException {
+		client.noConnectionPool();
+		Response response = client.get("http://www.baidu.com/");
+		Metrics metrics = response.getMetrics();
+		Assert.assertFalse(metrics.isCachedConnection());
+	}
+	
+	@Test(dependsOnMethods = "noConnectionPool")
 	public void noDNSCache() throws InterruptedException, IOException, URISyntaxException {
 		client.noDNSCache();
-		Response response = client.get("http://t.sina.com.cn");
+		Response response = client.get("http://www.baidu.com/");
 		Metrics metrics = response.getMetrics();
 		Assert.assertTrue(metrics.getDnsLookupCost() > 0);
-		Response response2 = client.get("http://t.sina.com.cn");
+		Response response2 = client.get("http://www.baidu.com/img/baidu_logo.gif");
 		Metrics metrics2 = response2.getMetrics();
-		Assert.assertFalse(metrics.equals(metrics2));
-		Assert.assertTrue(metrics.getDnsLookupCost() > 0);
+		Assert.assertFalse(metrics2.equals(metrics));
+		Assert.assertTrue(metrics2.getDnsLookupCost() > 0);
 	}
 }
