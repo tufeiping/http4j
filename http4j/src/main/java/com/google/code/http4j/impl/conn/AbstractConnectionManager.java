@@ -62,14 +62,18 @@ public abstract class AbstractConnectionManager implements ConnectionManager {
 		decreaseUsed(connection.getHost());
 		return reuse;
 	}
-	
-	abstract protected boolean doRelease(Connection connection);
 
 	@Override
 	public final Connection acquire(Host host) throws InterruptedException, IOException {
-		return shutdown.get() ? null : getConnection(host);
+		if(!shutdown.get()) {
+			increaseUsed(host);
+			return getConnection(host);
+		}
+		return null;
 	}
 	
+	abstract protected boolean doRelease(Connection connection);
+
 	abstract protected Connection getConnection(Host host) throws InterruptedException, IOException;
 	
 	abstract protected void doShutdown();
@@ -80,15 +84,15 @@ public abstract class AbstractConnectionManager implements ConnectionManager {
 		 return connection;
 	}
 	
-	protected void increaseUsed(Host host) throws InterruptedException {
+	private void increaseUsed(Host host) throws InterruptedException {
 		getSemaphore(host).acquire();
 	}
 
-	protected void decreaseUsed(Host host) {
+	private void decreaseUsed(Host host) {
 		getSemaphore(host).release();
 	}
 	
-	protected Semaphore getSemaphore(Host host) {
+	private Semaphore getSemaphore(Host host) {
 		Semaphore semaphore = used.get(host);
 		if (semaphore == null) {
 			semaphore = new Semaphore(maxConnectionsPerHost);
