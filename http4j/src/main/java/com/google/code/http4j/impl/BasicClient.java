@@ -27,23 +27,35 @@ import com.google.code.http4j.Request;
 import com.google.code.http4j.RequestExecutor;
 import com.google.code.http4j.Response;
 import com.google.code.http4j.impl.conn.ConnectionPool;
+import com.google.code.http4j.impl.conn.SingleConnectionManager;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public class BasicClient implements Client {
 
-	protected final ConnectionManager connectionManager;
+	protected ConnectionManager connectionManager;
 
 	protected final CookieCache cookieCache;
 
 	protected final ResponseParser responseParser;
 
 	public BasicClient() {
-		connectionManager = createConnectionManager();
 		cookieCache = createCookieCache();
 		responseParser = createResponseParser();
 		useDNSCache();
+		useConnectionPool();
+	}
+	
+	public BasicClient noConnectionPool() {
+		connectionManager.shutdown();
+		connectionManager = new SingleConnectionManager();
+		return this;
+	}
+	
+	public BasicClient useConnectionPool() {
+		connectionManager = new ConnectionPool();
+		return this;
 	}
 	
 	public BasicClient noDNSCache() {
@@ -85,9 +97,5 @@ public class BasicClient implements Client {
 
 	protected CookieCache createCookieCache() {
 		return new CookieStoreAdapter();
-	}
-
-	protected ConnectionManager createConnectionManager() {
-		return new ConnectionPool();
 	}
 }

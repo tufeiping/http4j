@@ -27,8 +27,8 @@ import com.google.code.http4j.utils.IOUtils;
  */
 public class SingleConnectionManager extends AbstractConnectionManager {
 
-	public SingleConnectionManager(int maxConnectionPerHost) {
-		super(maxConnectionPerHost);
+	public SingleConnectionManager() {
+		super();
 	}
 
 	@Override

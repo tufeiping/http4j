@@ -34,13 +34,10 @@ public class ConnectionPool extends AbstractConnectionManager {
 	protected ConcurrentHashMap<Host, ConcurrentLinkedQueue<Connection>> free;
 
 	public ConnectionPool() {
-		this(MAX_CONNECTION_PER_HOST);
-	}
-	
-	public ConnectionPool(int maxConnectionsPerHost) {
-		super(maxConnectionsPerHost);
+		super();
 		free = new ConcurrentHashMap<Host, ConcurrentLinkedQueue<Connection>>();
 	}
+	
 
 	@Override
 	public void doShutdown() {

@@ -38,6 +38,10 @@ public abstract class AbstractConnectionManager implements ConnectionManager {
 	
 	protected ConcurrentHashMap<Host, Semaphore> used;
 	
+	protected AbstractConnectionManager() {
+		this(MAX_CONNECTION_PER_HOST);
+	}
+	
 	protected AbstractConnectionManager(int maxConnectionPerHost) {
 		this.maxConnectionsPerHost = maxConnectionPerHost;
 		shutdown = new AtomicBoolean(false);
