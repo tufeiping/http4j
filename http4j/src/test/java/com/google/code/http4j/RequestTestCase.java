@@ -16,13 +16,14 @@
 
 package com.google.code.http4j;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.google.code.http4j.Request;
 import com.google.code.http4j.impl.AbstractRequest;
 import com.google.code.http4j.impl.BasicHost;
 
@@ -35,13 +36,15 @@ public abstract class RequestTestCase {
 	/*
 	 * m should not consider default headers message
 	 */
-	protected void assertion(String url, String m) throws MalformedURLException, URISyntaxException {
+	protected void assertion(String url, String m) throws URISyntaxException, IOException {
 		Request r = createRequest(url);
 		assertion(r, m);
 	}
 	
-	protected void assertion(Request r, String m) {
-		Assert.assertEquals(r.toMessage(), m.getBytes());
+	protected void assertion(Request r, String m) throws IOException {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		r.output(out);
+		Assert.assertEquals(new String(out.toByteArray()), new String(m.getBytes()));
 	}
 	
 	protected String getDefaultHeaderString() {

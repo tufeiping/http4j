@@ -16,6 +16,8 @@
 
 package com.google.code.http4j.impl;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -83,6 +85,43 @@ public abstract class AbstractRequest implements Request {
 		}
 	}
 
+	@Override
+	public Host getHost() {
+		return host;
+	}
+
+	@Override
+	public void setHeader(String name, String value) {
+		Header h = new CanonicalHeader(name, value);
+		for (int i = 0, size = headers.size(); i < size; i++) {
+			Header previous = headers.get(i);
+			if (previous.getName().equals(h.getName())) {
+				headers.set(i, h);
+				return;
+			}
+		}
+		headers.add(h);
+	}
+	
+	@Override
+	public URI getURI() {
+		return uri;
+	}
+	
+	@Override
+	public void output(OutputStream out) throws IOException {
+		byte[] message = toMessage();
+		out.write(message);
+		out.flush();
+	}
+	
+	protected byte[] toMessage() {
+		StringBuilder m = formatRequestLine();
+		m.append(formatHeaders());
+		m.append(HTTP.CRLF).append(HTTP.CRLF).append(formatBody());
+		return m.toString().getBytes();
+	}
+	
 	protected StringBuilder formatHeaders() {
 		StringBuilder m = new StringBuilder();
 		for (Header h : headers) {
@@ -98,12 +137,7 @@ public abstract class AbstractRequest implements Request {
 		l.append(' ').append(HTTP.DEFAULT_VERSION);
 		return l;
 	}
-
-	@Override
-	public Host getHost() {
-		return host;
-	}
-
+	
 	private void initDefaultHeaders() {
 		setHeader(Headers.USER_AGENT, DEFAULT_USER_AGENT);
 		setHeader(Headers.ACCEPT, DEFAULT_ACCEPT);
@@ -111,28 +145,4 @@ public abstract class AbstractRequest implements Request {
 		setHeader(Headers.CONNECTION, DEFAULT_CONNECTION_STRATEGY);
 	}
 	
-	@Override
-	public void setHeader(String name, String value) {
-		Header h = new CanonicalHeader(name, value);
-		for (int i = 0, size = headers.size(); i < size; i++) {
-			Header previous = headers.get(i);
-			if (previous.getName().equals(h.getName())) {
-				headers.set(i, h);
-				return;
-			}
-		}
-		headers.add(h);
-	}
-	@Override
-	public final byte[] toMessage() {
-		StringBuilder m = formatRequestLine();
-		m.append(formatHeaders());
-		m.append(HTTP.CRLF).append(HTTP.CRLF).append(formatBody());
-		return m.toString().getBytes();
-	}
-	
-	@Override
-	public URI getURI() {
-		return uri;
-	}
 }

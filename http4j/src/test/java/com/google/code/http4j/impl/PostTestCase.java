@@ -16,6 +16,7 @@
 
 package com.google.code.http4j.impl;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 
@@ -38,20 +39,20 @@ public final class PostTestCase extends RequestTestCase {
 	}
 	
 	@Test(expectedExceptions = IllegalStateException.class)
-	public void toMessage_cause_exception() throws MalformedURLException, URISyntaxException {
+	public void output_cause_exception() throws URISyntaxException, IOException {
 		Request request = createRequest("http://www.google.com");
-		request.toMessage();
+		request.output(System.out);
 	}
 	
 	@Test
-	public void toMessage() throws MalformedURLException, URISyntaxException {
+	public void toMessage() throws URISyntaxException, IOException {
 		assertion("http://www.google.com/search?q=http4j", "POST /search HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Content-Length:8\r\n\r\nq=http4j");
 		assertion("https://www.google.com:444/search?q=http4j&hl=en","POST /search HTTP/1.1\r\nHost:www.google.com:444\r\n" + getDefaultHeaderString() + "Content-Length:14\r\n\r\nq=http4j&hl=en");
 		assertion("http://localhost:8080/index.jsp;jsessionid=ABCDE?u=colin&pwd=http4j","POST /index.jsp;jsessionid=ABCDE HTTP/1.1\r\nHost:localhost:8080\r\n" + getDefaultHeaderString() + "Content-Length:18\r\n\r\nu=colin&pwd=http4j");
 	}
 	
 	@Test(dependsOnMethods = "toMessage")
-	public void addParameter_string_strings() throws MalformedURLException, URISyntaxException {
+	public void addParameter_string_strings() throws URISyntaxException, IOException {
 		Post post = new Post("http://www.google.com/search");
 		post.addParameter("q", "http4j");
 		assertion(post, "POST /search HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Content-Length:8\r\n\r\nq=http4j");
@@ -60,7 +61,7 @@ public final class PostTestCase extends RequestTestCase {
 	}
 
 	@Test(dependsOnMethods = "toMessage")
-	public void setHeader() throws MalformedURLException, URISyntaxException {
+	public void setHeader() throws URISyntaxException, IOException {
 		Post post = new Post("http://www.google.com/?u=http4j&p=http4j");
 		post.setHeader(Headers.ACCEPT_CHARSET, "ISO-8859-1");
 		assertion(post, "POST / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Charset:ISO-8859-1\r\nContent-Length:17\r\n\r\nu=http4j&p=http4j");

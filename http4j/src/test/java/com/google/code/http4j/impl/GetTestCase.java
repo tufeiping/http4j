@@ -16,6 +16,7 @@
 
 package com.google.code.http4j.impl;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 
@@ -38,7 +39,7 @@ public final class GetTestCase extends RequestTestCase {
 	}
 	
 	@Test
-	public void toMessage() throws MalformedURLException, URISyntaxException {
+	public void toMessage() throws URISyntaxException, IOException {
 		assertion("http://www.google.com","GET / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "\r\n");
 		assertion("http://www.google.com/search?q=http4j", "GET /search?q=http4j HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "\r\n");
 		assertion("https://localhost:8080/index.jsp", "GET /index.jsp HTTP/1.1\r\nHost:localhost:8080\r\n" + getDefaultHeaderString() + "\r\n");
@@ -46,7 +47,7 @@ public final class GetTestCase extends RequestTestCase {
 	}
 
 	@Test(dependsOnMethods = "toMessage")
-	public void addParameter_string_strings() throws MalformedURLException, URISyntaxException {
+	public void addParameter_string_strings() throws URISyntaxException, IOException {
 		Get get = new Get("http://www.google.com/search");
 		get.addParameter("q", "http4j");
 		assertion(get, "GET /search?q=http4j HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "\r\n");
@@ -55,7 +56,7 @@ public final class GetTestCase extends RequestTestCase {
 	}
 	
 	@Test(dependsOnMethods = "toMessage")
-	public void setHeader() throws MalformedURLException, URISyntaxException {
+	public void setHeader() throws URISyntaxException, IOException {
 		Get get = new Get("http://www.google.com");
 		get.setHeader(Headers.ACCEPT_CHARSET, "ISO-8859-1");
 		assertion(get, "GET / HTTP/1.1\r\nHost:www.google.com\r\n" + getDefaultHeaderString() + "Accept-Charset:ISO-8859-1\r\n\r\n");
