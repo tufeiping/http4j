@@ -87,7 +87,7 @@ public class Headers {
 	}
 
 	public static String getCharset(List<Header> headers) {
-		String contentType = getValueByName(headers, CONTENT_TYPE);
+		String contentType = getContentType(headers);
 		return getCharset(contentType);
 	}
 
@@ -110,5 +110,9 @@ public class Headers {
 		String connection = getValueByName(headers, CONNECTION);
 		connection = connection == null ? getValueByName(headers, PROXY_CONNECTION) : connection;
 		return connection;
+	}
+
+	public static String getContentType(List<Header> headers) {
+		return getValueByName(headers, CONTENT_TYPE);
 	}
 }

@@ -23,7 +23,7 @@ import com.google.code.http4j.utils.Metrics;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public interface Response {
+public interface Response extends Message {
 	
 	StatusLine getStatusLine();
 	

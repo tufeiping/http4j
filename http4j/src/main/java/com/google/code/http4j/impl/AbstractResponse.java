@@ -19,12 +19,14 @@ package com.google.code.http4j.impl;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import com.google.code.http4j.Charset;
 import com.google.code.http4j.HTTP;
 import com.google.code.http4j.Header;
 import com.google.code.http4j.Headers;
+import com.google.code.http4j.Message;
 import com.google.code.http4j.Response;
 import com.google.code.http4j.StatusLine;
 import com.google.code.http4j.utils.IOUtils;
@@ -56,29 +58,15 @@ public abstract class AbstractResponse implements Response {
 
 	abstract protected byte[] readEntity(InputStream in) throws IOException;
 
-	private byte[] downloadEntity(InputStream in) throws IOException {
-		byte[] original = readEntity(in);
-		return Headers.isGzipped(headers) ? IOUtils.unGzip(original) : original;
+	@Override
+	public void output(OutputStream out) throws IOException {
+		String contentType = Headers.getContentType(headers);
+		Message message = getMessage(contentType);
+		message.output(out);
 	}
-
-	private String determinCharset() {
-		String encoding = Headers.getCharset(headers);
-		encoding = null == encoding ? guessCharset() : encoding;
-		return encoding.toUpperCase();
-	}
-
-	private String guessCharset() {
-		if(null == entity) {
-			return Charset.DEFAULT;
-		}
-		ByteArrayInputStream in = new ByteArrayInputStream(entity);
-		try {
-			IOUtils.extractByEnd(in, "charset=".getBytes());// skip
-			byte[] charsets = IOUtils.extractByEnd(in, (byte) '"');
-			return charsets.length == 0 ? Charset.DEFAULT : new String(charsets);
-		} catch (IOException e) {
-			return Charset.DEFAULT;
-		}
+	
+	protected Message getMessage(String contentType) {
+		return null == contentType || !contentType.startsWith("text") ? new BinaryMessage() : new TextMessage();
 	}
 
 	@Override
@@ -129,5 +117,47 @@ public abstract class AbstractResponse implements Response {
 	@Override
 	public void setMetrics(Metrics metrics) {
 		this.metrics = metrics;
+	}
+	
+	private byte[] downloadEntity(InputStream in) throws IOException {
+		byte[] original = readEntity(in);
+		return Headers.isGzipped(headers) ? IOUtils.unGzip(original) : original;
+	}
+
+	private String determinCharset() {
+		String encoding = Headers.getCharset(headers);
+		encoding = null == encoding ? guessCharset() : encoding;
+		return encoding.toUpperCase();
+	}
+
+	private String guessCharset() {
+		if(null == entity) {
+			return Charset.DEFAULT;
+		}
+		ByteArrayInputStream in = new ByteArrayInputStream(entity);
+		try {
+			IOUtils.extractByEnd(in, "charset=".getBytes());// skip
+			byte[] charsets = IOUtils.extractByEnd(in, (byte) '"');
+			return charsets.length == 0 ? Charset.DEFAULT : new String(charsets);
+		} catch (IOException e) {
+			return Charset.DEFAULT;
+		}
+	}
+	
+	protected class TextMessage implements Message {
+		@Override
+		public void output(OutputStream out) throws IOException {
+			String content = new String(entity, charset);
+			out.write(content.getBytes());
+			out.flush();
+		}
+	}
+	
+	protected class BinaryMessage implements Message {
+		@Override
+		public void output(OutputStream out) throws IOException {
+			out.write(entity);
+			out.flush();
+		}
 	}
 }
