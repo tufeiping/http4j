@@ -64,10 +64,6 @@ public abstract class AbstractResponse implements Response {
 		Message message = getMessage(contentType);
 		message.output(out);
 	}
-	
-	protected Message getMessage(String contentType) {
-		return null == contentType || !contentType.startsWith("text") ? new BinaryMessage() : new TextMessage();
-	}
 
 	@Override
 	public StatusLine getStatusLine() {
@@ -117,6 +113,10 @@ public abstract class AbstractResponse implements Response {
 	@Override
 	public void setMetrics(Metrics metrics) {
 		this.metrics = metrics;
+	}
+	
+	protected Message getMessage(String contentType) {
+		return null == contentType || !contentType.startsWith("text") ? new BinaryMessage() : new TextMessage();
 	}
 	
 	private byte[] downloadEntity(InputStream in) throws IOException {
