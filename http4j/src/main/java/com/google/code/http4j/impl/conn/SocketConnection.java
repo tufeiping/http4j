@@ -74,7 +74,7 @@ public class SocketConnection implements Connection {
 	protected void doConnect() throws IOException {
 		SocketAddress address = getSocketAddress(host);
 		socket.connect(address, timeout);
-		socket.setSoLinger(true, 65535);
+		socket.setSoLinger(true, 60);
 	}
 
 	protected SocketAddress getSocketAddress(Host host)
