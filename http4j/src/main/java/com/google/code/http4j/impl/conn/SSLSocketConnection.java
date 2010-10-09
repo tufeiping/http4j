@@ -40,8 +40,12 @@ public class SSLSocketConnection extends SocketConnection {
 	@Override
 	protected Socket createSocket() throws IOException {
 		SSLSocketFactory factory = HttpsURLConnection.getDefaultSSLSocketFactory();
-		factory.createSocket();
-		return super.createSocket();
+		return factory.createSocket();
+	}
+	
+	@Override
+	protected void doConnect() throws IOException {
+		super.doConnect();//TODO add something such as handshake...
 	}
 	
 	// TODO
