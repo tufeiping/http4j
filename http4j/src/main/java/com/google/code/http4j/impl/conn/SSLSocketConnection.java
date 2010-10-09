@@ -16,6 +16,12 @@
 
 package com.google.code.http4j.impl.conn;
 
+import java.io.IOException;
+import java.net.Socket;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSocketFactory;
+
 import com.google.code.http4j.Host;
 
 /**
@@ -23,12 +29,19 @@ import com.google.code.http4j.Host;
  */
 public class SSLSocketConnection extends SocketConnection {
 
-	public SSLSocketConnection(Host host) {
+	public SSLSocketConnection(Host host) throws IOException {
 		this(host, 0);
 	}
 
-	public SSLSocketConnection(Host host, int timeout) {
+	public SSLSocketConnection(Host host, int timeout) throws IOException {
 		super(host, timeout);
+	}
+	
+	@Override
+	protected Socket createSocket() throws IOException {
+		SSLSocketFactory factory = HttpsURLConnection.getDefaultSSLSocketFactory();
+		factory.createSocket();
+		return super.createSocket();
 	}
 	
 	// TODO

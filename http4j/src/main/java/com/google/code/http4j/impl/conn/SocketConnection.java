@@ -44,11 +44,11 @@ public class SocketConnection implements Connection {
 
 	protected boolean reusable;
 
-	public SocketConnection(Host host) {
+	public SocketConnection(Host host) throws IOException {
 		this(host, 0);
 	}
 
-	public SocketConnection(Host host, int timeout) {
+	public SocketConnection(Host host, int timeout) throws IOException {
 		this.host = host;
 		this.timeout = timeout;
 		this.reusable = true;
@@ -60,7 +60,7 @@ public class SocketConnection implements Connection {
 		IOUtils.close(socket);
 	}
 
-	protected Socket createSocket() {
+	protected Socket createSocket() throws IOException {
 		return new Socket();
 	}
 

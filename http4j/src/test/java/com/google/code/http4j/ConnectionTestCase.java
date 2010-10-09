@@ -39,12 +39,12 @@ public final class ConnectionTestCase {
 	private Host host;
 
 	@BeforeClass
-	public void beforeClass() {
+	public void beforeClass() throws IOException {
 		host = new BasicHost("www.google.com");
 		connection = createConnection();
 	}
 	
-	private Connection createConnection() {
+	private Connection createConnection() throws IOException {
 		return new SocketConnection(host);
 	}
 	
