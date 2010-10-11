@@ -81,12 +81,6 @@ public abstract class AbstractConnectionManager implements ConnectionManager {
 	abstract protected Connection getConnection(Host host) throws InterruptedException, IOException;
 	
 	abstract protected void doShutdown();
-
-	protected Connection createConnection(Host host) throws IOException {
-		 SocketConnection connection = new SocketConnection(host);
-		 connection.connect();
-		 return connection;
-	}
 	
 	private void increaseUsed(Host host) throws InterruptedException {
 		getSemaphore(host).acquire();

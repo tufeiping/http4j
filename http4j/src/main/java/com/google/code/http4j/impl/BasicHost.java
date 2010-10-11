@@ -16,6 +16,9 @@
 
 package com.google.code.http4j.impl;
 
+import java.io.IOException;
+
+import com.google.code.http4j.Connection;
 import com.google.code.http4j.Host;
 import com.google.code.http4j.impl.protocol.HttpProtocol;
 import com.google.code.http4j.impl.protocol.HttpsProtocol;
@@ -106,7 +109,14 @@ public final class BasicHost implements Host {
 	}
 
 	@Override
-	public String getProtocol() {
-		return protocol.getProtocol();
+	public Protocol getProtocol() {
+		return protocol;
+	}
+
+	@Override
+	public Connection newConnection() throws IOException {
+		Connection connection = protocol.createConnection(this);
+		connection.connect();
+		return connection;
 	}
 }

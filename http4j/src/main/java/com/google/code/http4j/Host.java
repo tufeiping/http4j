@@ -16,6 +16,10 @@
 
 package com.google.code.http4j;
 
+import java.io.IOException;
+
+import com.google.code.http4j.impl.protocol.Protocol;
+
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  * 
@@ -30,5 +34,7 @@ public interface Host {
 
 	int getPort();
 
-	String getProtocol();
+	Protocol getProtocol();
+	
+	Connection newConnection() throws IOException;
 }

@@ -61,7 +61,7 @@ public class ConnectionPool extends AbstractConnectionManager {
 	protected Connection getConnection(Host host) throws InterruptedException, IOException {
 		Queue<Connection> queue = getFreeQueue(host);
 		Connection connection = queue.poll();
-		connection = connection == null || connection.isClosed() ? createConnection(host) : connection;
+		connection = connection == null || connection.isClosed() ? host.newConnection() : connection;
 		return connection;
 	}
 

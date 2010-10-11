@@ -25,4 +25,9 @@ public abstract class AbstractProtocol implements Protocol {
 	public String getAuthority(String host, int port) {
 		return getDefaultPort() == port || -1 == port ? host : new StringBuilder(host).append(':').append(port).toString();
 	}
+	
+	@Override
+	public final String toString() {
+		return getProtocol();
+	}
 }

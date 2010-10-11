@@ -16,6 +16,12 @@
 
 package com.google.code.http4j.impl.protocol;
 
+import java.io.IOException;
+
+import com.google.code.http4j.Connection;
+import com.google.code.http4j.Host;
+import com.google.code.http4j.impl.conn.SocketConnection;
+
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
@@ -38,5 +44,10 @@ public final class HttpProtocol extends AbstractProtocol implements Protocol {
 
 	public static HttpProtocol getInstance() {
 		return instance;
+	}
+
+	@Override
+	public Connection createConnection(Host host) throws IOException {
+		return new SocketConnection(host);
 	}
 }

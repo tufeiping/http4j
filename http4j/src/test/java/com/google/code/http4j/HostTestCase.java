@@ -90,10 +90,10 @@ public final class HostTestCase {
 	
 	@Test
 	public void getProtocol() {
-		Assert.assertEquals(googleHttp.getProtocol(), "http");
-		Assert.assertEquals(googleHttps.getProtocol(), "https");
-		Assert.assertEquals(specialHttp.getProtocol(), "http");
-		Assert.assertEquals(specialHttps.getProtocol(), "https");
+		Assert.assertEquals(googleHttp.getProtocol().toString(), "http");
+		Assert.assertEquals(googleHttps.getProtocol().toString(), "https");
+		Assert.assertEquals(specialHttp.getProtocol().toString(), "http");
+		Assert.assertEquals(specialHttps.getProtocol().toString(), "https");
 	}
 	
 	@Test

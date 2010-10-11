@@ -43,6 +43,6 @@ public class SingleConnectionManager extends AbstractConnectionManager {
 	@Override
 	protected Connection getConnection(Host host) throws InterruptedException,
 			IOException {
-		return createConnection(host);
+		return host.newConnection();
 	}
 }
