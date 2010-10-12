@@ -19,9 +19,19 @@ package com.google.code.http4j;
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-public interface SSLManager {
+public abstract class SSLManager {
 	
-	SSLManager addVerifier(SSLVerifier verifier);
+	protected static volatile SSLManager instance;
 	
-	SSLVerifier getVerifier(String host);
+	public static SSLManager getDefault() {
+		return instance;
+	}
+	
+	public static void setDefault(SSLManager manager) {
+		instance = manager;
+	}
+	
+	abstract SSLManager addVerifier(SSLVerifier verifier);
+	
+	abstract SSLVerifier getVerifier(String host);
 }
