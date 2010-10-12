@@ -46,6 +46,8 @@ public class IOUtilsTestCase {
 		Assert.assertEquals(new String(chunk1), "Hello World!-From http4j.");
 		byte[] chunk2 = IOUtils.getNextChunk(in);
 		Assert.assertEquals(new String(chunk2), "Author:guilin.zhang@hotmail.com");
+		byte[] chunk3 = IOUtils.getNextChunk(in);
+		Assert.assertNull(chunk3);
 	}
 	
 	private void assertionExtractByEnd(String source, String dest, String end) throws IOException {

@@ -99,13 +99,10 @@ public final class IOUtils {
 
 	static int getNextChunkSize(InputStream in) throws IOException {
 		byte[] chunkSize = extractByEnd(in, HTTP.CR, HTTP.LF);
-		if (chunkSize.length > 0) {
-			String s = new String(chunkSize);
-			int end = s.indexOf(';');
-			s = end < 0 ? s : s.substring(0, end);
-			return Integer.parseInt(s.trim(), 16);
-		}
-		return 0;
+		String s = new String(chunkSize);
+		int end = s.indexOf(';');
+		s = end < 0 ? s : s.substring(0, end);
+		return Integer.parseInt(s.trim(), 16);
 	}
 
 	public static byte[] unGzip(byte[] original) throws IOException {
