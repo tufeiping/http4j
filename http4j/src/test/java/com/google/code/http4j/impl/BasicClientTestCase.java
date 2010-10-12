@@ -44,7 +44,7 @@ public final class BasicClientTestCase {
 		client.noConnectionPool();
 		Response response = client.get("http://www.baidu.com/");
 		Metrics metrics = response.getMetrics();
-		Assert.assertFalse(metrics.isCachedConnection());
+		Assert.assertFalse(metrics.getConnectingCost() == 0);
 	}
 	
 	@Test(dependsOnMethods = "noConnectionPool")

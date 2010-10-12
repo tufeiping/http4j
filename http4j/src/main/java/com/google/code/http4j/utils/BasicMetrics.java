@@ -76,8 +76,4 @@ public class BasicMetrics implements Metrics {
 	public long getBytesReceived() {
 		return bytesReceived;
 	}
-
-	public boolean isCachedConnection() {
-		return connectingCost == 0;
-	}
 }
