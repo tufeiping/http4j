@@ -23,12 +23,11 @@ import javax.net.ssl.SSLSession;
  */
 public class AllowAllSSLVerifier extends AbstractSSLVerifier {
 
-	public AllowAllSSLVerifier(String host) {
-		super(host);
+	public AllowAllSSLVerifier() {
 	}
 
 	@Override
-	public boolean verify(String hostname, SSLSession session) {
+	public boolean verify(String host, SSLSession session) {
 		return true;
 	}
 }

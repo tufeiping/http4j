@@ -16,7 +16,6 @@
 
 package com.google.code.http4j.ssl;
 
-import javax.net.ssl.SSLSession;
 
 
 /**
@@ -24,19 +23,4 @@ import javax.net.ssl.SSLSession;
  */
 public abstract class AbstractSSLVerifier implements SSLVerifier {
 	
-	protected String host;
-	
-	protected AbstractSSLVerifier(String host) {
-		this.host = host;
-	}
-	
-	@Override
-	public String getHost() {
-		return host;
-	}
-
-	@Override
-	public boolean verify(SSLSession session) {
-		return verify(host, session);
-	}
 }

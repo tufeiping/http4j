@@ -39,7 +39,7 @@ public abstract class SSLManager {
 		
 	}
 	
-	abstract SSLManager addVerifier(SSLVerifier verifier);
+	abstract SSLManager addVerifier(String host, SSLVerifier verifier);
 	
 	abstract SSLVerifier getVerifier(String host);
 	
@@ -52,15 +52,15 @@ public abstract class SSLManager {
 		}
 		
 		@Override
-		SSLManager addVerifier(SSLVerifier verifier) {
-			map.put(verifier.getHost(), verifier);
+		SSLManager addVerifier(String host, SSLVerifier verifier) {
+			map.put(host, verifier);
 			return this;
 		}
 
 		@Override
-		SSLVerifier getVerifier(final String host) {
+		SSLVerifier getVerifier(String host) {
 			SSLVerifier verifier = map.get(host);
-			return null == verifier ? new AllowAllSSLVerifier(host) : verifier;
+			return null == verifier ? new AllowAllSSLVerifier() : verifier;
 		}
 	}
 }

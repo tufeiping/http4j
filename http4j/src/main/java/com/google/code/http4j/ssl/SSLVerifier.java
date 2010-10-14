@@ -17,14 +17,10 @@
 package com.google.code.http4j.ssl;
 
 import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLSession;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public interface SSLVerifier extends HostnameVerifier {
 	
-	String getHost();
-	
-	boolean verify(SSLSession session);
 }
