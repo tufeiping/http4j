@@ -25,6 +25,8 @@ import java.net.Socket;
 import java.util.Arrays;
 import java.util.zip.GZIPInputStream;
 
+import javax.net.ssl.SSLSocket;
+
 import com.google.code.http4j.HTTP;
 
 /**
@@ -46,8 +48,10 @@ public final class IOUtils {
 	public static void close(Socket socket) {
 		if (null != socket && !socket.isClosed()) {
 			try {
-				socket.shutdownInput();
-				socket.shutdownOutput();
+				if(!(socket instanceof SSLSocket)) {
+					socket.shutdownInput();
+					socket.shutdownOutput();
+				}
 				socket.close();
 			} catch (IOException e) {
 			}
