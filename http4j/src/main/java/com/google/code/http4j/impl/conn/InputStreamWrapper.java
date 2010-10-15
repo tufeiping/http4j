@@ -28,11 +28,11 @@ import com.google.code.http4j.utils.ThreadLocalMetricsRecorder;
  * So it is used within this package.
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-class InputStreamDecorator extends InputStream {
+class InputStreamWrapper extends InputStream {
 
 	protected final DataInputStream in;
 
-	public InputStreamDecorator(InputStream in) {
+	public InputStreamWrapper(InputStream in) {
 		this.in = new DataInputStream(in);
 	}
 

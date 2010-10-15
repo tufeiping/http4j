@@ -111,11 +111,11 @@ public class SocketConnection implements Connection {
 	
 	@Override
 	public InputStream getInputStream() throws IOException {
-		return new InputStreamDecorator(socket.getInputStream());
+		return new InputStreamWrapper(socket.getInputStream());
 	}
 
 	@Override
 	public OutputStream getOutputStream() throws IOException {
-		return new OutputStreamDecorator(socket.getOutputStream());
+		return new OutputStreamWrapper(socket.getOutputStream());
 	}
 }

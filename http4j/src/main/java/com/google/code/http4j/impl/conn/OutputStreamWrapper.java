@@ -26,11 +26,11 @@ import com.google.code.http4j.utils.ThreadLocalMetricsRecorder;
  * So it is used within this package.
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
-class OutputStreamDecorator extends OutputStream {
+class OutputStreamWrapper extends OutputStream {
 	
 	protected final OutputStream out;
 	
-	public OutputStreamDecorator(OutputStream out) {
+	public OutputStreamWrapper(OutputStream out) {
 		this.out = out;
 	}
 
