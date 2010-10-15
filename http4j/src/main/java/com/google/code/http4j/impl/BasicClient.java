@@ -47,26 +47,26 @@ public class BasicClient implements Client {
 		useConnectionPool();
 	}
 	
+	@Override
 	public BasicClient noConnectionPool() {
 		connectionManager.shutdown();
 		connectionManager = new SingleConnectionManager();
 		return this;
 	}
 	
+	@Override
 	public BasicClient useConnectionPool() {
 		connectionManager = new ConnectionPool();
 		return this;
 	}
 	
-	/**
-	 * DNS lookup cost is normally greater than 0 except the connection is cached.
-	 * @return this
-	 */
+	@Override
 	public BasicClient noDNSCache() {
 		DNS.noCache();
 		return this;
 	}
 	
+	@Override
 	public BasicClient useDNSCache() {
 		DNS.useCache();
 		return this;

@@ -31,4 +31,13 @@ public interface Client {
 	Response post(String url) throws InterruptedException, IOException, URISyntaxException;
 	
 	void shutdown();
+	
+	// configuration methods
+	Client noConnectionPool();
+	
+	Client useConnectionPool();
+	
+	Client noDNSCache();
+	
+	Client useDNSCache();
 }
