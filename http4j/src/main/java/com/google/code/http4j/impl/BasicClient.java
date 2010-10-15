@@ -102,4 +102,13 @@ public class BasicClient implements Client {
 	protected CookieCache createCookieCache() {
 		return new CookieStoreAdapter();
 	}
+	
+	@Override
+	protected void finalize() throws Throwable {
+		try {
+			shutdown();
+		} finally {
+			super.finalize();
+		}
+	}
 }
