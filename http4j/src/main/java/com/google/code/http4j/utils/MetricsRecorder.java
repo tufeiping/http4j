@@ -38,6 +38,8 @@ public interface MetricsRecorder {
 
 	Timer getResponseTimer();
 	
+	Timer getSslTimer();
+	
 	Counter<Long> getRequestTransportCounter();
 
 	Counter<Long> getResponseTransportCounter();

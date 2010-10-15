@@ -28,14 +28,13 @@ public interface Metrics {
 
 	long getSendingCost();
 
-	/**
-	 * @return time cost after sending and before receiving
-	 */
-	long getWaitingCost();
+	long getWaitingCost();// sending --|-- waiting --|-- receiving
 
 	long getReceivingCost();
 	
 	long getBytesSent();
 	
 	long getBytesReceived();
+	
+	long getSslHandshakeCost();
 }

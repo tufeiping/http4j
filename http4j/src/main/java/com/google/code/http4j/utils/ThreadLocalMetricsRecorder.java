@@ -28,6 +28,7 @@ public class ThreadLocalMetricsRecorder implements MetricsRecorder {
 	protected Timer connectionTimer;
 	protected Timer requestTimer;
 	protected Timer responseTimer;
+	protected Timer sslTimer;
 	protected Counter<Long> requestTransportCounter;
 	protected Counter<Long> responseTransportCounter;
 
@@ -46,6 +47,7 @@ public class ThreadLocalMetricsRecorder implements MetricsRecorder {
 		connectionTimer = new NanoSecondTimer();
 		requestTimer = new NanoSecondTimer();
 		responseTimer = new NanoSecondTimer();
+		sslTimer = new NanoSecondTimer();
 		requestTransportCounter = new LongCounter();
 		responseTransportCounter = new LongCounter();
 	}
@@ -70,16 +72,6 @@ public class ThreadLocalMetricsRecorder implements MetricsRecorder {
 	}
 
 	@Override
-	public void reset() {
-		dnsTimer.reset();
-		connectionTimer.reset();
-		requestTimer.reset();
-		responseTimer.reset();
-		requestTransportCounter.reset();
-		responseTransportCounter.reset();
-	}
-
-	@Override
 	public Counter<Long> getRequestTransportCounter() {
 		return requestTransportCounter;
 	}
@@ -87,6 +79,22 @@ public class ThreadLocalMetricsRecorder implements MetricsRecorder {
 	@Override
 	public Counter<Long> getResponseTransportCounter() {
 		return responseTransportCounter;
+	}
+	
+	@Override
+	public Timer getSslTimer() {
+		return sslTimer;
+	}
+	
+	@Override
+	public void reset() {
+		dnsTimer.reset();
+		connectionTimer.reset();
+		requestTimer.reset();
+		responseTimer.reset();
+		sslTimer.reset();
+		requestTransportCounter.reset();
+		responseTransportCounter.reset();
 	}
 
 	@Override
@@ -97,6 +105,7 @@ public class ThreadLocalMetricsRecorder implements MetricsRecorder {
 				requestTimer.getDuration(),
 				responseTimer.getStart() - requestTimer.getStop(),
 				responseTimer.getDuration(), 
+				sslTimer.getDuration(),
 				requestTransportCounter.get(),
 				responseTransportCounter.get());
 	}

@@ -36,15 +36,17 @@ public class BasicMetrics implements Metrics {
 
 	protected final long bytesReceived;
 
+	protected final long sslHandshakeCost;
 
 	public BasicMetrics(long dnsLookupCost, long connectingCost,
 			long sendingCost, long waitingCost, long receivingCost,
-			long bytesSent, long bytesReceived) {
+			long sslHandshakeCost, long bytesSent, long bytesReceived) {
 		this.dnsLookupCost = dnsLookupCost;
 		this.connectingCost = connectingCost;
 		this.sendingCost = sendingCost;
 		this.waitingCost = waitingCost;
 		this.receivingCost = receivingCost;
+		this.sslHandshakeCost = sslHandshakeCost;
 		this.bytesSent = bytesSent;
 		this.bytesReceived = bytesReceived;
 	}
@@ -75,5 +77,9 @@ public class BasicMetrics implements Metrics {
 
 	public long getBytesReceived() {
 		return bytesReceived;
+	}
+
+	public long getSslHandshakeCost() {
+		return sslHandshakeCost;
 	}
 }
