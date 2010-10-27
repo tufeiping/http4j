@@ -99,11 +99,12 @@ public class Headers {
 	}
 
 	public static String toString(List<Header> headers) {
-		StringBuilder buffer = new StringBuilder();
-		for (Header header : headers) {
-			buffer.append(header.toString()).append(HTTP.CRLF);
+		StringBuilder m = new StringBuilder();
+		for (Header h : headers) {
+			m.append(HTTP.CRLF);
+			m.append(h.toString());
 		}
-		return buffer.toString();
+		return m.toString();
 	}
 
 	public static String getConnectionHeaderValue(List<Header> headers) {

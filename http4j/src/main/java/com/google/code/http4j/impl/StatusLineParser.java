@@ -28,7 +28,8 @@ public class StatusLineParser implements Parser<StatusLine, byte[]> {
 	public StatusLine parse(byte[] s) {
 		String line = new String(s);
 		String[] fields = line.split("[ \t\r]+", 3);
-		return new BasicStatusLine(fields[0], Integer.parseInt(fields[1]), fields[2]);
+		return new BasicStatusLine(fields[0], Integer.parseInt(fields[1]),
+				fields[2]);
 	}
 
 	public static class BasicStatusLine implements StatusLine {
@@ -60,10 +61,14 @@ public class StatusLineParser implements Parser<StatusLine, byte[]> {
 
 		@Override
 		public boolean hasEntity() {
-			return statusCode >= 200 
-				&& statusCode != 204 
-				&& statusCode != 205 
-				&& statusCode != 304;
+			return statusCode >= 200 && statusCode != 204 && statusCode != 205
+					&& statusCode != 304;
+		}
+
+		@Override
+		public String toString() {
+			return new StringBuilder(version).append(" ").append(statusCode)
+					.append(" ").append(reason).toString();
 		}
 	}
 }

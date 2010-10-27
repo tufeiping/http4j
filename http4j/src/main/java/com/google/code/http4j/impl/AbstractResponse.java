@@ -54,6 +54,7 @@ public abstract class AbstractResponse implements Response {
 		this.headers = headers;
 		entity = statusLine.hasEntity() ? downloadEntity(in) : null;
 		charset = determinCharset();
+		log();
 	}
 
 	abstract protected byte[] readEntity(InputStream in) throws IOException;
@@ -142,6 +143,12 @@ public abstract class AbstractResponse implements Response {
 		} catch (IOException e) {
 			return Charset.DEFAULT;
 		}
+	}
+	
+	private void log() {
+		StringBuilder buf = new StringBuilder(statusLine.toString());
+		buf.append(Headers.toString(headers)).append(HTTP.CRLF);
+		HTTP.LOGGER.debug("Response:\r\n{}", buf.toString());
 	}
 	
 	protected class TextMessage implements Message {

@@ -40,7 +40,7 @@ public class Post extends AbstractRequest {
 	}
 
 	@Override
-	protected StringBuilder formatHeaders() {
+	protected CharSequence formatHeaders() {
 		setHeader(Headers.CONTENT_LENGTH, String.valueOf(query.length()));
 		return super.formatHeaders();
 	}

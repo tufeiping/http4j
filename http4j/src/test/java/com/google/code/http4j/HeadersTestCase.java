@@ -43,6 +43,6 @@ public class HeadersTestCase {
 		headers.add(new CanonicalHeader("Content-Type","text/html"));
 		headers.add(new CanonicalHeader("Content-Length","2012"));
 		String string = Headers.toString(headers);
-		Assert.assertEquals(string, "Content-Type:text/html\r\nContent-Length:2012\r\n");
+		Assert.assertEquals(string, "\r\nContent-Type:text/html\r\nContent-Length:2012");
 	}
 }

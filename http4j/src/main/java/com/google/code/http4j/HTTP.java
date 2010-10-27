@@ -16,10 +16,15 @@
 
 package com.google.code.http4j;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
  */
 public interface HTTP {
+	
+	Logger LOGGER = LoggerFactory.getLogger("com.google.code.http4j");
 	
 	byte CR = '\r';
 	byte LF = '\n';
