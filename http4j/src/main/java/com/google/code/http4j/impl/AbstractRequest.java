@@ -113,7 +113,7 @@ public abstract class AbstractRequest implements Request {
 		m.append(formatHeaders());
 		m.append(HTTP.CRLF).append(HTTP.CRLF).append(formatBody());
 		String message = m.toString();
-		HTTP.LOGGER.debug("Requesting:\r\n{}", message);
+		HTTP.LOGGER.debug("Request:\r\n{}", message);
 		return message.getBytes();
 	}
 
