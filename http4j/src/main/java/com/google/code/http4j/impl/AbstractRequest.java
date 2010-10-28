@@ -118,12 +118,7 @@ public abstract class AbstractRequest implements Request {
 	}
 
 	protected CharSequence formatHeaders() {
-		StringBuilder m = new StringBuilder();
-		for (Header h : headers) {
-			m.append(HTTP.CRLF);
-			m.append(h.toString());
-		}
-		return m;
+		return Headers.toString(headers);
 	}
 
 	private StringBuilder formatRequestLine() {
