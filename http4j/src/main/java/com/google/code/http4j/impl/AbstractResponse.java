@@ -37,7 +37,7 @@ import com.google.code.http4j.utils.Metrics;
  * 
  */
 public abstract class AbstractResponse implements Response {
-
+	
 	protected final StatusLine statusLine;
 
 	protected final List<Header> headers;
@@ -117,7 +117,12 @@ public abstract class AbstractResponse implements Response {
 	}
 	
 	protected Message getMessage(String contentType) {
-		return null == contentType || !contentType.startsWith("text") ? new BinaryMessage() : new TextMessage();
+		boolean isText = isText(contentType);
+		return isText ? new BinaryMessage() : new TextMessage();
+	}
+	
+	private boolean isText(String contentType) {
+		return null != contentType && (contentType.startsWith("text") || "application/x-javascript".equals(contentType));
 	}
 	
 	private byte[] downloadEntity(InputStream in) throws IOException {
