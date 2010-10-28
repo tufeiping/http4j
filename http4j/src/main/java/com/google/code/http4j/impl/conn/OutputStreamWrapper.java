@@ -19,6 +19,7 @@ package com.google.code.http4j.impl.conn;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import com.google.code.http4j.utils.MetricsRecorder;
 import com.google.code.http4j.utils.ThreadLocalMetricsRecorder;
 
 /**
@@ -37,23 +38,17 @@ class OutputStreamWrapper extends OutputStream {
 	public void flush() throws IOException {
 		out.flush();
 	}
-
+	
+	@Override
 	public void write(byte[] b) throws IOException {
-		write(b, 0, b.length);
-	}
-
-	public void write(byte[] b, int off, int len) throws IOException {
-		write(b[off++]);
-		if(--len > 0) {
-			ThreadLocalMetricsRecorder.getInstance().getRequestTransportCounter().addAndGet((long) len);
-			out.write(b, off, len);
-		}
-	}
-
-	public void write(int b) throws IOException {
+		MetricsRecorder recorder = ThreadLocalMetricsRecorder.getInstance();
+		recorder.getRequestTimer().start();
 		out.write(b);
-		if(ThreadLocalMetricsRecorder.getInstance().getRequestTransportCounter().addAndGet(1l) == 1) {
-			ThreadLocalMetricsRecorder.getInstance().getRequestTimer().start();
-		}
+		recorder.getRequestTransportCounter().addAndGet((long) b.length);
+	}
+	
+	@Deprecated
+	public void write(int b) throws IOException {
+		out.write(b);//never use
 	}
 }

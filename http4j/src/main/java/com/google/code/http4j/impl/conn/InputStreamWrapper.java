@@ -20,7 +20,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.google.code.http4j.utils.Counter;
+import com.google.code.http4j.utils.MetricsRecorder;
 import com.google.code.http4j.utils.ThreadLocalMetricsRecorder;
 
 /**
@@ -37,14 +37,16 @@ class InputStreamWrapper extends InputStream {
 	}
 
 	public int read() throws IOException {
-		int i = in.read();
-		Counter<Long> counter = ThreadLocalMetricsRecorder.getInstance().getResponseTransportCounter();
-		if (i != -1 && counter.addAndGet(1l) == 1) {// don't change logic order
-			ThreadLocalMetricsRecorder.getInstance().getResponseTimer().start();
+		byte[] b = new byte[1];
+		MetricsRecorder recorder = ThreadLocalMetricsRecorder.getInstance();
+		in.readFully(b);
+		if (recorder.getResponseTransportCounter().addAndGet(1l) == 1) {
+			recorder.getResponseTimer().start();
 		}
-		return i;
+		return b[0];
 	}
-
+	
+	@Override
 	public int read(byte[] b) throws IOException {
 		return read(b, 0, b.length);
 	}
