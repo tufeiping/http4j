@@ -53,7 +53,7 @@ public final class DNSTestCase {
 		InetAddress original = InetAddress.getByName(host);
 		DNS.CachedDNS cached = new DNS.CachedDNS();
 		cached.cache(host, original);
-		DNS.useCache();
+		DNS.useCache(true);
 		address = DNS.getAddress(host);
 		Assert.assertNotNull(address);
 		Metrics metrics = ThreadLocalMetricsRecorder.getInstance().captureMetrics();

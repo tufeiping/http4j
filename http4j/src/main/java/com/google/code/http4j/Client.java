@@ -33,11 +33,9 @@ public interface Client {
 	void shutdown();
 	
 	// configuration methods
-	Client noConnectionPool();
+	Client useConnectionPool(boolean use);
 	
-	Client useConnectionPool();
+	Client useDNSCache(boolean use);
 	
-	Client noDNSCache();
-	
-	Client useDNSCache();
+	Client followRedirect(boolean follow);
 }

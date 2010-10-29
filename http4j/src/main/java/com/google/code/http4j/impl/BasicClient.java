@@ -43,35 +43,30 @@ public class BasicClient implements Client {
 	public BasicClient() {
 		cookieCache = createCookieCache();
 		responseParser = createResponseParser();
-		useDNSCache();
-		useConnectionPool();
+		useDNSCache(true);
+		useConnectionPool(true);
 	}
 	
 	@Override
-	public BasicClient noConnectionPool() {
-		connectionManager.shutdown();
-		connectionManager = new SingleConnectionManager();
+	public BasicClient useConnectionPool(boolean use) {
+		if(null != connectionManager) {
+			connectionManager.shutdown();
+		}
+		connectionManager = use ? new ConnectionPool() : new SingleConnectionManager();
 		return this;
 	}
 	
 	@Override
-	public BasicClient useConnectionPool() {
-		connectionManager = new ConnectionPool();
-		return this;
-	}
-	
-	@Override
-	public BasicClient noDNSCache() {
-		DNS.noCache();
-		return this;
-	}
-	
-	@Override
-	public BasicClient useDNSCache() {
-		DNS.useCache();
+	public BasicClient useDNSCache(boolean use) {
+		DNS.useCache(use);
 		return this;
 	}
 
+	@Override
+	public Client followRedirect(boolean follow) {
+		return null;
+	}
+	
 	@Override
 	public Response submit(Request request) throws InterruptedException,
 			IOException {

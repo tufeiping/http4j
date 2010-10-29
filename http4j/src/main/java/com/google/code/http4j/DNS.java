@@ -38,15 +38,16 @@ public class DNS {
 		return instance.getInetAddress(host);
 	}
 	
-	public static void useCache() {
-		instance = CACHED;
+	public static void useCache(boolean use) {
+		instance = use ? CACHED : noCache();
 	}
 	
-	public static void noCache() {
+	private static DNS noCache() {
 		if(instance instanceof CachedDNS) {
 			((CachedDNS)instance).CACHE.clear();
 		}
 		instance = NORMAL;
+		return instance;
 	}
 	
 	protected InetAddress getInetAddress(String host)
