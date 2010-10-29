@@ -39,12 +39,15 @@ public class BasicClient implements Client {
 	protected final CookieCache cookieCache;
 
 	protected final ResponseParser responseParser;
+	
+	protected boolean followRedirect;
 
 	public BasicClient() {
 		cookieCache = createCookieCache();
 		responseParser = createResponseParser();
 		useDNSCache(true);
 		useConnectionPool(true);
+		followRedirect = false;
 	}
 	
 	@Override
@@ -64,14 +67,8 @@ public class BasicClient implements Client {
 
 	@Override
 	public Client followRedirect(boolean follow) {
-		return null;
-	}
-	
-	@Override
-	public Response submit(Request request) throws InterruptedException,
-			IOException {
-		RequestExecutor executor = new BasicRequestExecutor(connectionManager, cookieCache, responseParser);
-		return executor.execute(request);
+		this.followRedirect = follow;
+		return this;
 	}
 	
 	@Override
@@ -82,6 +79,22 @@ public class BasicClient implements Client {
 	@Override
 	public Response post(String url) throws InterruptedException, IOException, URISyntaxException {
 		return submit(new Post(url));
+	}
+	
+	@Override
+	public Response submit(Request request) throws InterruptedException,
+			IOException, URISyntaxException {
+		RequestExecutor executor = new BasicRequestExecutor(connectionManager, cookieCache, responseParser);
+		Response response = executor.execute(request);
+		return handleResponse(response);
+	}
+
+	protected Response handleResponse(Response response) throws InterruptedException, IOException, URISyntaxException {
+		if(response.needRedirect()) {
+			response = get(response.getRedirectLocation());
+		}
+		// TODO metrics hierachy
+		return response;
 	}
 	
 	@Override

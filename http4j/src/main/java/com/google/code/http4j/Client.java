@@ -24,7 +24,7 @@ import java.net.URISyntaxException;
  */
 public interface Client {
 
-	Response submit(Request request) throws InterruptedException, IOException;
+	Response submit(Request request) throws InterruptedException, IOException, URISyntaxException;
 
 	Response get(String url) throws InterruptedException, IOException, URISyntaxException;
 

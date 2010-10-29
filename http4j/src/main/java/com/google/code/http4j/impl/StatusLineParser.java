@@ -70,5 +70,10 @@ public class StatusLineParser implements Parser<StatusLine, byte[]> {
 			return new StringBuilder(version).append(" ").append(statusCode)
 					.append(" ").append(reason).toString();
 		}
+
+		@Override
+		public boolean needRedirect() {
+			return statusCode == 301 || statusCode == 302 || statusCode == 303;
+		}
 	}
 }

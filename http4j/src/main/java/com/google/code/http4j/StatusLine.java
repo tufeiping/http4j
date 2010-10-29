@@ -30,4 +30,6 @@ public interface StatusLine extends Serializable {
 	String getReason();
 	
 	boolean hasEntity();
+
+	boolean needRedirect();
 }

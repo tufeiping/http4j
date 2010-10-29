@@ -35,6 +35,10 @@ public interface Response extends Message {
 	
 	boolean isConnectionReusable();
 	
+	boolean needRedirect();
+	
+	String getRedirectLocation();
+	
 	Metrics getMetrics();
 
 	void setMetrics(Metrics metrics);

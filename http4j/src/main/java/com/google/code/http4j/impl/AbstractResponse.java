@@ -47,6 +47,8 @@ public abstract class AbstractResponse implements Response {
 	protected final String charset;
 
 	protected Metrics metrics;
+	
+	protected String redirectLocation;
 
 	public AbstractResponse(StatusLine statusLine, List<Header> headers,
 			InputStream in) throws IOException {
@@ -104,6 +106,19 @@ public abstract class AbstractResponse implements Response {
 			}
 		}
 		return false;
+	}
+	
+	@Override
+	public boolean needRedirect() {
+		return statusLine.needRedirect() && null != getRedirectLocation();
+	}
+	
+	@Override
+	public String getRedirectLocation() {
+		if(null == redirectLocation) {
+			redirectLocation = Headers.getRedirectLocation(headers);
+		}
+		return redirectLocation;
 	}
 
 	@Override

@@ -41,6 +41,7 @@ public class Headers {
 	public static final String CONTENT_ENCODING = "Content-Encoding";
 	public static final String CONNECTION = "Connection";
 	public static final String PROXY_CONNECTION = "Proxy-Connection";
+	public static final String LOCATION = "Location";
 
 	public static List<Header> filter(List<Header> headers, String name) {
 		List<Header> list = new LinkedList<Header>();
@@ -115,5 +116,9 @@ public class Headers {
 
 	public static String getContentType(List<Header> headers) {
 		return getValueByName(headers, CONTENT_TYPE);
+	}
+
+	public static String getRedirectLocation(List<Header> headers) {
+		return getValueByName(headers, LOCATION);
 	}
 }
