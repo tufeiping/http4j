@@ -17,6 +17,7 @@
 package com.google.code.http4j.impl;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 
 import com.google.code.http4j.Client;
@@ -39,7 +40,7 @@ public class BasicClient implements Client {
 	protected final CookieCache cookieCache;
 
 	protected final ResponseParser responseParser;
-	
+
 	protected boolean followRedirect;
 
 	public BasicClient() {
@@ -49,16 +50,17 @@ public class BasicClient implements Client {
 		useConnectionPool(true);
 		followRedirect = false;
 	}
-	
+
 	@Override
 	public BasicClient useConnectionPool(boolean use) {
-		if(null != connectionManager) {
+		if (null != connectionManager) {
 			connectionManager.shutdown();
 		}
-		connectionManager = use ? new ConnectionPool() : new SingleConnectionManager();
+		connectionManager = use ? new ConnectionPool()
+				: new SingleConnectionManager();
 		return this;
 	}
-	
+
 	@Override
 	public BasicClient useDNSCache(boolean use) {
 		DNS.useCache(use);
@@ -70,39 +72,49 @@ public class BasicClient implements Client {
 		this.followRedirect = follow;
 		return this;
 	}
-	
+
 	@Override
-	public Response get(String url) throws InterruptedException, IOException, URISyntaxException {
+	public Response get(String url) throws InterruptedException, IOException,
+			URISyntaxException {
 		return submit(new Get(url));
 	}
-	
+
 	@Override
-	public Response post(String url) throws InterruptedException, IOException, URISyntaxException {
+	public Response post(String url) throws InterruptedException, IOException,
+			URISyntaxException {
 		return submit(new Post(url));
 	}
-	
+
 	@Override
 	public Response submit(Request request) throws InterruptedException,
 			IOException, URISyntaxException {
 		RequestExecutor executor = new BasicRequestExecutor(connectionManager, cookieCache, responseParser);
 		Response response = executor.execute(request);
-		return handleResponse(response);
+		return postProcess(request, response);
 	}
 
-	protected Response handleResponse(Response response) throws InterruptedException, IOException, URISyntaxException {
-		if(followRedirect && response.needRedirect()) {
-			response = get(response.getRedirectLocation());
+	protected Response postProcess(Request request, Response response)
+			throws InterruptedException, IOException, URISyntaxException {
+		if (followRedirect && response.needRedirect()) {
+			String location = getLocation(request.getURI(), response.getRedirectLocation());
+			response = get(location);
 		}
 		// TODO metrics hierachy
 		return response;
 	}
-	
+
+	private String getLocation(URI uri, String location) {
+		return location.startsWith("http") ? location : new StringBuilder(
+				uri.getScheme()).append("://").append(uri.getAuthority())
+				.append(location).toString();
+	}
+
 	@Override
 	public void shutdown() {
 		cookieCache.clear();
 		connectionManager.shutdown();
 	}
-	
+
 	protected ResponseParser createResponseParser() {
 		return new ResponseParser();
 	}
@@ -110,7 +122,7 @@ public class BasicClient implements Client {
 	protected CookieCache createCookieCache() {
 		return new CookieStoreAdapter();
 	}
-	
+
 	@Override
 	protected void finalize() throws Throwable {
 		try {
