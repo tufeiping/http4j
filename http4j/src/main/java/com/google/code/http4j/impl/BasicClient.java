@@ -90,7 +90,7 @@ public class BasicClient implements Client {
 	}
 
 	protected Response handleResponse(Response response) throws InterruptedException, IOException, URISyntaxException {
-		if(response.needRedirect()) {
+		if(followRedirect && response.needRedirect()) {
 			response = get(response.getRedirectLocation());
 		}
 		// TODO metrics hierachy
