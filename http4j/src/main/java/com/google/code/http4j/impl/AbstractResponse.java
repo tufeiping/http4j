@@ -133,7 +133,7 @@ public abstract class AbstractResponse implements Response {
 	
 	protected Message getMessage(String contentType) {
 		boolean isText = isText(contentType);
-		return isText ? new BinaryMessage() : new TextMessage();
+		return isText ? new TextMessage() : new BinaryMessage();
 	}
 	
 	private boolean isText(String contentType) {
