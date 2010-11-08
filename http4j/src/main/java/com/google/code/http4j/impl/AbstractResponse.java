@@ -137,7 +137,7 @@ public abstract class AbstractResponse implements Response {
 	}
 	
 	private boolean isText(String contentType) {
-		return null != contentType && (contentType.startsWith("text") || "application/x-javascript".equals(contentType));
+		return null != contentType && ((contentType.startsWith("text") || contentType.startsWith("application/x-javascript")));
 	}
 	
 	private byte[] downloadEntity(InputStream in) throws IOException {
