@@ -41,4 +41,6 @@ public interface Metrics {
 	void setSourceMetrics(Metrics sourceMetrics);// return this
 	
 	Metrics getSourceMetrics();// used while redirection or retry happens
+
+	void setRedirectedMetrics(Metrics redirectedMetrics);
 }
