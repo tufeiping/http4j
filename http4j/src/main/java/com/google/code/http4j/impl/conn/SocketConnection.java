@@ -30,6 +30,7 @@ import com.google.code.http4j.DNS;
 import com.google.code.http4j.Host;
 import com.google.code.http4j.utils.IOUtils;
 import com.google.code.http4j.utils.ThreadLocalMetricsRecorder;
+import com.google.code.http4j.utils.Timer;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -66,9 +67,10 @@ public class SocketConnection implements Connection {
 
 	@Override
 	public final void connect() throws IOException {
-		ThreadLocalMetricsRecorder.getInstance().getConnectionTimer().start();
+		Timer timer = ThreadLocalMetricsRecorder.getInstance().getConnectionTimer();
+		timer.start();
 		doConnect();
-		ThreadLocalMetricsRecorder.getInstance().getConnectionTimer().stop();
+		timer.stop();
 	}
 
 	protected void doConnect() throws IOException {
