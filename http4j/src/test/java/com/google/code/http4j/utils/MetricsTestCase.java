@@ -19,6 +19,8 @@ package com.google.code.http4j.utils;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeClass;
@@ -33,6 +35,8 @@ import com.google.code.http4j.impl.BasicClient;
  */
 public final class MetricsTestCase {
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(MetricsTestCase.class);
+	
 	private Client client;
 	
 	@BeforeClass
@@ -44,9 +48,12 @@ public final class MetricsTestCase {
 	public void getSourceMetrics() throws InterruptedException, IOException, URISyntaxException {
 		Response response = client.get("http://www.sun.com");// redirect to oracle.com
 		Metrics oracle_us_sun_index = response.getMetrics();
+		LOGGER.debug(oracle_us_sun_index.toString());
 		Metrics oracle_us_sun = oracle_us_sun_index.getSourceMetrics();
+		LOGGER.debug(oracle_us_sun.toString());
 		Assert.assertNotNull(oracle_us_sun);
 		Metrics sun = oracle_us_sun.getSourceMetrics();
+		LOGGER.debug(sun.toString());
 		Assert.assertNotNull(sun);
 	}
 	
