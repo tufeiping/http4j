@@ -152,7 +152,7 @@ public abstract class AbstractResponse implements Response {
 	}
 
 	private String guessCharset() {
-		if(null == entity) {
+		if(null == entity || entity.length == 0) {
 			return Charset.DEFAULT;
 		}
 		ByteArrayInputStream in = new ByteArrayInputStream(entity);

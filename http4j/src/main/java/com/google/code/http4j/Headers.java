@@ -89,7 +89,7 @@ public class Headers {
 
 	public static String getCharset(List<Header> headers) {
 		String contentType = getContentType(headers);
-		return getCharset(contentType);
+		return null == contentType ? null : getCharset(contentType);
 	}
 
 	public static String getCharset(String contentType) {

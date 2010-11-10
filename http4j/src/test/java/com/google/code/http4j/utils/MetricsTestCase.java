@@ -16,11 +16,16 @@
 
 package com.google.code.http4j.utils;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.code.http4j.Client;
+import com.google.code.http4j.Response;
 import com.google.code.http4j.impl.BasicClient;
 
 /**
@@ -36,8 +41,11 @@ public final class MetricsTestCase {
 	}
 	
 	@Test
-	public void getSourceMetrics() {
-		
+	public void getSourceMetrics() throws InterruptedException, IOException, URISyntaxException {
+		Response response = client.get("http://www.sun.com");// redirect to oracle.com
+		Metrics metrics = response.getMetrics();
+		Metrics sourceMetrics = metrics.getSourceMetrics();
+		Assert.assertNotNull(sourceMetrics);
 	}
 	
 	@AfterTest
