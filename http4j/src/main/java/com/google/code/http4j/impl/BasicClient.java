@@ -29,6 +29,7 @@ import com.google.code.http4j.RequestExecutor;
 import com.google.code.http4j.Response;
 import com.google.code.http4j.impl.conn.ConnectionPool;
 import com.google.code.http4j.impl.conn.SingleConnectionManager;
+import com.google.code.http4j.utils.Metrics;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -96,10 +97,11 @@ public class BasicClient implements Client {
 	protected Response postProcess(Request request, Response response)
 			throws InterruptedException, IOException, URISyntaxException {
 		if (followRedirect && response.needRedirect()) {
+			Metrics sourceMetrics = response.getMetrics();
 			String location = getLocation(request.getURI(), response.getRedirectLocation());
 			response = get(location);
+			response.getMetrics().setSourceMetrics(sourceMetrics);
 		}
-		// TODO metrics hierachy
 		return response;
 	}
 
