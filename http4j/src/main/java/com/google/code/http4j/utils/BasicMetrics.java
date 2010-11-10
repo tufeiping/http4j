@@ -94,4 +94,14 @@ public class BasicMetrics implements Metrics {
 	public void setSourceMetrics(Metrics sourceMetrics) {
 		this.sourceMetrics = sourceMetrics;
 	}
+
+	@Override
+	public String toString() {
+		return "bytesReceived=" + bytesReceived + ", bytesSent="
+				+ bytesSent + ", connectingCost=" + connectingCost
+				+ ", dnsLookupCost=" + dnsLookupCost + ", receivingCost="
+				+ receivingCost + ", sendingCost=" + sendingCost
+				+ ", sourceMetrics=" + sourceMetrics + ", sslHandshakeCost="
+				+ sslHandshakeCost + ", waitingCost=" + waitingCost;
+	}
 }

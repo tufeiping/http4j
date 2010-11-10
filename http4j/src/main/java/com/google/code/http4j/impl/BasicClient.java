@@ -20,6 +20,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.code.http4j.Client;
 import com.google.code.http4j.ConnectionManager;
 import com.google.code.http4j.CookieCache;
@@ -36,6 +39,8 @@ import com.google.code.http4j.utils.Metrics;
  */
 public class BasicClient implements Client {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(BasicClient.class);
+	
 	protected ConnectionManager connectionManager;
 
 	protected final CookieCache cookieCache;
@@ -89,15 +94,14 @@ public class BasicClient implements Client {
 	@Override
 	public Response submit(Request request) throws InterruptedException,
 			IOException, URISyntaxException {
-		RequestExecutor executor = new BasicRequestExecutor(connectionManager, cookieCache, responseParser);
-		Response response = executor.execute(request);
-		return postProcess(request, response);
+		return submit(request, null);
 	}
 	
 	protected Response submit(Request request, Metrics metrics) throws InterruptedException,
 			IOException, URISyntaxException {
 		RequestExecutor executor = new BasicRequestExecutor(connectionManager, cookieCache, responseParser);
 		Response response = executor.execute(request);
+		LOGGER.debug("Metrics for {} : \r\n{}", request.getURI(), response.getMetrics());
 		response.getMetrics().setSourceMetrics(metrics);
 		return postProcess(request, response);
 	}
