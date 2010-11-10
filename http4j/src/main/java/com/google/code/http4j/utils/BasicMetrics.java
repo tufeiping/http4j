@@ -38,6 +38,8 @@ public class BasicMetrics implements Metrics {
 
 	protected final long sslHandshakeCost;
 
+	protected Metrics sourceMetrics;
+	
 	public BasicMetrics(long dnsLookupCost, long connectingCost,
 			long sendingCost, long waitingCost, long receivingCost,
 			long sslHandshakeCost, long bytesSent, long bytesReceived) {
@@ -81,5 +83,16 @@ public class BasicMetrics implements Metrics {
 
 	public long getSslHandshakeCost() {
 		return sslHandshakeCost;
+	}
+
+	@Override
+	public Metrics getSourceResponseMetrics() {
+		return sourceMetrics;
+	}
+
+	@Override
+	public Metrics setSourceResponseMetrics(Metrics sourceMetrics) {
+		this.sourceMetrics = sourceMetrics;
+		return this;
 	}
 }

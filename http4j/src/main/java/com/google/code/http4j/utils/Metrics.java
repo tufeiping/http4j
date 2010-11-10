@@ -37,4 +37,8 @@ public interface Metrics {
 	long getBytesReceived();
 	
 	long getSslHandshakeCost();
+	
+	Metrics setSourceResponseMetrics(Metrics sourceMetrics);// return this
+	
+	Metrics getSourceResponseMetrics();// used while redirection or retry happens
 }
