@@ -94,9 +94,4 @@ public class BasicMetrics implements Metrics {
 	public void setSourceMetrics(Metrics sourceMetrics) {
 		this.sourceMetrics = sourceMetrics;
 	}
-	
-	@Override
-	public void setRedirectedMetrics(Metrics redirectedMetrics) {
-		redirectedMetrics.setSourceMetrics(this);
-	}
 }

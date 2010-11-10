@@ -100,7 +100,7 @@ public class BasicClient implements Client {
 			Metrics sourceMetrics = response.getMetrics();
 			String location = getLocation(request.getURI(), response.getRedirectLocation());
 			response = get(location);
-			sourceMetrics.setRedirectedMetrics(response.getMetrics());// parent knows child, child does not know parent
+			response.getMetrics().setSourceMetrics(sourceMetrics);
 		}
 		return response;
 	}
