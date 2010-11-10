@@ -99,7 +99,7 @@ public class BasicClient implements Client {
 		if (followRedirect && response.needRedirect()) {
 			Metrics sourceMetrics = response.getMetrics();
 			String location = getLocation(request.getURI(), response.getRedirectLocation());
-			response = get(location);
+			response = get(location);// TODO bug here, www.sun.com should cause 3 deepth hierachy but now is 2.
 			response.getMetrics().setSourceMetrics(sourceMetrics);
 		}
 		return response;
