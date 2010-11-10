@@ -43,9 +43,11 @@ public final class MetricsTestCase {
 	@Test
 	public void getSourceMetrics() throws InterruptedException, IOException, URISyntaxException {
 		Response response = client.get("http://www.sun.com");// redirect to oracle.com
-		Metrics metrics = response.getMetrics();
-		Metrics sourceMetrics = metrics.getSourceMetrics();
-		Assert.assertNotNull(sourceMetrics);
+		Metrics oracle_us_sun_index = response.getMetrics();
+		Metrics oracle_us_sun = oracle_us_sun_index.getSourceMetrics();
+		Assert.assertNotNull(oracle_us_sun);
+		Metrics sun = oracle_us_sun.getSourceMetrics();
+		Assert.assertNotNull(sun);
 	}
 	
 	@AfterTest
