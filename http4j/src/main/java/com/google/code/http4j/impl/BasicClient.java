@@ -93,14 +93,25 @@ public class BasicClient implements Client {
 		Response response = executor.execute(request);
 		return postProcess(request, response);
 	}
+	
+	protected Response submit(Request request, Metrics metrics) throws InterruptedException,
+			IOException, URISyntaxException {
+		RequestExecutor executor = new BasicRequestExecutor(connectionManager, cookieCache, responseParser);
+		Response response = executor.execute(request);
+		response.getMetrics().setSourceMetrics(metrics);
+		return postProcess(request, response);
+	}
+	
+	protected Response redirect(String url, Metrics metrics) throws InterruptedException, IOException,
+			URISyntaxException {
+		return submit(new Get(url), metrics);
+	}
 
 	protected Response postProcess(Request request, Response response)
 			throws InterruptedException, IOException, URISyntaxException {
 		if (followRedirect && response.needRedirect()) {
-			Metrics sourceMetrics = response.getMetrics();
 			String location = getLocation(request.getURI(), response.getRedirectLocation());
-			response = get(location);
-			response.getMetrics().setSourceMetrics(sourceMetrics);
+			response = redirect(location, response.getMetrics());
 		}
 		return response;
 	}
