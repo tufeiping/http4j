@@ -86,12 +86,12 @@ public class BasicMetrics implements Metrics {
 	}
 
 	@Override
-	public Metrics getSourceMetrics() {
+	public Metrics getParentMetrics() {
 		return sourceMetrics;
 	}
 
 	@Override
-	public void setSourceMetrics(Metrics sourceMetrics) {
+	public void setParentMetrics(Metrics sourceMetrics) {
 		this.sourceMetrics = sourceMetrics;
 	}
 

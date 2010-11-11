@@ -102,7 +102,7 @@ public class BasicClient implements Client {
 		RequestExecutor executor = new BasicRequestExecutor(connectionManager, cookieCache, responseParser);
 		Response response = executor.execute(request);
 		LOGGER.debug("Metrics for {} : \r\n{}", request.getURI(), response.getMetrics());
-		response.getMetrics().setSourceMetrics(metrics);
+		response.getMetrics().setParentMetrics(metrics);
 		return postProcess(request, response);
 	}
 	

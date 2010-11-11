@@ -49,10 +49,10 @@ public final class MetricsTestCase {
 		Response response = client.get("http://www.sun.com");// redirect to oracle.com
 		Metrics oracle_us_sun_index = response.getMetrics();
 		LOGGER.debug(oracle_us_sun_index.toString());
-		Metrics oracle_us_sun = oracle_us_sun_index.getSourceMetrics();
+		Metrics oracle_us_sun = oracle_us_sun_index.getParentMetrics();
 		LOGGER.debug(oracle_us_sun.toString());
 		Assert.assertNotNull(oracle_us_sun);
-		Metrics sun = oracle_us_sun.getSourceMetrics();
+		Metrics sun = oracle_us_sun.getParentMetrics();
 		LOGGER.debug(sun.toString());
 		Assert.assertNotNull(sun);
 	}
