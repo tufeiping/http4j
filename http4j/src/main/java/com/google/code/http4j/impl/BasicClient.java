@@ -97,18 +97,24 @@ public class BasicClient implements Client {
 		return submit(request, null);
 	}
 	
-	protected Response submit(Request request, Metrics metrics) throws InterruptedException,
+	@Override
+	public void shutdown() {
+		cookieCache.clear();
+		connectionManager.shutdown();
+	}
+	
+	protected Response submit(Request request, Metrics parentMetrics) throws InterruptedException,
 			IOException, URISyntaxException {
 		RequestExecutor executor = new BasicRequestExecutor(connectionManager, cookieCache, responseParser);
 		Response response = executor.execute(request);
 		LOGGER.debug("Metrics for {} : \r\n{}", request.getURI(), response.getMetrics());
-		response.getMetrics().setParentMetrics(metrics);
+		response.getMetrics().setParentMetrics(parentMetrics);
 		return postProcess(request, response);
 	}
 	
-	protected Response redirect(String url, Metrics metrics) throws InterruptedException, IOException,
+	protected Response redirect(String url, Metrics parentMetrics) throws InterruptedException, IOException,
 			URISyntaxException {
-		return submit(new Get(url), metrics);
+		return submit(new Get(url), parentMetrics);
 	}
 
 	protected Response postProcess(Request request, Response response)
@@ -118,18 +124,6 @@ public class BasicClient implements Client {
 			response = redirect(location, response.getMetrics());
 		}
 		return response;
-	}
-
-	private String getLocation(URI uri, String location) {
-		return location.startsWith("http") ? location : new StringBuilder(
-				uri.getScheme()).append("://").append(uri.getAuthority())
-				.append(location).toString();
-	}
-
-	@Override
-	public void shutdown() {
-		cookieCache.clear();
-		connectionManager.shutdown();
 	}
 
 	protected ResponseParser createResponseParser() {
@@ -147,5 +141,11 @@ public class BasicClient implements Client {
 		} finally {
 			super.finalize();
 		}
+	}
+	
+	protected String getLocation(URI uri, String location) {
+		return location.startsWith("http") ? location : new StringBuilder(
+				uri.getScheme()).append("://").append(uri.getAuthority())
+				.append(location).toString();
 	}
 }
