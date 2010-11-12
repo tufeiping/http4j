@@ -28,8 +28,7 @@ public class StatusLineParser implements Parser<StatusLine, byte[]> {
 	public StatusLine parse(byte[] s) {
 		String line = new String(s);
 		String[] fields = line.split("[ \t\r]+", 3);
-		return new BasicStatusLine(fields[0], Integer.parseInt(fields[1]),
-				fields[2]);
+		return new BasicStatusLine(fields[0], Integer.parseInt(fields[1]), fields[2]);
 	}
 
 	public static class BasicStatusLine implements StatusLine {
