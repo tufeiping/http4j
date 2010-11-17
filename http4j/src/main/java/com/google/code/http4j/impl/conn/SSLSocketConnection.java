@@ -48,13 +48,12 @@ public class SSLSocketConnection extends SocketConnection {
 		sslSocket.addHandshakeCompletedListener(new HandshakeCompletedListener() {
 					@Override
 					public void handshakeCompleted(HandshakeCompletedEvent event) {
-						ThreadLocalMetricsRecorder.getInstance().getSslTimer()
-								.stop();
+						ThreadLocalMetricsRecorder.getInstance().getSslTimer().stop();
 					}
 				});
 		return sslSocket;
 	}
-	
+
 	@Override
 	protected void doConnect() throws IOException {
 		super.doConnect();
