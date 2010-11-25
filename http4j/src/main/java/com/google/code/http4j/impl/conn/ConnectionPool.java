@@ -78,8 +78,7 @@ public class ConnectionPool extends AbstractConnectionManager {
 		ConcurrentLinkedQueue<Connection> queue = free.get(host);
 		if (queue == null) {
 			queue = new ConcurrentLinkedQueue<Connection>();
-			ConcurrentLinkedQueue<Connection> exist = free.putIfAbsent(host,
-					queue);
+			ConcurrentLinkedQueue<Connection> exist = free.putIfAbsent(host, queue);
 			queue = exist == null ? queue : exist;
 		}
 		return queue;
