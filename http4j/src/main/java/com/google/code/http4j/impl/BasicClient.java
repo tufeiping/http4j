@@ -62,8 +62,7 @@ public class BasicClient implements Client {
 		if (null != connectionManager) {
 			connectionManager.shutdown();
 		}
-		connectionManager = use ? new ConnectionPool()
-				: new SingleConnectionManager();
+		connectionManager = use ? new ConnectionPool() : new SingleConnectionManager();
 		return this;
 	}
 
@@ -101,6 +100,12 @@ public class BasicClient implements Client {
 	public void shutdown() {
 		cookieCache.clear();
 		connectionManager.shutdown();
+	}
+	
+	@Override
+	public Client setMaxConnectionsPerHost(int max) {
+		connectionManager.setMaxConnectionsPerHost(max);
+		return this;
 	}
 	
 	protected Response submit(Request request, Metrics parentMetrics) throws InterruptedException,

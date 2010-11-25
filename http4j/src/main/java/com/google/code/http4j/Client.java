@@ -38,4 +38,6 @@ public interface Client {
 	Client useDNSCache(boolean use);
 	
 	Client followRedirect(boolean follow);
+	
+	Client setMaxConnectionsPerHost(int max);
 }
