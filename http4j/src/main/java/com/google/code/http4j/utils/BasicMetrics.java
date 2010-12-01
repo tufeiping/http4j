@@ -104,11 +104,12 @@ public class BasicMetrics implements Metrics {
 
 	@Override
 	public String toString() {
-		return "bytesReceived=" + bytesReceived + ", bytesSent="
+		return "blockingCost=" + blockingCost
+				+ ", bytesReceived=" + bytesReceived + ", bytesSent="
 				+ bytesSent + ", connectingCost=" + connectingCost
-				+ ", dnsLookupCost=" + dnsLookupCost + ", receivingCost="
-				+ receivingCost + ", sendingCost=" + sendingCost
-				+ ", parentMetrics=" + parentMetrics + ", sslHandshakeCost="
+				+ ", dnsLookupCost=" + dnsLookupCost + ", parentMetrics="
+				+ parentMetrics + ", receivingCost=" + receivingCost
+				+ ", sendingCost=" + sendingCost + ", sslHandshakeCost="
 				+ sslHandshakeCost + ", waitingCost=" + waitingCost;
 	}
 }
