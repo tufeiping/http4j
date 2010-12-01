@@ -22,6 +22,8 @@ package com.google.code.http4j.utils;
  */
 public interface Metrics {
 
+	long getBlockingCost();// acquire connection permit cost
+	
 	long getDnsLookupCost();
 
 	long getConnectingCost();

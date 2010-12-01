@@ -22,6 +22,8 @@ package com.google.code.http4j.utils;
  */
 public interface MetricsRecorder {
 
+	Timer getBlockingTimer();
+	
 	/**
 	 * DNS timer should be reset firstly while getting from DNS Cache.
 	 * @return dnsTimer

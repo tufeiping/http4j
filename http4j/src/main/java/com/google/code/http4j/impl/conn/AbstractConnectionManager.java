@@ -24,6 +24,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import com.google.code.http4j.Connection;
 import com.google.code.http4j.ConnectionManager;
 import com.google.code.http4j.Host;
+import com.google.code.http4j.utils.ThreadLocalMetricsRecorder;
+import com.google.code.http4j.utils.Timer;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -71,7 +73,11 @@ public abstract class AbstractConnectionManager implements ConnectionManager {
 	public final Connection acquire(Host host) throws InterruptedException, IOException {
 		if(!shutdown.get()) {
 			increaseUsed(host);
-			return getConnection(host);
+			Timer blockingTimer = ThreadLocalMetricsRecorder.getInstance().getBlockingTimer();
+			blockingTimer.start();
+			Connection connection = getConnection(host);
+			blockingTimer.stop();
+			return connection;
 		}
 		return null;
 	}

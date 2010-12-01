@@ -22,6 +22,8 @@ package com.google.code.http4j.utils;
  */
 public class BasicMetrics implements Metrics {
 
+	protected final long blockingCost;
+	
 	protected final long dnsLookupCost;
 
 	protected final long connectingCost;
@@ -38,11 +40,12 @@ public class BasicMetrics implements Metrics {
 
 	protected final long sslHandshakeCost;
 
-	protected Metrics sourceMetrics;
+	protected Metrics parentMetrics;
 	
-	public BasicMetrics(long dnsLookupCost, long connectingCost,
+	public BasicMetrics(long blockingCost, long dnsLookupCost, long connectingCost,
 			long sendingCost, long waitingCost, long receivingCost,
 			long sslHandshakeCost, long bytesSent, long bytesReceived) {
+		this.blockingCost = blockingCost;
 		this.dnsLookupCost = dnsLookupCost;
 		this.connectingCost = connectingCost;
 		this.sendingCost = sendingCost;
@@ -51,6 +54,10 @@ public class BasicMetrics implements Metrics {
 		this.sslHandshakeCost = sslHandshakeCost;
 		this.bytesSent = bytesSent;
 		this.bytesReceived = bytesReceived;
+	}
+
+	public long getBlockingCost() {
+		return blockingCost;
 	}
 
 	public long getDnsLookupCost() {
@@ -87,12 +94,12 @@ public class BasicMetrics implements Metrics {
 
 	@Override
 	public Metrics getParentMetrics() {
-		return sourceMetrics;
+		return parentMetrics;
 	}
 
 	@Override
 	public void setParentMetrics(Metrics sourceMetrics) {
-		this.sourceMetrics = sourceMetrics;
+		this.parentMetrics = sourceMetrics;
 	}
 
 	@Override
@@ -101,7 +108,7 @@ public class BasicMetrics implements Metrics {
 				+ bytesSent + ", connectingCost=" + connectingCost
 				+ ", dnsLookupCost=" + dnsLookupCost + ", receivingCost="
 				+ receivingCost + ", sendingCost=" + sendingCost
-				+ ", sourceMetrics=" + sourceMetrics + ", sslHandshakeCost="
+				+ ", parentMetrics=" + parentMetrics + ", sslHandshakeCost="
 				+ sslHandshakeCost + ", waitingCost=" + waitingCost;
 	}
 }

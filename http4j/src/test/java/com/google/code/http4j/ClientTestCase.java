@@ -80,5 +80,6 @@ public final class ClientTestCase {
 		Assert.assertTrue(metrics.getSendingCost() > 0);
 		Assert.assertTrue(metrics.getWaitingCost() > 0);
 		Assert.assertTrue(metrics.getDnsLookupCost() >= 0);// cache
+		Assert.assertTrue(metrics.getBlockingCost() > 0);
 	}
 }
