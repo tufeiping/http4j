@@ -37,13 +37,12 @@ class InputStreamWrapper extends InputStream {
 	}
 
 	public int read() throws IOException {
-		byte[] b = new byte[1];
 		MetricsRecorder recorder = ThreadLocalMetricsRecorder.getInstance();
-		in.readFully(b);
+		int b = in.read();
 		if (recorder.getResponseTransportCounter().addAndGet(1l) == 1) {
 			recorder.getResponseTimer().start();
 		}
-		return b[0];
+		return b;
 	}
 	
 	@Override
@@ -58,6 +57,7 @@ class InputStreamWrapper extends InputStream {
 		}
 		b[off] = (byte) s;
 		in.readFully(b, ++off, --c);
+		//in.readFully(b, off, len);
 		ThreadLocalMetricsRecorder.getInstance().getResponseTransportCounter().addAndGet((long) c);
 		return len;
 	}
