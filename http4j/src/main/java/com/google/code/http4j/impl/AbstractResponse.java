@@ -20,6 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.List;
 
 import com.google.code.http4j.Charset;
@@ -174,9 +175,10 @@ public abstract class AbstractResponse implements Response {
 	protected class TextMessage implements Message {
 		@Override
 		public void output(OutputStream out) throws IOException {
+			OutputStreamWriter writer = new OutputStreamWriter(out, charset);
 			String content = new String(entity, charset);
-			out.write(content.getBytes());
-			out.flush();
+			writer.write(content);
+			writer.flush();
 		}
 	}
 	
