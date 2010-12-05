@@ -57,7 +57,6 @@ class InputStreamWrapper extends InputStream {
 		}
 		b[off] = (byte) s;
 		in.readFully(b, ++off, --c);
-		//in.readFully(b, off, len);
 		ThreadLocalMetricsRecorder.getInstance().getResponseTransportCounter().addAndGet((long) c);
 		return len;
 	}
