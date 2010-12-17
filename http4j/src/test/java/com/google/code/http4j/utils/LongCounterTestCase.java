@@ -20,8 +20,6 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.google.code.http4j.utils.Counter;
-import com.google.code.http4j.utils.LongCounter;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>
@@ -42,15 +40,15 @@ public final class LongCounterTestCase {
 	
 	@Test(dependsOnMethods = "get")
 	public void increase() {
-		counter.addAndGet(0l);
+		counter.addAndGet(0L);
 		long number = counter.get();
 		Assert.assertEquals(number, 0);
-		counter.addAndGet(1048576l);
+		counter.addAndGet(1048576L);
 		number = counter.get();
-		Assert.assertEquals(number, 1048576l);
-		counter.addAndGet(-13l);
+		Assert.assertEquals(number, 1048576L);
+		counter.addAndGet(-13L);
 		number = counter.get();
-		Assert.assertEquals(number, 1048576l - 13);
+		Assert.assertEquals(number, 1048576L - 13);
 	}
 	
 	@Test(dependsOnMethods = "increase")

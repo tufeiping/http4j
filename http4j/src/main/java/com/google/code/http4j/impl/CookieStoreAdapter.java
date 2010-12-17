@@ -54,7 +54,7 @@ public class CookieStoreAdapter implements CookieCache {
 	protected String convertToString(List<HttpCookie> cookies) {
 		StringBuilder buffer = new StringBuilder();
 		for (HttpCookie cookie : cookies) {
-			buffer.append(cookie).append(";");
+			buffer.append(cookie).append(';');
 		}
 		return buffer.substring(0, buffer.length() - 1);
 	}

@@ -25,7 +25,6 @@ import org.testng.annotations.Test;
 import com.google.code.http4j.Headers;
 import com.google.code.http4j.Request;
 import com.google.code.http4j.RequestTestCase;
-import com.google.code.http4j.impl.Post;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>

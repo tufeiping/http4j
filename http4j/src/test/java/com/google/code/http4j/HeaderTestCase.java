@@ -20,7 +20,6 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.google.code.http4j.Header;
 import com.google.code.http4j.impl.CanonicalHeader;
 
 

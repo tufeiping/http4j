@@ -36,8 +36,6 @@ import com.google.code.http4j.Request;
  */
 public abstract class AbstractRequest implements Request {
 
-	private static final long serialVersionUID = 127059666172730925L;
-	
 	public static final String DEFAULT_USER_AGENT = "http4j v1.0";
 	public static final String DEFAULT_ACCEPT = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
 	public static final String DEFAULT_ACCEPT_ENCODING = "gzip,deflate";

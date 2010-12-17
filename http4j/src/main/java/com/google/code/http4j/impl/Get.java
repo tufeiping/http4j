@@ -26,8 +26,6 @@ import java.net.URL;
  */
 public class Get extends AbstractRequest {
 
-	private static final long serialVersionUID = -7662562240040943759L;
-
 	public Get(String url) throws MalformedURLException, URISyntaxException {
 		super(new URL(url));
 	}

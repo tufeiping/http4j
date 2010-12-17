@@ -66,8 +66,8 @@ public class StatusLineParser implements Parser<StatusLine, byte[]> {
 
 		@Override
 		public String toString() {
-			return new StringBuilder(version).append(" ").append(statusCode)
-					.append(" ").append(reason).toString();
+			return new StringBuilder(version).append(' ').append(statusCode)
+					.append(' ').append(reason).toString();
 		}
 
 		@Override

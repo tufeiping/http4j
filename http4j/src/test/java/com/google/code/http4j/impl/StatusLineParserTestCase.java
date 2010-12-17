@@ -24,7 +24,6 @@ import org.testng.annotations.Test;
 
 import com.google.code.http4j.Parser;
 import com.google.code.http4j.StatusLine;
-import com.google.code.http4j.impl.StatusLineParser;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>

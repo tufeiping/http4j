@@ -23,7 +23,6 @@ import java.io.InputStream;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.google.code.http4j.utils.IOUtils;
 
 /**
  * @author <a href="mailto:guilin.zhang@hotmail.com">Zhang, Guilin</a>

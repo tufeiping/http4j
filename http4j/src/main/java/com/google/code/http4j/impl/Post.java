@@ -28,8 +28,6 @@ import com.google.code.http4j.Headers;
  */
 public class Post extends AbstractRequest {
 
-	private static final long serialVersionUID = -9103163070992426384L;
-
 	public Post(String url) throws MalformedURLException, URISyntaxException {
 		super(new URL(url));
 	}

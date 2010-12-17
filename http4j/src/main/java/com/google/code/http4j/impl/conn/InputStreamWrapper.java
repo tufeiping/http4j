@@ -39,7 +39,7 @@ class InputStreamWrapper extends InputStream {
 	public int read() throws IOException {
 		MetricsRecorder recorder = ThreadLocalMetricsRecorder.getInstance();
 		int b = in.read();
-		if (recorder.getResponseTransportCounter().addAndGet(1l) == 1) {
+		if (recorder.getResponseTransportCounter().addAndGet(1L) == 1) {
 			recorder.getResponseTimer().start();
 		}
 		return b;
