@@ -19,6 +19,7 @@ package com.google.code.http4j.utils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
@@ -94,11 +95,23 @@ public final class IOUtils {
 		return size > 0 ? getNextChunk(in, size) : null;
 	}
 
+	/**
+	 * @see DataInputStream#readFully(byte[])
+	 * @param in
+	 * @param size
+	 * @return
+	 * @throws IOException
+	 */
+	public static byte[] read(InputStream in, int size) throws IOException {
+		byte[] data = new byte[size];
+		new DataInputStream(in).readFully(data);
+		return data;
+	}
+	
 	static byte[] getNextChunk(InputStream in, int size) throws IOException {
-		byte[] chunk = new byte[size];
-		if(in.read(chunk) < size || in.read(new byte[2]) < 2)// CRLF
-			throw new IOException("EOF at unexpected position.");
-		return chunk;
+		byte[] next = read(in, size);
+		read(in, 2);// CRLF
+		return next;
 	}
 
 	static int getNextChunkSize(InputStream in) throws IOException {

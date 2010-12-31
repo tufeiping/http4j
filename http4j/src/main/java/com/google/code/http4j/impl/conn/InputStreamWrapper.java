@@ -50,14 +50,11 @@ class InputStreamWrapper extends InputStream {
 		return read(b, 0, b.length);
 	}
 
-	public int read(byte[] b, int off, final int len) throws IOException {
-		int s = read(), c = len;// ensure metrics recorded.
-		if(s == -1) {
-			return -1;
-		}
-		b[off] = (byte) s;
-		in.readFully(b, ++off, --c);
-		ThreadLocalMetricsRecorder.getInstance().getResponseTransportCounter().addAndGet((long) c);
-		return len;
+	// Only be called while getting next chunk,
+	// so we do not need to worry about response timer start
+	public int read(byte[] b, int off, int len) throws IOException {
+		int read = super.read(b, off, len);
+		ThreadLocalMetricsRecorder.getInstance().getResponseTransportCounter().addAndGet((long) read);
+		return read;
 	}
 }
