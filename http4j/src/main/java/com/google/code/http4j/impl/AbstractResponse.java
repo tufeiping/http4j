@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import com.google.code.http4j.Charset;
@@ -64,9 +65,12 @@ public abstract class AbstractResponse implements Response {
 
 	@Override
 	public void output(OutputStream out) throws IOException {
-		String contentType = Headers.getContentType(headers);
-		Message message = getMessage(contentType);
-		message.output(out);
+		getOutputter().output(out);
+	}
+	
+	@Override
+	public String toString() {
+		return getOutputter().toString();
 	}
 
 	@Override
@@ -132,7 +136,8 @@ public abstract class AbstractResponse implements Response {
 		this.metrics = metrics;
 	}
 	
-	protected Message getMessage(String contentType) {
+	protected Message getOutputter() {
+		String contentType = Headers.getContentType(headers);
 		boolean isText = isText(contentType);
 		return isText ? new TextMessage() : new BinaryMessage();
 	}
@@ -180,6 +185,15 @@ public abstract class AbstractResponse implements Response {
 			writer.write(content);
 			writer.flush();
 		}
+
+		@Override
+		public String toString() {
+			try {
+				return new String(entity, charset);
+			} catch (UnsupportedEncodingException e) {
+				return new String(entity);
+			}
+		}
 	}
 	
 	protected class BinaryMessage implements Message {
@@ -188,5 +202,11 @@ public abstract class AbstractResponse implements Response {
 			out.write(entity);
 			out.flush();
 		}
+
+		@Override
+		public String toString() {
+			return new String(entity);
+		}
+		
 	}
 }
